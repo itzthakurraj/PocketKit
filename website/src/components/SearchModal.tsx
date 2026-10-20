@@ -15,6 +15,7 @@ import {
   Type,
   Filter,
   Check,
+  CornerDownLeft,
 } from 'lucide-react';
 import { IconRenderer } from './IconRenderer';
 
@@ -49,31 +50,20 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 }) => {
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const resultListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
+      setSelectedIndex(0);
     } else {
       setQuery('');
       setSelectedCategory('all');
+      setSelectedIndex(0);
     }
   }, [isOpen]);
-
-  // Global key listener for Esc
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        if (selectedCategory !== 'all') {
-          setSelectedCategory('all');
-        } else {
-          onClose();
-        }
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, selectedCategory, onClose]);
 
   // Real-time category counts based on current search query
   const categoryCounts = useMemo(() => {
@@ -122,6 +112,41 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     });
   }, [query, selectedCategory]);
 
+  // Reset selected index when filtered list changes
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query, selectedCategory]);
+
+  // Global key listener for ArrowUp, ArrowDown, Enter, Esc
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      if (e.key === 'Escape') {
+        if (selectedCategory !== 'all') {
+          setSelectedCategory('all');
+        } else {
+          onClose();
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev < filteredTools.length - 1 ? prev + 1 : 0));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredTools.length - 1));
+      } else if (e.key === 'Enter') {
+        if (filteredTools[selectedIndex]) {
+          e.preventDefault();
+          onSelectTool(filteredTools[selectedIndex].id);
+          onClose();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, selectedCategory, filteredTools, selectedIndex, onClose, onSelectTool]);
+
   if (!isOpen) return null;
 
   return (
@@ -161,9 +186,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           </button>
         </div>
 
-        {/* Real-time Category Filtering Tags Bar */}
-        <div className="px-4 py-2.5 bg-slate-50/70 dark:bg-slate-900/40 border-b border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
-          <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1.5 shrink-0">
+        {/* Real-time Category Filter Row */}
+        <div className="px-4 py-2.5 bg-slate-50/80 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
+          <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1 shrink-0">
             <Filter className="w-3 h-3 text-indigo-500" />
             <span>Filter:</span>
           </div>
@@ -171,25 +196,25 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           {/* 'All' tag */}
           <button
             onClick={() => setSelectedCategory('all')}
-            className={`px-2.5 py-1 rounded-xl text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
               selectedCategory === 'all'
-                ? 'bg-indigo-600 text-white shadow-xs'
+                ? 'bg-indigo-600 text-white shadow-xs font-bold'
                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80'
             }`}
           >
             <span>All</span>
             <span
-              className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+              className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
                 selectedCategory === 'all'
                   ? 'bg-indigo-700 text-white'
-                  : 'bg-slate-100 dark:bg-slate-900 text-slate-400'
+                  : 'bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400'
               }`}
             >
               {categoryCounts.all}
             </span>
           </button>
 
-          {/* Primary Quick Tags: Developer, Image, PDF, etc. */}
+          {/* Primary Quick Category Filter Tags: Developer, Image, PDF, etc. */}
           {PRIMARY_TAGS.map((tag) => {
             const isSelected = selectedCategory === tag.id;
             const count = categoryCounts[tag.id] || 0;
@@ -199,15 +224,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               <button
                 key={tag.id}
                 onClick={() => setSelectedCategory(isSelected ? 'all' : tag.id)}
-                className={`px-2.5 py-1 rounded-xl text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
                   isSelected
-                    ? 'bg-gradient-to-r from-indigo-600 to-emerald-600 text-white shadow-xs ring-1 ring-indigo-400'
+                    ? 'bg-gradient-to-r from-indigo-600 to-emerald-600 text-white shadow-xs ring-1 ring-indigo-400 font-bold'
                     : count > 0
                     ? 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80'
-                    : 'bg-slate-100/60 dark:bg-slate-900/40 text-slate-400/60 border border-transparent cursor-not-allowed opacity-50'
+                    : 'bg-slate-100/50 dark:bg-slate-900/30 text-slate-400/50 border border-transparent cursor-not-allowed opacity-40'
                 }`}
                 disabled={count === 0}
-                title={`Filter by ${tag.label} (${count} tools)`}
+                title={`Filter by ${tag.label} (${count} matching tools)`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-slate-400 dark:text-slate-500'}`} />
                 <span>{tag.label}</span>
@@ -230,13 +255,16 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               onClick={() => setSelectedCategory('all')}
               className="ml-auto px-2 py-1 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline shrink-0 flex items-center gap-1"
             >
-              <X className="w-3 h-3" /> Clear
+              <X className="w-3 h-3" /> Clear Filter
             </button>
           )}
         </div>
 
         {/* Results List */}
-        <div className="overflow-y-auto p-3 space-y-1 divide-y divide-slate-100 dark:divide-slate-800/60">
+        <div
+          ref={resultListRef}
+          className="overflow-y-auto p-3 space-y-1 divide-y divide-slate-100 dark:divide-slate-800/60"
+        >
           {filteredTools.length === 0 ? (
             <div className="py-14 text-center text-slate-400 dark:text-slate-500">
               <Search className="w-10 h-10 mx-auto mb-3 opacity-30 text-indigo-500" />
@@ -267,8 +295,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               )}
             </div>
           ) : (
-            filteredTools.map((tool) => {
+            filteredTools.map((tool, index) => {
               const isFav = favorites.includes(tool.id);
+              const isKeyboardSelected = index === selectedIndex;
+
               return (
                 <div
                   key={tool.id}
@@ -276,15 +306,32 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     onSelectTool(tool.id);
                     onClose();
                   }}
-                  className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/70 cursor-pointer transition-colors group"
+                  onMouseEnter={() => setSelectedIndex(index)}
+                  className={`flex items-center justify-between p-3 rounded-2xl cursor-pointer transition-all group ${
+                    isKeyboardSelected
+                      ? 'bg-indigo-50/80 dark:bg-indigo-950/40 ring-1 ring-indigo-200 dark:ring-indigo-800/60'
+                      : 'hover:bg-slate-50 dark:hover:bg-slate-800/70'
+                  }`}
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-50 to-indigo-100/60 dark:from-slate-800 dark:to-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0 border border-indigo-100/80 dark:border-slate-700/60 group-hover:scale-105 group-hover:border-indigo-300 dark:group-hover:border-indigo-700 transition-all">
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all ${
+                        isKeyboardSelected
+                          ? 'bg-indigo-600 text-white border-indigo-600 scale-105'
+                          : 'bg-gradient-to-tr from-indigo-50 to-indigo-100/60 dark:from-slate-800 dark:to-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-100/80 dark:border-slate-700/60 group-hover:scale-105'
+                      }`}
+                    >
                       <IconRenderer name={tool.icon} className="w-5 h-5" />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 truncate">
+                        <h4
+                          className={`text-sm font-bold truncate ${
+                            isKeyboardSelected
+                              ? 'text-indigo-600 dark:text-indigo-400'
+                              : 'text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400'
+                          }`}
+                        >
                           {tool.name}
                         </h4>
                         {isFav && <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />}
@@ -292,7 +339,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5 leading-normal">
                         {tool.description}
                       </p>
-                      
+
                       {/* Interactive Tool Tags */}
                       <div className="flex items-center gap-1.5 mt-1.5">
                         <button
@@ -322,10 +369,25 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0 ml-3">
-                    <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline">
-                      Open Tool
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
+                    {isKeyboardSelected ? (
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                        <span className="hidden sm:inline">Press</span>
+                        <kbd className="px-1.5 py-0.5 text-[10px] bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 rounded border border-indigo-200 dark:border-indigo-800 font-mono">
+                          ↵
+                        </kbd>
+                      </span>
+                    ) : (
+                      <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline">
+                        Open Tool
+                      </span>
+                    )}
+                    <ArrowRight
+                      className={`w-4 h-4 transition-all ${
+                        isKeyboardSelected
+                          ? 'text-indigo-600 dark:text-indigo-400 translate-x-1'
+                          : 'text-slate-300 dark:text-slate-600 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 group-hover:translate-x-1'
+                      }`}
+                    />
                   </div>
                 </div>
               );
@@ -345,7 +407,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               </span>
             )}
           </div>
-          <span className="hidden sm:inline">Press ESC to dismiss</span>
+          <div className="hidden sm:flex items-center gap-2 text-slate-400">
+            <span>Use ↑ ↓ to navigate</span>
+            <span>•</span>
+            <span>↵ to select</span>
+            <span>•</span>
+            <span>ESC to dismiss</span>
+          </div>
         </div>
       </div>
     </div>
