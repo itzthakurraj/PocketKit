@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lorem Ipsum Generator - Generate random Lorem Ipsum text based on a word input. Use it to quickly generate placeholder text for your projects.">
+    <meta name="keywords" content="Lorem Ipsum, text generator, placeholder text, random text generator, Ipsum generator, lorem ipsum generator">
+    <meta name="author" content="Toolkit">
+    <meta property="og:title" content="Lorem Ipsum Generator - Toolkit">
+    <meta property="og:description" content="Generate random Lorem Ipsum text based on your word input. Ideal for creating placeholder text quickly and easily.">
+    <meta property="og:image" content="path/to/your/preview-image.jpg">
+    <meta property="og:url" content="your-website-url">
+    <title>Lorem Ipsum Generator - Toolkit</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXXXX-X');
+    </script>
+
+    <!-- AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-XXXXXX",
+            enable_page_level_ads: true
+        });
+    </script>
+
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Interactive Elements */
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* Lorem Ipsum Output */
+        #loremOutput {
+            background: #f1f1f1;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: black;
+            white-space: pre-line;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Lorem Ipsum Generator</h1>
+        <p>Generate random Lorem Ipsum text based on your word input. Use this tool to create placeholder text for your projects quickly and easily.</p>
+    </section>
+
+    <!-- Tool Card for Lorem Ipsum Generator -->
+    <main class="tools-grid">
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-file-alt fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>Lorem Ipsum Generator</h2>
+            <p>Enter a word, and the tool will generate Lorem Ipsum text based on that word.</p>
+            <div>
+                <textarea id="inputWord" placeholder="Enter a word to generate Lorem Ipsum text..."></textarea>
+            </div>
+            <div>
+                <button class="button" onclick="generateLoremIpsum()">Generate Lorem Ipsum</button>
+            </div>
+            <div style="margin-top: 1rem;">
+                <h3>Generated Lorem Ipsum:</h3>
+                <pre id="loremOutput"></pre>
+            </div>
+        </article>
+    </main>
+
+    <!-- Ads Section -->
+    <section class="ads-section" style="text-align: center; margin-top: 2rem; padding: 2rem; background: var(--card-bg); border-radius: 8px; box-shadow: var(--shadow);">
+        <p>Sponsored Ad</p>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXX"
+             data-ad-slot="XXXXXXX"
+             data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </section>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Function to generate Lorem Ipsum text based on user input
+        function generateLoremIpsum() {
+            const inputWord = document.getElementById('inputWord').value.trim();
+            const wordCount = parseInt(inputWord.length, 10) || 5; // Set minimum of 5 words if the input is empty
+
+            const lorem = [
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+                'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+                'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            ];
+
+            let result = [];
+            for (let i = 0; i < wordCount; i++) {
+                result.push(lorem[i % lorem.length]); // Loop through Lorem Ipsum phrases
+            }
+
+            // Join the result and output
+            document.getElementById('loremOutput').textContent = result.join(' ');
+        }
+    </script>
+
+</body>
+</html>

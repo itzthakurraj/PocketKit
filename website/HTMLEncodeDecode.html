@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HTML Encode & Decode tool - Easily encode and decode text to/from HTML entities for secure and readable web content.">
+    <meta name="keywords" content="HTML Encoder, HTML Decoder, Encode Text, Decode HTML, Convert Text to HTML Entities">
+    <meta name="author" content="Your Website Name">
+    <meta property="og:title" content="HTML Encode & Decode Tool">
+    <meta property="og:description" content="Convert text to HTML entities or decode HTML entities back to readable text.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com/html-encode-decode">
+    <title>HTML Encode & Decode Tool</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXX-Y');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tool Card */
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tool-card textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        #outputText {
+            background: #f1f1f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: black;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        /* Ads Section */
+        .ad-container {
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1>🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="all-tools.html">All Tools</a>
+            <a href="blog.html">Blog</a>
+            <a href="help.html">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>HTML Encode & Decode Tool</h1>
+        <p>Convert text to HTML entities or decode HTML entities back to readable text.</p>
+    </section>
+
+    <!-- Ads Section -->
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXX"
+            data-ad-slot="XXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- HTML Encode/Decode Tool -->
+    <main class="tool-card">
+        <h2>HTML Encode/Decode</h2>
+        <textarea id="inputText" placeholder="Enter text here..."></textarea>
+        <br>
+        <button class="button" onclick="encodeText()">Encode</button>
+        <button class="button" onclick="decodeText()">Decode</button>
+        <div id="outputText"></div>
+    </main>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+
+        function encodeText() {
+            let text = document.getElementById('inputText').value;
+            document.getElementById('outputText').textContent = text.replace(/./g, c => `&#${c.charCodeAt(0)};`);
+        }
+
+        function decodeText() {
+            let text = document.getElementById('inputText').value;
+            let parser = new DOMParser();
+            document.getElementById('outputText').textContent = parser.parseFromString(text, "text/html").documentElement.textContent;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Text to ASCII Converter Tool - Convert your text to ASCII easily">
+    <meta name="keywords" content="text to ascii, ascii converter, text converter, ascii tool">
+    <meta name="author" content="Toolkit">
+    <meta property="og:title" content="Text to ASCII Converter - Toolkit">
+    <meta property="og:description" content="Convert your text to ASCII values easily. A free and simple tool to convert text to ASCII.">
+    <meta property="og:image" content="path/to/your/preview-image.jpg">
+    <meta property="og:url" content="your-website-url">
+    <title>Text to ASCII Converter - Toolkit</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXXXX-X');
+    </script>
+
+    <!-- AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-XXXXXX",
+            enable_page_level_ads: true
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reusing the CSS design system and styling from your provided theme */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .main-nav .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .converter-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .converter-card textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            background: var(--background);
+            color: var(--text);
+            resize: vertical;
+            min-height: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .output {
+            background: #f1f1f1;
+            padding: 1rem;
+            border-radius: 8px;
+            color: black;  /* Ensure the text color is black */
+            min-height: 50px;
+            margin-top: 1rem;
+            white-space: pre-wrap; /* Allows the ASCII output to preserve formatting */
+        }
+
+        /* Ad Section */
+        .ads-section {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .ads-section p {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .converter-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Text to ASCII Converter</h1>
+        <p>Convert your text to ASCII values with ease! This tool provides a quick and simple way to convert your text to its corresponding ASCII codes.</p>
+    </section>
+
+    <!-- Text to ASCII Converter Tool -->
+    <section class="converter-card">
+        <h2>Enter Text to Convert</h2>
+        <textarea id="inputText" placeholder="Type or paste text here..."></textarea>
+        <button class="button" onclick="convertToASCII()">Convert to ASCII</button>
+
+        <div class="output" id="outputText"></div>
+    </section>
+
+    <!-- Ads Section -->
+    <section class="ads-section">
+        <p>Sponsored Ad</p>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXX"
+             data-ad-slot="XXXXXXX"
+             data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </section>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Function to convert text to ASCII
+        function convertToASCII() {
+            const inputText = document.getElementById('inputText').value;
+            let asciiOutput = '';
+            
+            // Loop through each character and convert to ASCII
+            for (let i = 0; i < inputText.length; i++) {
+                asciiOutput += inputText.charCodeAt(i) + ' ';
+            }
+
+            // Display the ASCII output
+            document.getElementById('outputText').textContent = asciiOutput.trim();
+        }
+    </script>
+
+</body>
+</html>

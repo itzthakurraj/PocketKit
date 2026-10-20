@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ASCII to Text Converter - Convert ASCII codes into human-readable text easily. This online tool allows you to quickly decode ASCII values to text for various applications.">
+    <meta name="keywords" content="ASCII to Text, ASCII converter, online ASCII decoder, free tools">
+    <meta name="author" content="Toolkit">
+    <link rel="canonical" href="https://yourtoolkitdomain.com/ascii-to-text">
+    
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="ASCII to Text Converter - Toolkit">
+    <meta property="og:description" content="Convert ASCII codes to human-readable text instantly using Toolkit’s free ASCII to Text Converter. Perfect for developers, writers, and students.">
+    <meta property="og:image" content="https://yourtoolkitdomain.com/images/og-ascii-to-text.jpg">
+    <meta property="og:url" content="https://yourtoolkitdomain.com/ascii-to-text">
+    <meta property="og:type" content="website">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ASCII to Text Converter - Toolkit">
+    <meta name="twitter:description" content="Easily convert ASCII codes into human-readable text with Toolkit’s online tool. Ideal for developers and content creators.">
+    <meta name="twitter:image" content="https://yourtoolkitdomain.com/images/twitter-ascii-to-text.jpg">
+
+    <title>ASCII to Text Converter - Toolkit</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXX-X');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* Reusing the CSS design system and styling from your provided theme */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="AllTools.html" class="button">All Tools</a>
+            <a href="Blog.html" class="button">Blog</a>
+            <a href="Help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>ASCII to Text Converter</h1>
+        <p>Convert ASCII codes into human-readable text easily with this free online tool. Simply input ASCII codes separated by commas, and instantly get the corresponding text.</p>
+    </section>
+
+    <!-- Google AdSense Banner Ad Section -->
+    <section class="adsense-banner" style="text-align: center; margin: 2rem 0;">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXX" data-ad-slot="XXXXXXX"             data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </section>
+
+    <!-- ASCII to Text Converter -->
+    <main class="tools-grid">
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-code fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>ASCII to Text Converter</h2>
+            <p>Convert ASCII codes into readable text easily. This tool is perfect for developers, writers, and students who need to quickly decode ASCII values to plain text.</p>
+            <div style="margin-top: 1rem;">
+                <textarea id="asciiInput" placeholder="Enter ASCII codes (comma separated)..." rows="6" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #ddd; background: var(--background); color: var(--text);"></textarea>
+                <p id="textOutput" style="margin-top: 1rem;">Converted Text: </p>
+                <button class="button" onclick="convertAsciiToText()">Convert</button>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div style="text-align: center; padding: 2rem;">
+            <p>© 2025 Toolkit. All rights reserved.</p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Convert ASCII to Text
+        function convertAsciiToText() {
+            const asciiInput = document.getElementById('asciiInput').value;
+            const asciiArray = asciiInput.split(',').map(item => item.trim());
+            let textOutput = '';
+
+            asciiArray.forEach(code => {
+                // Check if each code is a valid ASCII code
+                const char = String.fromCharCode(parseInt(code, 10));
+                textOutput += char;
+            });
+
+            // Display the converted text
+            document.getElementById('textOutput').textContent = `Converted Text: ${textOutput}`;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHA256 Hash Generator & Decrypt</title>
+    <meta name="description" content="Generate and decrypt SHA256 hashes easily with this online tool.">
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        body { font-family: 'Inter', sans-serif; background: var(--background); color: var(--text); }
+        .main-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 2rem; background: var(--card-bg); box-shadow: var(--shadow);
+        }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .hero { text-align: center; padding: 4rem 1rem; max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: 2.5rem; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .converter-card {
+            background: var(--card-bg); border-radius: 16px; padding: 2rem;
+            box-shadow: var(--shadow); max-width: 600px; margin: 2rem auto;
+        }
+        .input-field {
+            width: 100%; padding: 1rem; border-radius: 8px;
+            border: 1px solid var(--primary); background: var(--background); color: var(--text);
+            margin-bottom: 1rem;
+        }
+        .button {
+            padding: 0.8rem 1.5rem; border-radius: 8px; border: none;
+            background: var(--primary); color: white; cursor: pointer; display: inline-flex;
+            align-items: center; gap: 0.5rem;
+        }
+        .button:hover { opacity: 0.9; transform: translateY(-2px); }
+        .output {
+            background: var(--background); padding: 1rem; border-radius: 8px; color: var(--text);
+            min-height: 50px; margin-top: 1rem; white-space: pre-wrap;
+            border: 1px solid var(--primary);
+        }
+        .theme-toggle {
+            position: fixed; bottom: 2rem; right: 2rem; background: var(--card-bg);
+            padding: 1rem; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <h1>🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>SHA256 Hash Generator & Decrypt</h1>
+        <p>Generate SHA256 hashes and attempt decryption using our tool.</p>
+    </section>
+
+    <div class="converter-card">
+        <h2>Generate SHA256 Hash</h2>
+        <input type="text" id="sha256-input" class="input-field" placeholder="Enter text to hash">
+        <button class="button" onclick="generateSHA256Hash()">Generate Hash</button>
+        <div class="output" id="sha256-result">SHA256 Hash will appear here</div>
+    </div>
+
+    <div class="converter-card">
+        <h2>SHA256 Decrypt (Basic)</h2>
+        <input type="text" id="sha256-decrypt-input" class="input-field" placeholder="Enter hash to decrypt">
+        <button class="button" onclick="decryptSHA256()">Attempt Decrypt</button>
+        <div class="output" id="sha256-decrypt-result">Decryption result will appear here</div>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+
+        async function generateSHA256Hash() {
+            const inputText = document.getElementById('sha256-input').value;
+            if (!inputText) { alert("Please enter text to hash."); return; }
+            const encoder = new TextEncoder();
+            const data = encoder.encode(inputText);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+            document.getElementById('sha256-result').textContent = hashHex;
+        }
+
+        function decryptSHA256() {
+            const hashInput = document.getElementById('sha256-decrypt-input').value;
+            if (!hashInput) { alert("Please enter a SHA256 hash to decrypt."); return; }
+            const knownHashes = {
+                'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855': 'empty',
+                '6dcd4ce23d88e2ee9568ba546c007c63a0c8ab1e4ab3c1f604c7a8e24eaeaa56': 'hello',
+                '5e884898da28047151d0e56f8dc6292773603d0d31b2f5e1d2d2bde4e6b6e8a7': 'password',
+            };
+            document.getElementById('sha256-decrypt-result').textContent = knownHashes[hashInput.toLowerCase()] || "Hash not found in known list.";
+        }
+    </script>
+</body>
+</html>

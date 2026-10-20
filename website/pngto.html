@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools for text editing, image conversion, PDF management, and more!">
+    <meta name="keywords" content="online tools, PDF converter, image compressor, text editor, web development tools">
+    <meta name="author" content="Toolkit">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourdomain.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:title" content="Toolkit - Friendly Online Tools">
+    <meta property="og:description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools">
+    <meta property="og:image" content="https://yourdomain.com/images/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourdomain.com/">
+    <meta property="twitter:title" content="Toolkit - Friendly Online Tools">
+    <meta property="twitter:description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools">
+    <meta property="twitter:image" content="https://yourdomain.com/images/twitter-image.jpg">
+    <title>PNG TO PDF</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+
+  </head>
+      <style>
+
+        /* Ad Containers */
+        .ad-container {
+            margin: 2rem auto;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            max-width: 1200px;
+        }
+
+        .ad-unit {
+            margin: 1rem 0;
+            padding: 20px;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive Ads */
+        @media (min-width: 768px) {
+            .ad-responsive {
+                width: 728px;
+                height: 90px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .ad-responsive {
+                width: 320px;
+                height: 100px;
+            }
+        }
+        /* Design System */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: var(--card-bg);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        footer p {
+            margin: 0;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+        }
+
+.toollist {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .singletools {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        break-inside: avoid;
+    }
+
+    .singletools:hover {
+        transform: translateY(-5px);
+    }
+
+    .singletools::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .singletools h2 {
+        font-size: 1.25rem;
+        margin: 1rem 0;
+        color: var(--text);
+    }
+
+    .singletools p {
+        font-size: 0.9rem;
+        color: var(--text);
+        opacity: 0.9;
+    }
+
+    .imgbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: var(--background);
+        border-radius: 12px;
+    }
+
+    .imgbox img {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+
+    .imgbox img:hover {
+        transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+        .toollist {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+        
+        .imgbox {
+            flex-direction: column;
+        }
+    }
+
+    /* Dark theme adjustments */
+    [data-theme="dark"] .singletools {
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    </style>
+
+  <body>
+    <!-- Loading Indicator -->
+    <div class="loading-bar" id="loadingBar"></div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="AllTools.html" class="button">All Tools</a>
+            <a href="Blog.html" class="button">Blog</a>
+            <a href="Features.html" class="button">Features</a>
+            <a href="Help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+	<br/>
+
+    <div style="min-height: 100vh; overflow: hidden" class="bg-white">
+      <div class="relative isolate px-6 pt-14 lg:px-8" style="justify-content: center;align-items: center;display: flex;margin-top: 5%;">
+        <div 
+          class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+          aria-hidden="true"
+        >
+          <div
+            class="myanime relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+            style="
+              clip-path: polygon(
+                74.1% 44.1%,
+                100% 61.6%,
+                97.5% 26.9%,
+                85.5% 0.1%,
+                80.7% 2%,
+                72.5% 32.5%,
+                60.2% 62.4%,
+                52.4% 68.1%,
+                47.5% 58.3%,
+                45.2% 34.5%,
+                27.5% 76.7%,
+                0.1% 64.9%,
+                17.9% 100%,
+                27.6% 76.8%,
+                76.1% 97.7%,
+                74.1% 44.1%
+              );
+            "
+          ></div>
+        </div>
+        <div class="half-section">
+            <h1 class="toolheading" style="margin-top: 50px">
+             PNG TO PDF Converter
+            </h1>
+            <p class="description" style="margin-top: 30px">
+              Convert your PDF files to CSV format quickly and accurately with
+              our tool. Ideal for extracting tabular data and transforming it
+              into a usable spreadsheet format for analysis, reporting, and data
+              manipulation.
+            </p>
+
+            <div class="toolbox">
+              <label
+                for="fileInput"
+                style="
+                  padding: 13px 30px;
+                  border-radius: 50px;
+                  background: black;
+                  color: white;
+                  cursor: pointer;
+                "
+                >Select File</label
+              >
+          
+
+              <button class="downloadbutton" id="convertButton">
+                Download PDF
+              </button>
+
+              <input type="file" id="fileInput" accept="image/png" style="display: none;">
+ 
+             </div>
+          </div>
+        
+        <div
+          class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+          aria-hidden="true"
+        >
+          <div
+            class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+            style="
+              clip-path: polygon(
+                74.1% 44.1%,
+                100% 61.6%,
+                97.5% 26.9%,
+                85.5% 0.1%,
+                80.7% 2%,
+                72.5% 32.5%,
+                60.2% 62.4%,
+                52.4% 68.1%,
+                47.5% 58.3%,
+                45.2% 34.5%,
+                27.5% 76.7%,
+                0.1% 64.9%,
+                17.9% 100%,
+                27.6% 76.8%,
+                76.1% 97.7%,
+                74.1% 44.1%
+              );
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+     <!-- Footer Ad -->
+    <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <!-- Google AdSense Footer Ad -->
+        <ins class="adsbygoogle ad-responsive"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-slot="XXXXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Toolkit - Your Friendly Digital Workshop</p>
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Toolkit",
+            "url": "https://yourdomain.com",
+            "logo": "https://yourdomain.com/logo.png",
+            "description": "Your friendly neighborhood toolkit providing simple, beautiful & powerful online tools",
+            "sameAs": [
+                "https://facebook.com/yourpage",
+                "https://twitter.com/yourhandle"
+            ]
+        }
+        </script>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Loading Indicator
+        window.addEventListener('load', () => {
+            const loadingBar = document.getElementById('loadingBar');
+            loadingBar.style.width = '100%';
+            setTimeout(() => loadingBar.style.opacity = '0', 500);
+        });
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+</script>
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+    <script>
+        document.getElementById('convertButton').addEventListener('click', async function() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a PNG image to convert.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                const imageDataUrl = event.target.result;
+
+                // Create a new PDF Document
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                const page = pdfDoc.addPage();
+
+                // Embed the PNG image in the PDF
+                const pngImageBytes = await fetch(imageDataUrl).then(res => res.arrayBuffer());
+                const pngImage = await pdfDoc.embedPng(pngImageBytes);
+                const { width, height } = pngImage.scale(1);
+
+                // Resize page to image dimensions
+                page.setSize(width, height);
+                page.drawImage(pngImage, {
+                    x: 0,
+                    y: 0,
+                    width: width,
+                    height: height,
+                });
+
+                const pdfBytes = await pdfDoc.save();
+                download(pdfBytes, 'converted.pdf', 'application/pdf');
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        function download(data, filename, type) {
+            const blob = new Blob([data], { type: type });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+  </body>
+</html>

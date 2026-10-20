@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert HTML webpages into images easily with our HTML to Image Converter tool. Capture any webpage as an image file and download it in multiple formats.">
+    <meta name="keywords" content="HTML to image converter, convert webpage to image, online HTML to image, download webpage as image, screenshot webpage tool">
+    <meta name="author" content="Toolkit">
+    <meta property="og:title" content="HTML to Image Converter - Toolkit">
+    <meta property="og:description" content="Convert HTML webpages into images easily with our HTML to Image Converter tool. Capture any webpage as an image file and download it in multiple formats.">
+    <meta property="og:image" content="image_url_here">
+    <meta property="og:url" content="your_url_here">
+    <title>HTML to Image Converter - Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .main-nav h1 {
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links .button {
+            background-color: var(--primary);
+            padding: 0.5rem 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .nav-links .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .tool-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .input-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .input-section input {
+            width: 80%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            outline: none;
+        }
+
+        .output-section {
+            display: none;
+            text-align: center;
+        }
+
+        .output-section img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .download-options {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .button {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        footer {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-top: 3rem;
+        }
+
+        footer p {
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-XXXXX-Y');
+    </script>
+
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="all-tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <div class="tool-container">
+        <div class="input-section">
+            <h1>HTML to Image Converter</h1>
+            <p>Convert any HTML webpage into an image with ease using our HTML to Image Converter tool. Just enter the URL, and we’ll create an image for you.</p>
+            <input type="text" id="urlInput" placeholder="Enter URL of the webpage" />
+            <button class="button" id="loadPageButton">Convert to Image</button>
+        </div>
+
+        <div class="output-section" id="outputSection">
+            <h3>Converted Image</h3>
+            <canvas id="webpageCanvas"></canvas>
+            <div class="download-options">
+                <button class="button" id="downloadJpg">Download JPG</button>
+                <button class="button" id="downloadSvg">Download SVG</button>
+            </div>
+        </div>
+
+        <div class="processing-overlay" id="processingOverlay" style="display:none;">
+            <div class="processing-spinner">
+                <i class="fas fa-spinner fa-spin fa-3x"></i>
+                <p>Processing...</p>
+            </div>
+        </div>
+
+        <!-- Google AdSense -->
+        <div id="ads-container" style="margin: 2rem 0;">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXX"
+                data-ad-slot="XXXXXX"
+                data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Toolkit. All rights reserved.</p>
+        <p><a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script>
+    const loadPageButton = document.getElementById('loadPageButton');
+    const urlInput = document.getElementById('urlInput');
+    const outputSection = document.getElementById('outputSection');
+    const webpageCanvas = document.getElementById('webpageCanvas');
+    const processingOverlay = document.getElementById('processingOverlay');
+    const downloadJpgButton = document.getElementById('downloadJpg');
+    const downloadSvgButton = document.getElementById('downloadSvg');
+
+    loadPageButton.addEventListener('click', function() {
+        const url = urlInput.value;
+        if (!url) {
+            alert("Please enter a valid URL.");
+            return;
+        }
+
+        // Show loading state
+        processingOverlay.style.display = 'flex';
+
+        // Create iframe to load the webpage
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '100%';
+        iframe.style.height = '600px';
+        iframe.src = url;
+        iframe.style.border = 'none';  // Optional: remove iframe border
+
+        // Add the iframe to the document
+        document.body.appendChild(iframe);
+
+        iframe.onload = function() {
+            // Once the iframe is loaded, use html2canvas to capture it
+            html2canvas(iframe.contentWindow.document.body, { logging: false }).then(function(canvas) {
+                // Show the output section with the canvas
+                outputSection.style.display = 'block';
+
+                // Set canvas size and draw it
+                webpageCanvas.width = canvas.width;
+                webpageCanvas.height = canvas.height;
+                const ctx = webpageCanvas.getContext('2d');
+                ctx.drawImage(canvas, 0, 0);
+
+                // Handle JPG download
+                downloadJpgButton.onclick = function() {
+                    const imgUrl = webpageCanvas.toDataURL("image/jpeg");
+                    const link = document.createElement('a');
+                    link.href = imgUrl;
+                    link.download = "webpage-image.jpg";
+                    link.click();
+                };
+
+                // Handle SVG download
+                downloadSvgButton.onclick = function() {
+                    const svgData = getSvgDataFromCanvas(canvas);
+                    const link = document.createElement('a');
+                    const blob = new Blob([svgData], { type: "image/svg+xml" });
+                    const url = URL.createObjectURL(blob);
+                    link.href = url;
+                    link.download = "webpage-image.svg";
+                    link.click();
+                };
+
+                // Hide loading state
+                processingOverlay.style.display = 'none';
+            }).catch(function(error) {
+                // Handle errors gracefully
+                alert("Error capturing the webpage. Please try again.");
+                processingOverlay.style.display = 'none';
+            });
+        };
+
+        // Handling iframe load error
+        iframe.onerror = function() {
+            alert("Unable to load the page. Please check the URL.");
+            processingOverlay.style.display = 'none';
+        };
+    });
+
+    // Function to get SVG data from the canvas
+    function getSvgDataFromCanvas(canvas) {
+        const svg = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}">
+                <foreignObject width="100%" height="100%">
+                    ${canvas.toDataURL()}
+                </foreignObject>
+            </svg>`;
+        return svg;
+    }
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+    }
+    </script>
+</body>
+</html>

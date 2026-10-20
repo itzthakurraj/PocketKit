@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A collection of powerful online JSON tools including JSON Minify, Beautifier, Validator, and more. Format, validate, and convert JSON effortlessly.">
+    <meta name="keywords" content="JSON tools, JSON Minify, JSON Beautifier, JSON Validator, JSON to XML, JSON to CSV, online JSON editor">
+    <meta name="author" content="YourWebsiteName">
+    <title>JSON Tools - Minify, Beautify, Validate & Convert</title>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "YOUR-ADSENSE-ID",
+            enable_page_level_ads: true
+        });
+    </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'YOUR-GA-ID');
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Theme Variables */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* Ad Sections */
+        .ad-space {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1>🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="all-tools.html">All Tools</a>
+            <a href="blog.html">Blog</a>
+            <a href="help.html">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Online JSON Tools - Minify, Beautify, Validate & Convert</h1>
+        <p>A collection of powerful tools for developers to handle JSON data efficiently.</p>
+    </section>
+
+    <!-- Ad Section 1 -->
+    <div class="ad-space">
+        <p>Ad Space 1 (Google AdSense)</p>
+    </div>
+
+    <!-- Main Tools Grid -->
+    <main class="tools-grid">
+<article class="tool-card">
+    <div class="tool-icon">
+        <i class="fas fa-compress-alt fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>JSON Minify</h2>
+    <p>Minify your JSON data by removing unnecessary spaces and formatting. This tool helps reduce file size and makes it ideal for efficient data transmission.</p>
+    <div style="margin-top: 1rem;">
+        <a href="JSONMinify.html" class="button">Start</a>
+    </div>
+</article>
+
+<article class="tool-card">
+    <div class="tool-icon">
+        <i class="fas fa-random fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>JSON to XML</h2>
+    <p>Convert your JSON data to XML format. This tool is helpful for developers needing to work with XML-based systems or APIs.</p>
+    <div style="margin-top: 1rem;">
+        <a href="JSONToXML.html" class="button">Start</a>
+    </div>
+</article>
+
+<article class="tool-card">
+    <div class="tool-icon">
+        <i class="fas fa-paint-brush fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>JSON Beautifier</h2>
+    <p>Format and beautify your JSON data for easier reading and editing. This tool adds proper indentation and spacing to make your JSON more readable.</p>
+    <div style="margin-top: 1rem;">
+        <a href="JSONBeautifier.html" class="button">Start</a>
+    </div>
+</article>
+
+<article class="tool-card">
+    <div class="tool-icon">
+        <i class="fas fa-exchange-alt fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>Diff Checker</h2>
+    <p>Compare two JSON files and highlight the differences. This tool is perfect for checking changes and updates in your JSON data.</p>
+    <div style="margin-top: 1rem;">
+        <a href="DiffChecker.html" class="button">Start</a>
+    </div>
+</article>
+
+<article class="tool-card">
+    <div class="tool-icon">
+        <i class="fas fa-check-circle fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>JSON Validator</h2>
+    <p>Validate your JSON data to ensure it is well-formed and free of errors. This tool checks for syntax issues and provides clear error messages.</p>
+    <div style="margin-top: 1rem;">
+        <a href="JSONValidator.html" class="button">Start</a>
+    </div>
+</article>
+
+<article class="tool-card">
+    <div class="tool-icon">
+        <i class="fas fa-random fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>JSON to CSV</h2>
+    <p>Convert your JSON data to CSV format for easier use in spreadsheets and databases. This tool simplifies the process of extracting tabular data from JSON.</p>
+    <div style="margin-top: 1rem;">
+        <a href="JSONToCSV.html" class="button">Start</a>
+    </div>
+</article>
+
+<article class="tool-card">
+    <div class="tool-icon">
+        <i class="fas fa-eye fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>JSON Viewer</h2>
+    <p>View and explore your JSON data in an interactive and formatted way. This tool makes it easier to analyze and understand your JSON structure.</p>
+    <div style="margin-top: 1rem;">
+        <a href="JSONViewer.html" class="button">Start</a>
+    </div>
+</article>
+
+    </main>
+
+    <!-- Ad Section 2 -->
+    <div class="ad-space">
+        <p>Ad Space 2 (Google AdSense)</p>
+    </div>
+
+    <!-- Footer -->
+    <footer style="text-align:center; padding:2rem;">
+        <p>© 2025 JSON Toolkit. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools for text editing, image conversion, PDF management, and more!">
+    <meta name="keywords" content="online tools, PDF converter, image compressor, text editor, web development tools">
+    <meta name="author" content="Toolkit">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourdomain.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:title" content="Toolkit - Friendly Online Tools">
+    <meta property="og:description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools">
+    <meta property="og:image" content="https://yourdomain.com/images/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourdomain.com/">
+    <meta property="twitter:title" content="Toolkit - Friendly Online Tools">
+    <meta property="twitter:description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools">
+    <meta property="twitter:image" content="https://yourdomain.com/images/twitter-image.jpg">
+
+    <title>Toolkit - Home</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+
+    <style>
+        /* Existing styles remain unchanged */
+
+        /* Ad Containers */
+        .ad-container {
+            margin: 2rem auto;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            max-width: 1200px;
+        }
+
+        .ad-unit {
+            margin: 1rem 0;
+            padding: 20px;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive Ads */
+        @media (min-width: 768px) {
+            .ad-responsive {
+                width: 728px;
+                height: 90px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .ad-responsive {
+                width: 320px;
+                height: 100px;
+            }
+        }
+        /* Design System */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: var(--card-bg);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        footer p {
+            margin: 0;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+        }
+
+.toollist {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .singletools {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        break-inside: avoid;
+    }
+
+    .singletools:hover {
+        transform: translateY(-5px);
+    }
+
+    .singletools::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .singletools h2 {
+        font-size: 1.25rem;
+        margin: 1rem 0;
+        color: var(--text);
+    }
+
+    .singletools p {
+        font-size: 0.9rem;
+        color: var(--text);
+        opacity: 0.9;
+    }
+
+    .imgbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: var(--background);
+        border-radius: 12px;
+    }
+
+    .imgbox img {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+
+    .imgbox img:hover {
+        transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+        .toollist {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+        
+        .imgbox {
+            flex-direction: column;
+        }
+    }
+
+    /* Dark theme adjustments */
+    [data-theme="dark"] .singletools {
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    </style>
+</head>
+<body>
+    <!-- Loading Indicator -->
+    <div class="loading-bar" id="loadingBar"></div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="AllTools.html" class="button">All Tools</a>
+            <a href="Blog.html" class="button">Blog</a>
+            <a href="Features.html" class="button">Features</a>
+            <a href="Help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <center>
+    <div style="min-height: 100vh" class="bg-[#f5f5fa]">
+      <div class="relative isolate px-6 lg:px-8">
+        <div
+          class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+          aria-hidden="true"
+        ></div>
+        <div class="mx-auto pt-24 max-w-2xl">
+          <div class="text-center">
+            <h1
+              class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mt-10"
+            >
+              Every tools you need to work with PDFs in one place 100% FREE
+            </h1>
+            <p class="mt-6 text-lg leading-8 text-gray-600">
+              Effortlessly convert your PDF files into various formats including
+              DOC, JPG, PNG, Excel, and PPT with our comprehensive conversion
+              tool.
+            </p>
+          </div>
+        </div>
+      </div>
+    </center>
+<div class="tools-grid" id="toollists">
+    <div class="tool-card">
+          <a href="./pdftocsv.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/8242/8242984.png"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO CSV</h2>
+    </a>
+      
+            <p>
+              A PDF to CSV converter extracts tabular data from PDFs,
+              transforming it into CSV format for easy data handling and
+              analysis.
+            </p>
+        </div>
+    <div class="tool-card">
+          <a href="./pdftoexcel.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn.pixabay.com/photo/2021/01/30/12/15/excel-5963669_640.png"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO EXCEL</h2>
+    </a>
+      
+            <p>
+              Convert PDFs to Excel effortlessly with high accuracy, preserving
+              data integrity and formatting for seamless spreadsheet
+              integration.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="pdftohtml.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/html-2752158-2284975.png?f=webp&w=256"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO HTML</h2>
+    </a>
+      
+            <p>
+              Convert PDFs to HTML effortlessly, preserving text, images, and
+              formatting for a seamless web-ready document experience.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./pdftojpg.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/136/136524.png"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO JPG</h2>
+    </a>
+      
+            <p>
+              Convert PDFs to high-quality JPG images quickly, preserving
+              clarity and detail for easy use and sharing in various formats.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./pdftojson.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/136/136525.png"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO JSON</h2>
+          </a>
+
+
+            <p>
+              Convert PDFs to JSON format efficiently, extracting data into a
+              structured, machine-readable format for seamless integration and
+              analysis.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./pdftopng.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/29/29072.png"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO PNG</h2>
+          </a>
+
+            <p>
+              Transform PDFs into high-resolution PNG images, preserving quality
+              and detail for versatile use and easy sharing in digital formats.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./pdftoword.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbYQcLfUfqY6nAiwop5kkdkSvuKg0qzIc2TA&s"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO WORD</h2>
+          </a>
+
+            <p>
+              Convert PDFs to editable MS Word documents with precision,
+              maintaining formatting and layout for seamless editing and content
+              management.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./pdftoxml.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/5105/5105250.png"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO XML</h2>
+          </a>
+
+            <p>
+              Convert PDFs to XML format accurately, extracting structured data
+              for integration and analysis while preserving content integrity
+              and layout.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./pdftozip.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/7817/7817526.png"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO ZIP</h2>
+          </a>
+
+            <p>
+              Convert PDFs to ZIP files quickly, compressing documents into a
+              compact format for easier storage, sharing, and management.
+            </p>
+        </div>
+
+   <div class="tool-card">
+          <a href="./pdftowebp.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/8263/8263085.png"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO WEBP</h2>
+          </a>
+
+            <p>
+              Convert PDFs to WebP images efficiently, ensuring high-quality
+              visuals with reduced file size for optimal web performance and
+              faster loading.
+            </p>
+        </div>
+
+   <div class="tool-card">
+          <a href="./pdftotext.html">
+            <div class="imgbox">
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://static.vecteezy.com/system/resources/previews/026/221/337/non_2x/text-icon-symbol-design-illustration-vector.jpg"
+                alt=""
+              />
+            </div>
+            <h2>PDF TO TEXT</h2>
+          </a>
+            <p>
+              Convert PDFs to editable text quickly with our tool. Extract and
+              preserve content while ensuring accuracy, perfect for editing,
+              repurposing, and efficient data handling.
+            </p>
+        </div>
+
+   <div class="tool-card">
+          <a href="./csvto.html">
+            <div class="imgbox">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/8242/8242984.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>CSV TO PDF</h2>
+
+          </a>
+
+            <p>
+              Transform CSV data into polished PDFs effortlessly with our
+              converter. Ideal for creating clear, professional documents from
+              spreadsheets. Simple, fast, and accurate conversion process.
+            </p>
+        </div>
+
+   <div class="tool-card">
+          <a href="./excelto.html">
+            <div class="imgbox">
+              <img
+                src="https://cdn.pixabay.com/photo/2021/01/30/12/15/excel-5963669_640.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>EXCEL TO PDF</h2>
+          </a>
+
+            <p>
+              Convert Excel spreadsheets to professional PDFs with ease. Our
+              tool ensures accurate formatting and high-quality output, perfect
+              for reports, presentations, and data sharing. Simple and
+              efficient.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./htmlto.html">
+            <div class="imgbox">
+              <img
+                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/html-2752158-2284975.png?f=webp&w=256"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>HTML TO PDF</h2>
+          </a>
+
+            <p>
+              Easily convert HTML files to high-quality PDFs with our tool.
+              Preserve layouts, styles, and graphics while generating
+              professional, easily shareable documents. Fast and reliable
+              conversion.
+            </p>
+        </div>
+
+   <div class="tool-card">
+          <a href="./jpgto.html">
+            <div class="imgbox">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/136/136524.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>JPG TO PDF</h2>
+          </a>
+
+            <p>
+              Quickly convert JPG images to PDF files with our tool. Maintain
+              image quality and resolution while creating clean, professional
+              PDFs for easy sharing and storage.
+            </p>
+        </div>
+
+   <div class="tool-card">
+          <a href="./jsonto.html">
+            <div class="imgbox">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/136/136525.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>JSON TO PDF</h2>
+          </a>
+
+            <p>
+              Convert JSON data to neatly formatted PDFs effortlessly. Our tool
+              ensures accurate representation of data in a clean, professional
+              layout, ideal for reports and documentation.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./pngto.html">
+            <div class="imgbox">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/29/29072.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>PNG TO PDF</h2>
+          </a>
+
+            <p>
+              Transform PNG images into high-quality PDFs with ease. Our
+              converter preserves image clarity and color, creating professional
+              and shareable documents quickly and efficiently.
+            </p>
+        </div>
+
+   <div class="tool-card">
+          <a href="./speechto.html">
+            <div class="imgbox">
+              <img
+                src="https://static.thenounproject.com/png/1202-200.png"
+                alt=""
+              />
+
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>SPEECH TO PDF</h2>
+          </a>
+
+            <p>
+              Convert speech transcripts to polished PDFs effortlessly. Our tool
+              accurately formats spoken content into professional, readable
+              documents, ideal for reports, presentations, and easy sharing.
+            </p>
+        </div>
+
+   <div class="tool-card">
+          <a href="./textto.html">
+            <div class="imgbox">
+              <img
+                src="https://static.vecteezy.com/system/resources/previews/026/221/337/non_2x/text-icon-symbol-design-illustration-vector.jpg"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>TEXT TO PDF</h2>
+          </a>
+
+            <p>
+              Transform plain text into polished PDFs effortlessly. Our
+              converter ensures clean formatting and professional output, ideal
+              for creating well-structured documents and easily shareable files.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./webpto.html">
+            <div class="imgbox">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/8263/8263085.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>WEBP TO PDF</h2>
+          </a>
+
+            <p>
+              Convert PDFs to WebP images efficiently, ensuring high-quality
+              visuals with reduced file size for optimal web performance and
+              faster loading.
+            </p>
+        </div>
+   <div class="tool-card">
+          <a href="./xmlto.html">
+            <div class="imgbox">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/5105/5105250.png"
+                alt=""
+              />
+              <img
+                style="height: 15px"
+                src="https://cdn-icons-png.flaticon.com/512/32/32213.png"
+                alt=""
+              />
+              <img
+                src="https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"
+                alt=""
+              />
+            </div>
+            <h2>XML TO PDF</h2>
+          </a>
+
+            <p>
+              Convert HTML files to professional PDFs seamlessly. Our tool
+              preserves formatting and design, ensuring accurate, high-quality
+              output suitable for reports, presentations, and online content.
+            </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Ad -->
+    <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <!-- Google AdSense Footer Ad -->
+        <ins class="adsbygoogle ad-responsive"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-slot="XXXXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Toolkit - Your Friendly Digital Workshop</p>
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Toolkit",
+            "url": "https://yourdomain.com",
+            "logo": "https://yourdomain.com/logo.png",
+            "description": "Your friendly neighborhood toolkit providing simple, beautiful & powerful online tools",
+            "sameAs": [
+                "https://facebook.com/yourpage",
+                "https://twitter.com/yourhandle"
+            ]
+        }
+        </script>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Loading Indicator
+        window.addEventListener('load', () => {
+            const loadingBar = document.getElementById('loadingBar');
+            loadingBar.style.width = '100%';
+            setTimeout(() => loadingBar.style.opacity = '0', 500);
+        });
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+</html>

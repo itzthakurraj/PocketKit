@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert JSON to CSV online! Free tool to transform structured JSON data into CSV format for easy analysis and processing.">
+    <meta name="keywords" content="JSON to CSV, Convert JSON to CSV, JSON to Excel, CSV Generator">
+    <meta name="author" content="YourWebsiteName">
+    <title>JSON to CSV Converter - Free Online Tool</title>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "YOUR-ADSENSE-ID",
+            enable_page_level_ads: true
+        });
+    </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'YOUR-GA-ID');
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Theme Variables */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Main Container */
+        .container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            background-color: var(--card-bg);
+            color: var(--text);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            height: 150px;
+            resize: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+
+        .output {
+            background-color: var(--card-bg);
+            color: var(--text);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 40px;
+            font-size: 1.2em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: monospace;
+        }
+
+        /* Ad Section */
+        .ad-space {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1>JSON to CSV Converter</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="all-tools.html">All Tools</a>
+            <a href="blog.html">Blog</a>
+            <a href="help.html">Help</a>
+        </div>
+    </nav>
+
+    <!-- Ad Section 1 -->
+    <div class="ad-space">
+        <p>Ad Space 1 (Google AdSense)</p>
+    </div>
+
+    <!-- JSON to CSV Converter -->
+    <div class="container">
+        <h1>Convert JSON to CSV</h1>
+        <p>Transform structured JSON data into CSV format for easy analysis.</p>
+        <div class="section">
+            <h3>Enter JSON to Convert to CSV</h3>
+            <textarea id="json-input" class="input-field" placeholder="Paste your JSON here"></textarea>
+            <button class="btn" onclick="convertJsonToCsv()">Convert to CSV</button>
+            <div class="output">
+                <pre id="csv-output">Your CSV result will appear here.</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Section 2 -->
+    <div class="ad-space">
+        <p>Ad Space 2 (Google AdSense)</p>
+    </div>
+
+    <!-- Footer -->
+    <footer style="text-align:center; padding:2rem;">
+        <p>© 2025 JSON to CSV Converter Tool. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        function convertJsonToCsv() {
+            const jsonInput = document.getElementById('json-input').value.trim();
+            try {
+                const jsonObj = JSON.parse(jsonInput);
+                const keys = Object.keys(jsonObj[0]);
+                const header = keys.join(',');
+                const rows = jsonObj.map(obj => keys.map(key => obj[key]).join(',')).join('\n');
+                document.getElementById('csv-output').textContent = `${header}\n${rows}`;
+            } catch (e) {
+                document.getElementById('csv-output').textContent = "Invalid JSON format.";
+            }
+        }
+
+        function toggleTheme() {
+            const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
+
+</body>
+</html>

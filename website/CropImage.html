@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crop your images with precision by selecting the area you want to keep using our simple online tool. Crop images for free with ease!">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Toolkit Team">
+    <meta property="og:title" content="Crop Image - Toolkit">
+    <meta property="og:description" content="Crop images precisely with our online tool. Upload an image and select the area to keep.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="path_to_image.jpg">
+    <meta property="og:url" content="current_page_url">
+    <title>Crop Image - Toolkit</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXX-X');
+    </script>
+
+    <style>
+        /* Base Theme Styles */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .tool-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: 16px;
+            padding: 4rem 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            cursor: pointer;
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Crop Controls */
+        .crop-controls {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .crop-inputs {
+            margin: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .crop-inputs input {
+            width: 45%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            font-size: 1rem;
+        }
+
+        .crop-inputs label {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Preview Section */
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .preview-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+            background: var(--background);
+        }
+
+        /* Download Button */
+        .download-btn-container {
+            text-align: center;
+            margin: 2rem;
+        }
+
+        .download-btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--secondary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* Ads Section */
+        .ads-section {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        footer p {
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXX-X');
+    </script>
+
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="image-tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <div class="tool-container">
+        <div class="upload-section">
+            <h1>Crop Image</h1>
+            <p>Crop your images with precision by selecting the area you want to keep. Simply upload an image, set the dimensions, and crop it to your needs.</p>
+
+            <div class="upload-area" id="dropZone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drag & Drop Images Here</h3>
+                <p>or click to browse files (JPEG, PNG, WEBP)</p>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+        </div>
+
+        <div class="crop-controls" id="cropControls" hidden>
+            <h2>Crop Controls</h2>
+            <div class="crop-inputs">
+                <div>
+                    <label for="cropWidth">Width</label>
+                    <input type="number" id="cropWidth" min="1" placeholder="Width in px">
+                </div>
+                <div>
+                    <label for="cropHeight">Height</label>
+                    <input type="number" id="cropHeight" min="1" placeholder="Height in px">
+                </div>
+            </div>
+            <button class="button" id="cropBtn" disabled>Crop Image</button>
+        </div>
+
+        <div class="preview-container" id="previewContainer" hidden>
+            <div class="preview-card">
+                <h3>Original Image</h3>
+                <img class="preview-img" id="originalPreview">
+            </div>
+            <div class="preview-card">
+                <h3>Cropped Image</h3>
+                <img class="preview-img" id="croppedPreview">
+            </div>
+        </div>
+
+        <div class="download-btn-container" id="downloadContainer" hidden>
+            <button class="download-btn" id="downloadBtn">
+                <i class="fas fa-download"></i> Download Cropped Image
+            </button>
+        </div>
+
+        <!-- Ads Section -->
+        <div class="ads-section">
+            <h3>Sponsored</h3>
+            <!-- Google AdSense Ad (example) -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXX"
+                data-ad-slot="XXXXXX"
+                data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Toolkit. All rights reserved.</p>
+    </footer>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const cropWidthInput = document.getElementById('cropWidth');
+        const cropHeightInput = document.getElementById('cropHeight');
+        const cropBtn = document.getElementById('cropBtn');
+        const previewContainer = document.getElementById('previewContainer');
+        const downloadContainer = document.getElementById('downloadContainer');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const cropControls = document.getElementById('cropControls');
+        let currentFile = null;
+        let originalImage = null;
+
+        // Event Listeners
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', handleDragOver);
+        dropZone.addEventListener('dragleave', handleDragLeave);
+        dropZone.addEventListener('drop', handleDrop);
+        fileInput.addEventListener('change', handleFileSelect);
+        cropBtn.addEventListener('click', cropImage);
+        downloadBtn.addEventListener('click', downloadImage);
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            dropZone.style.borderColor = 'var(--secondary)';
+        }
+
+        function handleDragLeave() {
+            dropZone.style.borderColor = 'var(--primary)';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            dropZone.style.borderColor = 'var(--primary)';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleFile(file);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) handleFile(file);
+        }
+
+        function handleFile(file) {
+            currentFile = file;
+            cropControls.hidden = false;
+            previewContainer.hidden = true;
+            downloadContainer.hidden = true;
+            cropBtn.disabled = false;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                originalImage = new Image();
+                originalImage.src = event.target.result;
+                originalImage.onload = () => {
+                    document.getElementById('originalPreview').src = originalImage.src;
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function cropImage() {
+            const width = parseInt(cropWidthInput.value);
+            const height = parseInt(cropHeightInput.value);
+            if (isNaN(width) || isNaN(height)) return;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.drawImage(originalImage, 0, 0, width, height);
+
+            canvas.toBlob((blob) => {
+                showPreview(blob);
+            }, 'image/jpeg');
+        }
+
+        function showPreview(blob) {
+            previewContainer.hidden = false;
+
+            // Display Cropped Image
+            document.getElementById('croppedPreview').src = URL.createObjectURL(blob);
+            downloadContainer.hidden = false;
+
+            // Enable Download
+            downloadBtn.disabled = false;
+        }
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = `cropped_${currentFile.name}`;
+            link.href = document.getElementById('croppedPreview').src;
+            link.click();
+        }
+
+        // Toggle Theme
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+        }
+    </script>
+</body>
+</html>

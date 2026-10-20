@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Base64 Encode/Decode tool - Convert text to Base64 and back to original text. Ideal for web development and data transfer.">
+    <title>Base64 Encoder/Decoder - Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'YOUR-GA-ID');
+    </script>
+
+    <!-- Design System & Styles -->
+    <style>
+        /* Reusing the CSS design system and styling from your provided theme */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Base64 Tool */
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Interactive Elements */
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Text Output */
+        #outputText {
+            background: #f1f1f1;
+            padding: 1rem;
+            border-radius: 8px;
+            white-space: pre-line;
+            overflow-x: auto;
+            margin-top: 1rem;
+            color: black;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tool-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Base64 Encode/Decode</h1>
+        <p>Convert text to Base64 and decode Base64 back to text. This tool is perfect for web development and data transfer where encoding and decoding are needed.</p>
+    </section>
+
+    <!-- Base64 Tool -->
+    <main class="tools-grid">
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-clipboard-list fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>Base64 Encoder/Decoder</h2>
+            <p>Enter text to either encode to Base64 or decode from Base64 format.</p>
+
+            <!-- Input Fields -->
+            <textarea id="inputText" placeholder="Enter text here to encode or decode"></textarea>
+
+            <div>
+                <button class="button" onclick="encodeBase64()">Encode to Base64</button>
+                <button class="button" onclick="decodeBase64()">Decode from Base64</button>
+            </div>
+
+            <!-- Output Section -->
+            <div id="outputText"></div>
+        </article>
+    </main>
+
+    <!-- Google AdSense Ad -->
+    <div style="text-align:center; margin-top: 2rem;">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+             style="display:block; text-align:center;"
+             data-ad-client="YOUR-AD-CLIENT-ID"
+             data-ad-slot="YOUR-AD-SLOT-ID"
+             data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Encode to Base64
+        function encodeBase64() {
+            const inputText = document.getElementById('inputText').value.trim();
+            const outputText = document.getElementById('outputText');
+
+            if (!inputText) {
+                outputText.textContent = "Please enter some text to encode.";
+                return;
+            }
+
+            // Encode the text to Base64
+            const encodedText = btoa(inputText);
+            outputText.textContent = `Encoded Base64: \n${encodedText}`;
+        }
+
+        // Decode from Base64
+        function decodeBase64() {
+            const inputText = document.getElementById('inputText').value.trim();
+            const outputText = document.getElementById('outputText');
+
+            if (!inputText) {
+                outputText.textContent = "Please enter some Base64 text to decode.";
+                return;
+            }
+
+            try {
+                // Decode from Base64
+                const decodedText = atob(inputText);
+                outputText.textContent = `Decoded Text: \n${decodedText}`;
+            } catch (e) {
+                outputText.textContent = "Invalid Base64 string.";
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate MD5 hashes and decrypt them with our online tool. Simple, fast, and efficient.">
+    <meta name="keywords" content="MD5, hash generator, decrypt MD5, online tool">
+    <meta name="author" content="Your Name">
+    <title>MD5 Hash & Decrypt Converter</title>
+
+    <!-- Google Analytics Integration -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-XXXXXX-X');
+    </script>
+
+    <!-- Google AdSense Integration -->
+    <script data-ad-client="ca-pub-XXXXXX" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reuse exact same :root variables and base styles from ASCII converter */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .converter-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            background: var(--background);
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .output {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            color: var(--text);
+            min-height: 50px;
+            margin-top: 1rem;
+            white-space: pre-wrap;
+            border: 1px solid var(--primary);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .main-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation matching ASCII converter -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>MD5 Hash Generator & Decrypt</h1>
+        <p>Generate MD5 hashes instantly and attempt to decrypt existing hashes using our comprehensive tool.</p>
+    </section>
+
+    <!-- MD5 Generator Card -->
+    <div class="converter-card">
+        <h2>Generate MD5 Hash</h2>
+        <input type="text" 
+               id="hash-input" 
+               class="input-field"
+               placeholder="Enter text to hash">
+        <button class="button" onclick="generateMD5Hash()">
+            <i class="fas fa-hashtag"></i>
+            Generate Hash
+        </button>
+        <div class="output" id="hash-result">MD5 Hash will appear here</div>
+    </div>
+
+    <!-- MD5 Decrypt Card -->
+    <div class="converter-card">
+        <h2>MD5 Decrypt (Basic)</h2>
+        <input type="text" 
+               id="decrypt-input" 
+               class="input-field"
+               placeholder="Enter hash to decrypt">
+        <button class="button" onclick="decryptMD5()">
+            <i class="fas fa-unlock"></i>
+            Attempt Decrypt
+        </button>
+        <div class="output" id="decrypt-result">Decryption result will appear here</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // Same theme toggle functionality as ASCII converter
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Function to generate MD5 Hash
+        function generateMD5Hash() {
+            const inputText = document.getElementById('hash-input').value;
+
+            if (!inputText) {
+                alert("Please enter text to hash.");
+                return;
+            }
+
+            // Using browser's built-in SubtleCrypto API for MD5 (Fallback could be to use a polyfill library like SparkMD5)
+            crypto.subtle.digest('MD5', new TextEncoder().encode(inputText))
+                .then((buffer) => {
+                    const hashArray = Array.from(new Uint8Array(buffer));
+                    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+                    document.getElementById('hash-result').textContent = hashHex;
+                })
+                .catch((err) => {
+                    console.error(err);
+                    alert("Error generating MD5 hash.");
+                });
+        }
+
+        // Function to decrypt MD5 Hash (Limited using a predefined list)
+        function decryptMD5() {
+            const hashInput = document.getElementById('decrypt-input').value;
+
+            if (!hashInput) {
+                alert("Please enter an MD5 hash to decrypt.");
+                return;
+            }
+
+            // A simple predefined list of known MD5 hashes (for demonstration)
+            const knownHashes = {
+                'd41d8cd98f00b204e9800998ecf8427e': 'empty', // Example MD5 Hash for an empty string
+                '098f6bcd4621d373cade4e832627b4f6': 'test', // Example MD5 Hash for the string "test"
+                '5baa61e4c9b93f3f0682250b6cf8331b': 'password', // Example MD5 Hash for the string "password"
+            };
+
+            const result = knownHashes[hashInput.toLowerCase()] || "Hash not found in known list.";
+
+            document.getElementById('decrypt-result').textContent = result;
+        }
+    </script>
+</body>
+</html>

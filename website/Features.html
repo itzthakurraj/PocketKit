@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Free professional tools for PDF editing, image conversion, text manipulation, and web development. Premium-quality utilities at no cost with Toolkit's online suite.">
+    <meta name="keywords" content="free PDF tools, image converter, text editor, online encryption, web development tools, SEO utilities, file conversion">
+    <meta name="author" content="Toolkit">
+    <link rel="canonical" href="https://yourtoolkitdomain.com/features">
+    
+    <!-- Social Media Meta -->
+    <meta property="og:title" content="Free Professional Online Tools Suite | Toolkit">
+    <meta property="og:description" content="Access premium-quality PDF, image, and text tools completely free. Convert, edit, and enhance files without limitations.">
+    <meta property="og:image" content="https://yourtoolkitdomain.com/images/og-tools.jpg">
+    <meta property="og:url" content="https://yourtoolkitdomain.com/features">
+    <meta property="og:type" content="website">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Online Tools for Professionals | Toolkit">
+    <meta name="twitter:description" content="Complete suite of free tools for PDF conversion, image editing, text manipulation, and web development.">
+    <meta name="twitter:image" content="https://yourtoolkitdomain.com/images/twitter-tools.jpg">
+
+    <!-- Title -->
+    <title>Toolkit - Features</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXX-X');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
+
+    <style>
+        .ad-container {
+            margin: 2rem auto;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            max-width: 1200px;
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .ad-responsive {
+            width: 100%;
+            height: auto;
+        }
+
+        @media (min-width: 768px) {
+            .ad-responsive {
+                height: 90px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .ad-responsive {
+                height: 100px;
+            }
+        }
+
+        /* Reusing the base styles and design system from the previous page */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Ad Space Styles */
+        .ad-space {
+            text-align: center;
+            padding: 2rem;
+            margin: 2rem 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="Index.html" class="button">Home</a>
+            <a href="AllTools.html" class="button">All Tools</a>
+            <a href="Blog.html" class="button">Blog</a>
+            <a href="Help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Free Tools That You Would Normally Pay For</h1>
+        <p>Offering PDF, Image, and Text-related services for free—what you usually pay for, now at no cost!</p>
+    </section>
+
+    <!-- Horizontal Ad Space 1 -->
+    <div class="ad-space ad-horizontal">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="YOUR-AD-CLIENT-ID"
+            data-ad-slot="YOUR-AD-SLOT-ID"
+            data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+		<!-- Main Content -->
+		<main class="tools-grid">
+	<!-- Text Tools -->
+	<article class="tool-card" role="button" tabindex="0" aria-label="Text Tools">
+		<div class="tool-icon">
+			<i class="fas fa-font fa-2x" style="color: var(--primary)"></i>
+		</div>
+		<h2>Text Tools</h2>
+		<p>Edit, format, and enhance text documents</p>
+		<div style="margin-top: 1rem;">
+			<a href="DocumentWizard.html" class="button">Start Editing</a>
+		</div>
+	</article>
+
+	<!-- Image Tools -->
+	<article class="tool-card" role="button" tabindex="0" aria-label="Image Tools">
+		<div class="tool-icon">
+			<i class="fas fa-image fa-2x" style="color: var(--primary)"></i>
+		</div>
+		<h2>Image Tools</h2>
+		<p>Reduce image size without quality loss</p>
+		<div style="margin-top: 1rem;">
+			<a href="ImageTools.html" class="button">Start Converting</a>
+		</div>
+	</article>
+
+	<!-- PDF Tools -->
+	<article class="tool-card" role="button" tabindex="0" aria-label="PDF Tools">
+		<div class="tool-icon">
+			<i class="fas fa-file-pdf fa-2x" style="color: var(--secondary)"></i>
+		</div>
+		<h2>PDF Magic</h2>
+		<p>Merge, split, and convert PDFs effortlessly</p>
+		<div style="margin-top: 1rem;">
+			<a href="PDFTools.html" class="button">Transform PDFs</a>
+		</div>
+	</article>
+
+	<!-- Typing Test Tools -->
+	<article class="tool-card" role="button" tabindex="0" aria-label="Typing Test Tools">
+		<div class="tool-icon">
+			<i class="fas fa-keyboard fa-2x" style="color: var(--tertiary)"></i>
+		</div>
+		<h2>Typing Test</h2>
+		<p>Improve your typing speed and accuracy</p>
+		<div style="margin-top: 1rem;">
+			<a href="TypingTest.html" class="button">Start Typing</a>
+		</div>
+	</article>
+
+	<!-- Encryption Tools -->
+	<article class="tool-card" role="button" tabindex="0" aria-label="Encryption Tools">
+		<div class="tool-icon">
+			<i class="fas fa-lock fa-2x" style="color: var(--primary)"></i>
+		</div>
+		<h2>Encryption</h2>
+		<p>Secure your data with encryption algorithms</p>
+		<div style="margin-top: 1rem;">
+			<a href="Encryption.html" class="button">Start Encrypting</a>
+		</div>
+	</article>
+
+	<!-- Web Tools -->
+	<article class="tool-card" role="button" tabindex="0" aria-label="Web Tools">
+		<div class="tool-icon">
+			<i class="fas fa-code fa-2x" style="color: var(--primary)"></i>
+		</div>
+		<h2>Web Development Tools</h2>
+		<p>Enhance your web development workflow with a set of powerful tools to optimize, beautify, and convert your code.</p>
+		<div style="margin-top: 1rem;">
+			<a href="Web.html" class="button">Start Development</a>
+		</div>
+	</article>
+
+	<!-- Development Tools -->
+	<article class="tool-card" role="button" tabindex="0" aria-label="Development Tools">
+		<div class="tool-icon">
+			<i class="fas fa-laptop-code fa-2x" style="color: var(--primary)"></i>
+		</div>
+		<h2>Development Tools</h2>
+		<p>Streamline your development process with a set of powerful JSON manipulation and comparison tools to make your coding faster and easier.</p>
+		<div style="margin-top: 1rem;">
+			<a href="Development.html" class="button">Start Development</a>
+		</div>
+	</article>
+
+	<!-- Calculator Tools -->
+	<article class="tool-card" role="button" tabindex="0" aria-label="Calculator Tools">
+		<div class="tool-icon">
+			<i class="fas fa-calculator fa-2x" style="color: var(--primary)"></i>
+		</div>
+		<h2>Calculator Tools</h2>
+		<p>Access a variety of calculators to help you with age calculations, loans, SIPs, and GST computations for a smoother experience in finance management.</p>
+		<div style="margin-top: 1rem;">
+			<a href="Calculator.html" class="button">Start Calculator</a>
+		</div>
+	</article>
+
+		</main>
+    
+    <!-- Footer Ad -->
+    <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <ins class="adsbygoogle ad-responsive"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-slot="XXXXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Toolkit. All rights reserved.</p>
+        <!-- Schema.org Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": [{
+                "@type": "ListItem",
+                "position": 1,
+                "name": "PDF Tools",
+                "url": "https://yourtoolkitdomain.com/PDFTools.html"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Image Tools",
+                "url": "https://yourtoolkitdomain.com/ImageTools.html"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Text Tools",
+                "url": "https://yourtoolkitdomain.com/DocumentWizard.html"
+            }]
+        }
+        </script>
+    </footer>
+
+    <script>
+        // Initialize all ads
+        document.addEventListener('DOMContentLoaded', () => {
+            const ads = document.querySelectorAll('.adsbygoogle');
+            ads.forEach(ad => {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            });
+        });
+
+        // Dark Mode Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+</body>
+</html>

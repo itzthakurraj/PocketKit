@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Secure and powerful encryption and encoding tools to protect your sensitive data. From base64 encoding to AES encryption, we've got you covered.">
+    <title>Encryption Tools - Toolkit</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'YOUR-GA-ID');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "YOUR-ADSENSE-ID",
+            enable_page_level_ads: true
+        });
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Design System */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Interactive Elements */
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Secure Your Data with Powerful Encryption Tools</h1>
+        <p>From encoding and decoding to hashing and encryption, our suite of tools ensures your data remains protected. Whether it's securing passwords or handling encryption algorithms, manage your sensitive information with ease and confidence.</p>
+    </section>
+
+    <!-- Horizontal Ad Space 1 -->
+    <div class="ad-space ad-horizontal" style="background-color: #f1f1f1; text-align: center; padding: 20px;">
+        <p>Ad Space 1 (Horizontal) - Place your Google AdSense code here!</p>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="YOUR-ADSENSE-ID"
+             data-ad-slot="YOUR-AD-SLOT"
+             data-ad-format="auto"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Main Tools Grid -->
+    <main class="tools-grid">
+        <!-- Base64 Encode/Decode Tool -->
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-random fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>Base64 Encode/Decode</h2>
+            <p>Convert data to and from Base64 encoding. Perfect for encoding binary data to be transmitted as text or decoding it back to its original form.</p>
+            <div style="margin-top: 1rem;">
+                <a href="Base64EncodeDecode.html" class="button">Start</a>
+            </div>
+        </article>
+
+        <!-- MD5 Hash Decrypt Tool -->
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-lock fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>MD5 Hash Decrypt</h2>
+            <p>Decrypt MD5 hashed strings. This tool is helpful for reversing MD5 hashes or checking if a hash matches a known value.</p>
+            <div style="margin-top: 1rem;">
+                <a href="MD5HashDecrypt.html" class="button">Start</a>
+            </div>
+        </article>
+
+        <!-- SHA256 Encrypt/Decrypt Tool -->
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-shield-alt fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>SHA256 Encrypt/Decrypt</h2>
+            <p>Encrypt and decrypt data using the SHA-256 hashing algorithm. A widely used cryptographic hash function for ensuring data integrity.</p>
+            <div style="margin-top: 1rem;">
+                <a href="SHA256EncryptDecrypt.html" class="button">Start</a>
+            </div>
+        </article>
+
+        <!-- AES/DES Encrypt/Decrypt Tool -->
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-lock fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>AES/DES Encrypt/Decrypt</h2>
+            <p>Encrypt and decrypt data using AES or DES encryption algorithms. These are symmetric encryption methods for securing sensitive information.</p>
+            <div style="margin-top: 1rem;">
+                <a href="AES_DES_EncryptDecrypt.html" class="button">Start</a>
+            </div>
+        </article>
+
+        <!-- URL Encode/Decode Tool -->
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-link fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>URL Encode/Decode</h2>
+            <p>Encode and decode URLs to ensure proper formatting for safe transmission across the internet. Ideal for encoding query parameters or web addresses.</p>
+            <div style="margin-top: 1rem;">
+                <a href="URLEncodeDecode.html" class="button">Start</a>
+            </div>
+        </article>
+
+        <!-- HTML Encode/Decode Tool -->
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-code fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>HTML Encode/Decode</h2>
+            <p>Encode and decode HTML entities. This tool helps you convert characters like `&`, `<`, and `>` into their respective HTML encoded versions and vice versa.</p>
+            <div style="margin-top: 1rem;">
+                <a href="HTMLEncodeDecode.html" class="button">Start</a>
+            </div>
+        </article>
+
+        <!-- Password Generator Tool -->
+        <article class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-key fa-2x" style="color: var(--primary)"></i>
+            </div>
+            <h2>Password Generator</h2>
+            <p>Generate strong and secure passwords to protect your accounts and data. Customize the length and complexity of your password for optimal security.</p>
+            <div style="margin-top: 1rem;">
+                <a href="PasswordGenerator.html" class="button">Start</a>
+            </div>
+        </article>
+    </main>
+
+    <!-- Horizontal Ad Space 2 -->
+    <div class="ad-space ad-horizontal" style="background-color: #f1f1f1; text-align: center; padding: 20px;">
+        <p>Ad Space 2 (Horizontal) - Place your Google AdSense code here!</p>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="YOUR-ADSENSE-ID"
+             data-ad-slot="YOUR-AD-SLOT"
+             data-ad-format="auto"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div style="text-align: center; padding: 2rem;">
+            <p>© 2025 Toolkit. All rights reserved.</p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+</body>
+</html>

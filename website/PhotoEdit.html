@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Resize, edit, and enhance images with our online photo editor. Upload images in various formats (JPEG, PNG, WEBP), apply filters, resize, crop, rotate, and add text.">
+    <meta name="keywords" content="photo editor, resize image, image tools, online image editor, add text to images, rotate images">
+    <meta name="author" content="Toolkit">
+    <meta name="robots" content="index, follow">
+    <title>Resize Image - Photo Editor | Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Existing CSS with some adjustments for SEO & responsiveness */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .main-nav h1 {
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links .button {
+            background-color: var(--primary);
+            padding: 0.5rem 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .nav-links .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .tool-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        .upload-section {
+            flex: 1;
+        }
+
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border 0.3s ease;
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area h3 {
+            margin-bottom: 1rem;
+        }
+
+        .upload-area p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+        }
+
+        .resize-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+            max-width: 200px;
+        }
+
+        .resize-controls button {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+        }
+
+        .resize-controls button:hover {
+            opacity: 0.9;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 1000px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .tool-container {
+                flex-direction: column;
+            }
+
+            .resize-controls {
+                max-width: 100%;
+            }
+        }
+
+        .footer {
+            background: var(--card-bg);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .footer p {
+            color: #555;
+        }
+
+        .ads-section {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .ads-section iframe {
+            width: 100%;
+            max-width: 300px;
+            height: 250px;
+            border: none;
+        }
+    </style>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-XXXXXXXXX-X');
+    </script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-XXXXXXX",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="image-tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <!-- Ads Section -->
+    <div class="ads-section">
+        <h2>Sponsored</h2>
+        <iframe src="https://www.google.com/adsense/start/" title="Google Ads"></iframe>
+    </div>
+
+    <div class="tool-container">
+        <div class="upload-section">
+            <h1>Resize Image</h1>
+            <p>Resize your image to desired dimensions. Upload and adjust the size, rotate, or apply filters to enhance your photo.</p>
+
+            <div class="upload-area" id="dropZone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drag & Drop Images Here</h3>
+                <p>or click to browse files (JPEG, PNG, WEBP)</p>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+            <canvas id="imageCanvas"></canvas>
+        </div>
+
+        <div class="resize-controls" id="resizeControls" hidden>
+            <button id="applyFilterBtn">Apply Filter</button>
+            <button id="resizeBtn">Resize</button>
+            <button id="cropBtn">Crop</button>
+            <button id="rotateBtn">Rotate</button>
+            <button id="drawBtn">Draw</button>
+            <button id="textBtn">Add Text</button>
+            <button id="zoomInBtn">Zoom In</button>
+            <button id="zoomOutBtn">Zoom Out</button>
+            <button id="undoBtn">Undo</button>
+            <button id="redoBtn">Redo</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Toolkit. All rights reserved.</p>
+        <p><a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('imageCanvas');
+        const ctx = canvas.getContext('2d');
+        const fileInput = document.getElementById('fileInput');
+        const applyFilterBtn = document.getElementById('applyFilterBtn');
+        const resizeBtn = document.getElementById('resizeBtn');
+        const cropBtn = document.getElementById('cropBtn');
+        const rotateBtn = document.getElementById('rotateBtn');
+        const drawBtn = document.getElementById('drawBtn');
+        const textBtn = document.getElementById('textBtn');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+        const dropZone = document.getElementById('dropZone');
+
+        let img = new Image();
+        let history = [];
+        let historyIndex = -1;
+        let isDrawing = false;
+        let scale = 1;
+        let angle = 0;
+        let text = "";
+
+        // Load the image
+        fileInput.addEventListener('change', (e) => {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    saveHistory();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        // Drag and Drop functionality
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    img.onload = function() {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        saveHistory();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Apply Filter
+        applyFilterBtn.addEventListener('click', () => {
+            ctx.filter = 'sepia(1)';
+            ctx.drawImage(img, 0, 0);
+            saveHistory();
+        });
+
+        // Resize
+        resizeBtn.addEventListener('click', () => {
+            const width = prompt("Enter width:");
+            const height = prompt("Enter height:");
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            saveHistory();
+        });
+
+        // Rotate
+        rotateBtn.addEventListener('click', () => {
+            angle += 90;
+            canvas.width = img.height;
+            canvas.height = img.width;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(angle * Math.PI / 180);
+            ctx.drawImage(img, -img.width / 2, -img.height / 2);
+            ctx.restore();
+            saveHistory();
+        });
+
+        // Draw
+        drawBtn.addEventListener('click', () => {
+            isDrawing = !isDrawing;
+            if (isDrawing) {
+                canvas.addEventListener('mousemove', drawOnCanvas);
+            } else {
+                canvas.removeEventListener('mousemove', drawOnCanvas);
+            }
+        });
+
+        function drawOnCanvas(event) {
+            const x = event.offsetX;
+            const y = event.offsetY;
+            ctx.fillStyle = "red";
+            ctx.fillRect(x, y, 5, 5);
+        }
+
+        // Add Text
+        textBtn.addEventListener('click', () => {
+            text = prompt("Enter text:");
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "black";
+            ctx.fillText(text, 50, 50);
+            saveHistory();
+        });
+
+        // Zoom In
+        zoomInBtn.addEventListener('click', () => {
+            scale *= 1.1;
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            saveHistory();
+        });
+
+        // Zoom Out
+        zoomOutBtn.addEventListener('click', () => {
+            scale /= 1.1;
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            saveHistory();
+        });
+
+        // Undo
+        undoBtn.addEventListener('click', () => {
+            if (historyIndex > 0) {
+                historyIndex--;
+                restoreHistory();
+            }
+        });
+
+        // Redo
+        redoBtn.addEventListener('click', () => {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                restoreHistory();
+            }
+        });
+
+        // Save history
+        function saveHistory() {
+            if (historyIndex < history.length - 1) {
+                history = history.slice(0, historyIndex + 1);
+            }
+            history.push(canvas.toDataURL());
+            historyIndex++;
+        }
+
+        // Restore history
+        function restoreHistory() {
+            const imgData = new Image();
+            imgData.src = history[historyIndex];
+            imgData.onload = function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(imgData, 0, 0);
+            };
+        }
+
+        // Download
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL();
+            link.download = 'edited-image.png';
+            link.click();
+        });
+
+        // Toggle Theme
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        }
+    </script>
+</body>
+</html>

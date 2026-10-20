@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AES and DES Encrypt/Decrypt tool - Securely encrypt and decrypt text online using AES & DES encryption algorithms.">
+    <meta name="keywords" content="AES Encryption, DES Encryption, Online Encrypt Tool, Decrypt AES, Decrypt DES">
+    <meta name="author" content="YourWebsite">
+    
+    <title>AES & DES Encrypt/Decrypt - Online Secure Tool</title>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXX-Y');
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script> <!-- For DES -->
+    <style>
+        /* Design System */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 15px;
+        }
+
+        .toggle-btn {
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+        }
+
+        .input-field, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            min-height: 50px;
+            text-align: center;
+            color: var(--text);
+            font-weight: bold;
+            font-size: 1.2em;
+            word-wrap: break-word;
+        }
+
+        /* Ad Section */
+        .ad-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div>
+            <a href="index.html">Home</a>
+            <a href="all-tools.html">All Tools</a>
+            <a href="blog.html">Blog</a>
+            <a href="help.html">Help</a>
+        </div>
+        <div class="toggle-btn" onclick="toggleTheme()">🌙</div>
+    </nav>
+
+    <div class="container">
+        <h1>AES & DES Encrypt/Decrypt</h1>
+        <p>Encrypt and decrypt text securely with AES or DES encryption.</p>
+
+        <div class="ad-section"> <!-- AdSense Placeholder -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXX" data-ad-slot="123456"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <textarea id="inputText" class="input-field" placeholder="Enter text here to encrypt or decrypt"></textarea>
+        
+        <select id="algorithm" class="input-field">
+            <option value="aes">AES</option>
+            <option value="des">DES</option>
+        </select>
+
+        <button class="btn" onclick="encryptText()">Encrypt</button>
+        <button class="btn" onclick="decryptText()">Decrypt</button>
+
+        <div class="result-box" id="outputText">Output will appear here</div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Load Saved Theme
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+
+        // AES Encryption/Decryption
+        function encryptAES(text, password) {
+            return CryptoJS.AES.encrypt(text, password).toString();
+        }
+
+        function decryptAES(encryptedText, password) {
+            const bytes = CryptoJS.AES.decrypt(encryptedText, password);
+            return bytes.toString(CryptoJS.enc.Utf8);
+        }
+
+        // DES Encryption/Decryption
+        function encryptDES(text, password) {
+            return CryptoJS.DES.encrypt(text, password).toString();
+        }
+
+        function decryptDES(encryptedText, password) {
+            const bytes = CryptoJS.DES.decrypt(encryptedText, password);
+            return bytes.toString(CryptoJS.enc.Utf8);
+        }
+
+        function encryptText() {
+            const text = document.getElementById('inputText').value;
+            const algorithm = document.getElementById('algorithm').value;
+            const password = prompt("Enter a password for encryption:");
+
+            if (!text || !password) return alert("Text and password are required!");
+
+            document.getElementById('outputText').textContent = algorithm === "aes" 
+                ? encryptAES(text, password)
+                : encryptDES(text, password);
+        }
+
+        function decryptText() {
+            const text = document.getElementById('inputText').value;
+            const algorithm = document.getElementById('algorithm').value;
+            const password = prompt("Enter the password for decryption:");
+
+            if (!text || !password) return alert("Encrypted text and password are required!");
+
+            document.getElementById('outputText').textContent = algorithm === "aes" 
+                ? decryptAES(text, password) || "Invalid Password!"
+                : decryptDES(text, password) || "Invalid Password!";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools for text editing, image conversion, PDF management, and more!">
+    <meta name="keywords" content="online tools, PDF converter, image compressor, text editor, web development tools">
+    <meta name="author" content="Toolkit">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourdomain.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:title" content="Toolkit - Friendly Online Tools">
+    <meta property="og:description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools">
+    <meta property="og:image" content="https://yourdomain.com/images/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourdomain.com/">
+    <meta property="twitter:title" content="Toolkit - Friendly Online Tools">
+    <meta property="twitter:description" content="Your friendly neighborhood toolkit - Simple, beautiful & powerful online tools">
+    <meta property="twitter:image" content="https://yourdomain.com/images/twitter-image.jpg">
+
+    <title>Toolkit - Home</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+
+    <style>
+        /* Existing styles remain unchanged */
+
+        /* Ad Containers */
+        .ad-container {
+            margin: 2rem auto;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            max-width: 1200px;
+        }
+
+        .ad-unit {
+            margin: 1rem 0;
+            padding: 20px;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive Ads */
+        @media (min-width: 768px) {
+            .ad-responsive {
+                width: 728px;
+                height: 90px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .ad-responsive {
+                width: 320px;
+                height: 100px;
+            }
+        }
+        /* Design System */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--background);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: var(--card-bg);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        footer p {
+            margin: 0;
+            color: var(--text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Loading Indicator -->
+    <div class="loading-bar" id="loadingBar"></div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="AllTools.html" class="button">All Tools</a>
+            <a href="Blog.html" class="button">Blog</a>
+            <a href="Features.html" class="button">Features</a>
+            <a href="Help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Your Friendly Digital Workshop</h1>
+        <p>Transform files effortlessly with our intuitive, accessible tools. Get the best of both worlds—premium features and free tools—all in one place!</p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="tools-grid">
+<!-- Text Tools -->
+<article class="tool-card" role="button" tabindex="0" aria-label="Text Tools">
+    <div class="tool-icon">
+        <i class="fas fa-font fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>Text Tools</h2>
+    <p>Edit, Format, and Enhance Your Documents Unlock the full potential of your text documents with our powerful suite of tools. Whether you're formatting essays, converting file types, or enhancing your content, our tools make it effortless to manage your text files with just a few clicks.</p>
+    <div style="margin-top: 1rem;">
+        <a href="DocumentWizard.html" class="button">Start Editing</a>
+    </div>
+</article>
+
+<!-- Image Tools -->
+<article class="tool-card" role="button" tabindex="0" aria-label="Image Tools">
+    <div class="tool-icon">
+        <i class="fas fa-image fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>Image Tools</h2>
+    <p>Compress, Convert, and Edit Images Without Losing Quality Transform your images quickly and easily. Reduce file sizes, change formats, or adjust image properties, all while maintaining the highest quality. Perfect for optimizing your images for web use or personal projects.</p>
+    <div style="margin-top: 1rem;">
+        <a href="ImageTools.html" class="button">Start Converting</a>
+    </div>
+</article>
+
+<!-- PDF Tools -->
+<article class="tool-card" role="button" tabindex="0" aria-label="PDF Tools">
+    <div class="tool-icon">
+        <i class="fas fa-file-pdf fa-2x" style="color: var(--secondary)"></i>
+    </div>
+    <h2>PDF Magic</h2>
+    <p>Merge, Split, and Convert PDFs Effortlessly Simplify your PDF management tasks. Merge multiple PDFs into one, split large documents, or convert PDFs to other formats in just a few clicks. Our PDF tools are designed to save you time while maintaining file integrity.</p>
+    <div style="margin-top: 1rem;">
+        <a href="PDFTools.html" class="button">Transform PDFs</a>
+    </div>
+</article>
+
+<!-- Typing Test Tools -->
+<article class="tool-card" role="button" tabindex="0" aria-label="Typing Test Tools">
+    <div class="tool-icon">
+        <i class="fas fa-keyboard fa-2x" style="color: var(--tertiary)"></i>
+    </div>
+    <h2>Typing Test</h2>
+    <p>Improve Your Typing Speed and Accuracy Want to type faster? Our typing test tools help you track your progress and improve your typing skills. Whether you're a beginner or an expert, you'll find interactive tests that make learning to type more engaging and effective.</p>
+    <div style="margin-top: 1rem;">
+        <a href="TypingTest.html" class="button">Start Typing</a>
+    </div>
+</article>
+
+<!-- Encryption Tools -->
+<article class="tool-card" role="button" tabindex="0" aria-label="Encryption Tools">
+    <div class="tool-icon">
+        <i class="fas fa-lock fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>Encryption</h2>
+    <p>Secure Your Data with Top-Notch Encryption Algorithms Protect your sensitive information with industry-leading encryption tools. Secure files, messages, and data effortlessly. With our tools, you can ensure that your private information remains just that—private.</p>
+    <div style="margin-top: 1rem;">
+        <a href="Encryption.html" class="button">Start Encrypting</a>
+    </div>
+</article>
+
+<!-- Web Tools -->
+<article class="tool-card" role="button" tabindex="0" aria-label="Web Tools">
+    <div class="tool-icon">
+        <i class="fas fa-code fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>Web Development Tools</h2>
+    <p>Enhance Your Web Development Workflow Streamline your coding process with our suite of web development tools. Optimize, beautify, and convert your code seamlessly, helping you save time and focus on creating high-quality websites and applications.</p>
+    <div style="margin-top: 1rem;">
+        <a href="Web.html" class="button">Start Development</a>
+    </div>
+</article>
+
+<!-- Development Tools -->
+<article class="tool-card" role="button" tabindex="0" aria-label="Development Tools">
+    <div class="tool-icon">
+        <i class="fas fa-laptop-code fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>Development Tools</h2>
+    <p>Make Your Coding Faster and Easier Boost your productivity with our powerful development tools. Whether you need JSON manipulation, comparison tools, or advanced code optimization features, our toolkit is designed to help you code smarter, not harder.</p>
+    <div style="margin-top: 1rem;">
+        <a href="Development.html" class="button">Start Development</a>
+    </div>
+</article>
+
+<!-- Calculator Tools -->
+<article class="tool-card" role="button" tabindex="0" aria-label="Calculator Tools">
+    <div class="tool-icon">
+        <i class="fas fa-calculator fa-2x" style="color: var(--primary)"></i>
+    </div>
+    <h2>Calculator Tools</h2>
+    <p>Simplify Complex Calculations Take the guesswork out of calculations. Whether you're managing finances, computing loan repayments, or calculating age, our collection of calculators makes it easy to get accurate results fast.</p>
+    <div style="margin-top: 1rem;">
+        <a href="Calculator.html" class="button">Start Calculator</a>
+    </div>
+</article>
+
+        <!-- Mid-content Ad -->
+        <div class="ad-container" style="grid-column: 1 / -1;">
+            <div class="ad-label">Sponsored Content</div>
+            <!-- Google AdSense Square Ad -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="XXXXXXXXXX"
+                data-ad-format="rectangle"
+                data-ad-layout-key="-gw-3+1f-3d+2z"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Existing tool cards remain unchanged -->
+
+    </main>
+
+    <!-- Footer Ad -->
+    <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <!-- Google AdSense Footer Ad -->
+        <ins class="adsbygoogle ad-responsive"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+            data-ad-slot="XXXXXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Toolkit - Your Friendly Digital Workshop</p>
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Toolkit",
+            "url": "https://yourdomain.com",
+            "logo": "https://yourdomain.com/logo.png",
+            "description": "Your friendly neighborhood toolkit providing simple, beautiful & powerful online tools",
+            "sameAs": [
+                "https://facebook.com/yourpage",
+                "https://twitter.com/yourhandle"
+            ]
+        }
+        </script>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Loading Indicator
+        window.addEventListener('load', () => {
+            const loadingBar = document.getElementById('loadingBar');
+            loadingBar.style.width = '100%';
+            setTimeout(() => loadingBar.style.opacity = '0', 500);
+        });
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+</html>

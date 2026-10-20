@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add a watermark to your image easily with Toolkit's online tool. Personalize your images with custom watermarks, logos, or text.">
+    <meta name="keywords" content="watermark image, add watermark, watermark online, free watermark tool, image editor, watermark text">
+    <meta name="author" content="Toolkit">
+    <meta property="og:title" content="Watermark Image - Toolkit">
+    <meta property="og:description" content="Add a watermark to your image easily with Toolkit's online tool. Personalize your images with custom watermarks, logos, or text.">
+    <meta property="og:image" content="image_url_here">
+    <meta property="og:url" content="your_url_here">
+    <title>Watermark Image - Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .main-nav h1 {
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links .button {
+            background-color: var(--primary);
+            padding: 0.5rem 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .nav-links .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .tool-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .upload-section {
+            text-align: center;
+        }
+
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border 0.3s ease;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area h3 {
+            margin-bottom: 1rem;
+        }
+
+        .upload-area p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .watermark-input {
+            width: 80%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            outline: none;
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .image-wrapper {
+            position: relative;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .processed-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .download-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .button {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .processing-spinner {
+            text-align: center;
+            color: white;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        footer {
+            background-color: var(--card-bg);
+            color: var(--text);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .ads-container {
+            width: 100%;
+            text-align: center;
+            margin: 2rem 0;
+        }
+    </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXXXX-X');
+    </script>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="image-tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <div class="tool-container">
+        <div class="upload-section">
+            <h1>Watermark Image</h1>
+            <p>Add a watermark to your image. Personalize your photos with text or logos.</p>
+            
+            <div class="upload-area" id="dropZone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drag & Drop Image Here</h3>
+                <p>or click to browse files (JPEG, PNG)</p>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+
+            <!-- Watermark input section -->
+            <input type="text" id="watermarkText" class="watermark-input" placeholder="Enter watermark text" />
+        </div>
+
+        <div class="comparison-container" id="resultContainer" hidden>
+            <div class="image-wrapper">
+                <h3>Original Image</h3>
+                <img id="originalPreview" class="processed-image" alt="Original Image">
+            </div>
+            <div class="image-wrapper">
+                <h3>Watermarked Image</h3>
+                <canvas id="processedPreview" class="processed-image"></canvas>
+            </div>
+        </div>
+
+        <div class="download-options" id="downloadOptions" hidden>
+            <button class="button" id="downloadPng">
+                <i class="fas fa-download"></i> Download PNG
+            </button>
+            <button class="button" id="downloadJpg">
+                <i class="fas fa-download"></i> Download JPG
+            </button>
+        </div>
+
+        <div class="processing-overlay" id="processingOverlay">
+            <div class="processing-spinner">
+                <i class="fas fa-spinner fa-spin fa-3x"></i>
+                <p>Processing image...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Ads Section above Footer -->
+    <div class="ads-container">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXX"
+             data-ad-slot="XXXXXX"
+             data-ad-format="auto"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Toolkit. All rights reserved.</p>
+        <p><a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+    </footer>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const processingOverlay = document.getElementById('processingOverlay');
+        const watermarkInput = document.getElementById('watermarkText');
+        let currentImage = null;
+
+        // Event Listeners
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        document.getElementById('downloadPng').addEventListener('click', () => downloadImage('png'));
+        document.getElementById('downloadJpg').addEventListener('click', () => downloadImage('jpeg'));
+        watermarkInput.addEventListener('input', applyWatermark);
+
+        async function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            processingOverlay.style.display = 'flex';
+
+            try {
+                currentImage = await loadImage(file);
+                document.getElementById('resultContainer').hidden = false;
+                document.getElementById('originalPreview').src = URL.createObjectURL(file);
+
+                applyWatermark();
+            } catch (error) {
+                alert('Error processing image: ' + error.message);
+            }
+
+            processingOverlay.style.display = 'none';
+        }
+
+        function applyWatermark() {
+            if (!currentImage) return;
+
+            const watermarkText = watermarkInput.value || "Watermark";
+            const canvas = document.getElementById('processedPreview');
+            const ctx = canvas.getContext('2d');
+            canvas.width = currentImage.width;
+            canvas.height = currentImage.height;
+
+            ctx.drawImage(currentImage, 0, 0);
+
+            ctx.font = "48px Arial";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(watermarkText, canvas.width / 2, canvas.height / 2);
+
+            document.getElementById('downloadOptions').hidden = false;
+        }
+
+        function downloadImage(format) {
+            const canvas = document.getElementById('processedPreview');
+            const link = document.createElement('a');
+            link.download = `watermarked-image-${Date.now()}.${format}`;
+            link.href = canvas.toDataURL(`image/${format}`);
+            link.click();
+        }
+
+        function loadImage(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Beautify and format your HTML code with this free online HTML Beautifier tool.">
+    <meta name="keywords" content="HTML beautifier, HTML formatter, HTML pretty print, online tool">
+    <meta name="author" content="YourWebsiteName">
+    <title>HTML Beautifier - Format & Indent HTML Code</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'YOUR-GA-ID');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR-ADSENSE-ID"
+        crossorigin="anonymous"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: bold;
+        }
+
+        /* Main Container */
+        .container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            background-color: var(--card-bg);
+            color: var(--text);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+
+        .result-box {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 150px;
+            text-align: left;
+            color: var(--text);
+            font-size: 1.2em;
+            white-space: pre-wrap;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        /* Ad Section */
+        .ad-section {
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <h1>HTML Beautifier</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="all-tools.html">All Tools</a>
+            <a href="blog.html">Blog</a>
+            <a href="help.html">Help</a>
+        </div>
+    </nav>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1>HTML Beautifier</h1>
+        <p>Paste your HTML code below and click "Beautify" to format and indent your HTML properly.</p>
+        <textarea id="html-input" class="input-field" placeholder="Paste your HTML code here..." rows="8"></textarea>
+        <button class="btn" onclick="beautifyHTML()">Beautify</button>
+        <div class="result-box">
+            <pre id="html-result">Your beautified HTML will appear here</pre>
+        </div>
+    </div>
+
+    <!-- AdSense Section -->
+    <div class="ad-section">
+        <p>Advertisement</p>
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="YOUR-ADSENSE-ID"
+            data-ad-slot="YOUR-AD-SLOT"
+            data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Apply saved theme
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+
+        // HTML Beautifier Function
+        function beautifyHTML() {
+            let htmlInput = document.getElementById('html-input').value.trim();
+            if (!htmlInput) {
+                alert("Please enter some HTML code.");
+                return;
+            }
+
+            try {
+                let formattedHTML = htmlInput
+                    .replace(/></g, ">\n<") // Add new lines between tags
+                    .replace(/^\s*[\r\n]/gm, '') // Remove extra blank lines
+                    .replace(/\s+/g, ' ') // Remove extra spaces
+                    .trim();
+                document.getElementById('html-result').textContent = formattedHTML;
+            } catch (error) {
+                document.getElementById('html-result').textContent = "Invalid HTML input.";
+            }
+        }
+    </script>
+
+</body>
+</html>

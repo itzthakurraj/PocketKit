@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Typing Tutor - Improve your typing speed and accuracy">
+    <meta name="keywords" content="typing tutor, typing test, typing practice, typing speed">
+    <meta name="author" content="Toolkit">
+    <meta property="og:title" content="Typing Tutor - Toolkit">
+    <meta property="og:description" content="Improve your typing skills with our interactive tutor">
+    <meta property="og:image" content="path/to/your/typing-preview.jpg">
+    <meta property="og:url" content="your-website-url">
+    <title>Typing Tutor - Toolkit</title>
+
+    <!-- Same analytics and adsense code as text-to-ascii -->
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reuse the same CSS variables and base styles */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .typing-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .module-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .module-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        #text-display {
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            background: var(--background);
+            min-height: 100px;
+            line-height: 1.5;
+        }
+
+        .correct {
+            color: #10B981;
+        }
+
+        .incorrect {
+            color: #EF4444;
+            text-decoration: underline;
+        }
+
+        #input-field {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2em;
+            margin-bottom: 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-box {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            gap: 2px;
+            margin-top: 2rem;
+        }
+
+        .key {
+            padding: 0.5rem;
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            text-align: center;
+            grid-column: span 2;
+            background: var(--card-bg);
+        }
+
+        .active-key {
+            background: var(--primary);
+            color: white;
+        }
+
+        .progress-section {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .keyboard {
+                grid-template-columns: repeat(10, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home </a>
+            <a href="tools.html" class="button">All Tools </a>
+            <a href="blog.html" class="button">Blog </a>
+            <a href="help.html" class="button">Help </a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Typing Tutor</h1>
+        <p>Improve your typing speed and accuracy with our interactive tutor. Practice different modules and track your progress!</p>
+    </section>
+
+    <main class="typing-card">
+        <div class="module-selector">
+            <button class="module-btn" onclick="startLesson('home-row')">Home Row</button>
+            <button class="module-btn" onclick="startLesson('top-row')">Top Row</button>
+            <button class="module-btn" onclick="startSpeedTest()">Speed Test</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div>Time: <span id="timer">0</span>s</div>
+            </div>
+            <div class="stat-box">
+                <div>WPM: <span id="wpm">0</span></div>
+            </div>
+            <div class="stat-box">
+                <div>Accuracy: <span id="accuracy">100</span>%</div>
+            </div>
+        </div>
+
+        <div id="text-display"></div>
+        <input type="text" id="input-field" autocomplete="off">
+
+        <div class="keyboard" id="keyboard"></div>
+
+        <div class="progress-section">
+            <h3>Your Progress</h3>
+            <div id="progress"></div>
+        </div>
+    </main>
+
+    <!-- Same ads section and theme toggle as text-to-ascii -->
+
+    <script>
+               let currentText = "";
+        let startTime = null;
+        let timerInterval = null;
+        let currentModule = null;
+        let expectedKeys = [];
+        let errors = 0;
+
+        const lessons = {
+            'home-row': {
+                keys: ['a','s','d','f','j','k','l',';'],
+                words: ['sad', 'lad', 'fall', 'jazz', 'flash', 'slash', 'hall', 'salad']
+            },
+            'top-row': {
+                keys: ['q','w','e','r','t','y','u','i','o','p'],
+                words: ['quiet', 'type', 'power', 'writer', 'upper', 'equip', 'tower', 'queue']
+            }
+        };
+
+        const quotes = [
+            "The quick brown fox jumps over the lazy dog",
+            "Practice makes perfect",
+            "Success is the sum of small efforts repeated day in and day out",
+            "Typing is a skill that requires patience and practice"
+        ];
+
+        function generatePracticeText(module) {
+            let words = [];
+            for(let i = 0; i < 20; i++) {
+                words.push(module.words[Math.floor(Math.random() * module.words.length)]);
+            }
+            return words.join(' ');
+        }
+
+        function updateDisplay() {
+            const input = document.getElementById('input-field').value;
+            let displayHTML = "";
+            
+            for(let i = 0; i < currentText.length; i++) {
+                let inputChar = input[i] || '';
+                if(i < input.length) {
+                    if(inputChar === currentText[i]) {
+                        displayHTML += `<span class="correct">${currentText[i]}</span>`;
+                    } else {
+                        displayHTML += `<span class="incorrect">${currentText[i]}</span>`;
+                    }
+                } else {
+                    displayHTML += currentText[i];
+                }
+            }
+            
+            document.getElementById('text-display').innerHTML = displayHTML;
+            updateStats();
+            highlightKeyboard();
+        }
+
+        function updateStats() {
+            const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
+            const typedChars = document.getElementById('input-field').value.length;
+            const wpm = Math.floor((typedChars / 5) / (timeElapsed / 60)) || 0;
+            const accuracy = Math.floor(((typedChars - errors) / typedChars) * 100) || 100;
+            
+            document.getElementById('timer').textContent = timeElapsed;
+            document.getElementById('wpm').textContent = wpm;
+            document.getElementById('accuracy').textContent = isNaN(accuracy) ? 100 : accuracy;
+        }
+
+        function highlightKeyboard() {
+            const currentChar = currentText[document.getElementById('input-field').value.length];
+            document.querySelectorAll('.key').forEach(key => {
+                key.classList.remove('active-key');
+                if(key.textContent.toLowerCase() === currentChar?.toLowerCase()) {
+                    key.classList.add('active-key');
+                }
+            });
+        }
+
+        function initializeKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            const keyboardLayout = [
+                'q w e r t y u i o p',
+                'a s d f g h j k l',
+                'z x c v b n m , .'
+            ];
+            
+            keyboardLayout.forEach(row => {
+                row.split(' ').forEach(key => {
+                    const keyElement = document.createElement('div');
+                    keyElement.className = 'key';
+                    keyElement.textContent = key;
+                    keyboard.appendChild(keyElement);
+                });
+                keyboard.appendChild(document.createElement('br'));
+            });
+        }
+
+
+        // Start lesson or practice
+        function startLesson(lessonType) {
+            currentModule = lessons[lessonType];
+            currentText = generatePracticeText(currentModule);
+            startTest();
+        }
+
+        function startSpeedTest() {
+            currentText = generatePracticeText({
+                words: [...lessons['home-row'].words, ...lessons['top-row'].words],
+                keys: []
+            });
+            startTest();
+        }
+
+        function startQuotePractice() {
+            currentText = quotes[Math.floor(Math.random() * quotes.length)];
+            startTest();
+        }
+
+        function startTest() {
+            document.getElementById('input-field').value = '';
+            document.getElementById('text-display').textContent = currentText;
+            startTime = Date.now();
+            errors = 0;
+            
+            if(timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateStats, 1000);
+            
+            document.getElementById('input-field').focus();
+        }
+
+        function handleInput(e) {
+            if(!startTime) return;
+            
+            const input = e.target.value;
+            errors = 0;
+            
+            for(let i = 0; i < input.length; i++) {
+                if(input[i] !== currentText[i]) {
+                    errors++;
+                }
+            }
+            
+            updateDisplay();
+            
+            if(input.length === currentText.length) {
+                clearInterval(timerInterval);
+                saveProgress();
+            }
+        }
+
+        function saveProgress() {
+            const progress = JSON.parse(localStorage.getItem('typingProgress') || '{}');
+            const wpm = parseInt(document.getElementById('wpm').textContent);
+            const accuracy = parseInt(document.getElementById('accuracy').textContent);
+            
+            if(currentModule) {
+                if(!progress[currentModule]) progress[currentModule] = [];
+                progress[currentModule].push({ date: new Date(), wpm, accuracy });
+            }
+            
+            localStorage.setItem('typingProgress', JSON.stringify(progress));
+            updateProgressDisplay();
+        }
+
+        function updateProgressDisplay() {
+            const progress = JSON.parse(localStorage.getItem('typingProgress') || '{}');
+            let progressHTML = '';
+            
+            for(const [module, data] of Object.entries(progress)) {
+                progressHTML += `<h4>${module}</h4>`;
+                progressHTML += data.map(entry => 
+                    `<div>${new Date(entry.date).toLocaleDateString()}: ${entry.wpm} WPM, ${entry.accuracy}%</div>`
+                ).join('');
+            }
+            
+            document.getElementById('progress').innerHTML = progressHTML;
+        }
+
+        // Initialize
+        initializeKeyboard();
+        document.getElementById('input-field').addEventListener('input', handleInput);
+        updateProgressDisplay();
+ 
+        // Theme toggle logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+    </script>
+</body>
+</html>

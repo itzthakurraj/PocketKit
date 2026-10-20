@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate your exact age in years, months, and days with our simple and accurate age calculator.">
+    <title>Age Calculator - Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'YOUR-GA-ID');
+    </script>
+
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            background-color: var(--card-bg);
+            color: var(--text);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            height: 40px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+
+        .output-box {
+            background-color: var(--background);
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 40px;
+            color: var(--text);
+            font-size: 1.2em;
+        }
+
+        .ad-space {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <h1>🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="btn">Home</a>
+            <a href="all-tools.html" class="btn">All Tools</a>
+            <a href="blog.html" class="btn">Blog</a>
+            <a href="help.html" class="btn">Help</a>
+        </div>
+    </nav>
+    <div class="ad-space">Ad Space 1 (Horizontal)</div>
+
+    <div class="container">
+        <h1>Age Calculator</h1>
+        <p>Find your exact age in years, months, and days.</p>
+        <input type="date" id="dob" class="input-field">
+        <button class="btn" onclick="calculateAge()">Calculate Age</button>
+        <div class="output-box">
+            <span id="age-result">Your age will appear here.</span>
+        </div>
+    </div>
+
+    <div class="ad-space">Ad Space 2 (Horizontal)</div>
+
+    <footer style="text-align: center; padding: 2rem;">
+        <p>© 2025 Toolkit. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <script>
+        function calculateAge() {
+            const dobInput = document.getElementById('dob').value;
+            const resultElement = document.getElementById('age-result');
+            if (!dobInput) {
+                resultElement.textContent = "Please select your date of birth.";
+                resultElement.style.color = "red";
+                return;
+            }
+            const dob = new Date(dobInput);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDifference = today.getMonth() - dob.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            resultElement.textContent = `Your age is ${age} years old.`;
+            resultElement.style.color = "green";
+        }
+    </script>
+</body>
+</html>

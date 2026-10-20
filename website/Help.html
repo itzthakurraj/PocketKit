@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Toolkit Help Center - Comprehensive guides, FAQs, and support for all our free online tools including PDF editors, image converters, and text utilities">
+    <meta name="keywords" content="toolkit help, PDF tool guide, image converter help, online tools FAQ, free utilities support">
+    <meta name="author" content="Toolkit">
+    <link rel="canonical" href="https://yourtoolkitdomain.com/help">
+    
+    <!-- Social Media Meta -->
+    <meta property="og:title" content="Toolkit Help Center - Official Support & Guides">
+    <meta property="og:description" content="Get instant help with Toolkit's free online tools. Step-by-step guides and FAQs for PDF, image, and text utilities">
+    <meta property="og:image" content="https://yourtoolkitdomain.com/images/help-og.jpg">
+    <meta property="og:url" content="https://yourtoolkitdomain.com/help">
+    <meta property="og:type" content="website">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Toolkit Help & Support Center">
+    <meta name="twitter:description" content="Official help resources for Toolkit's free online tools. Learn to use PDF, image, and text converters like a pro">
+    <meta name="twitter:image" content="https://yourtoolkitdomain.com/images/help-twitter.jpg">
+
+    <title>Toolkit - Help</title>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    <!-- Schema.org FAQ Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I use PDF tools?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our PDF tools allow you to merge, split, and convert PDF files effortlessly. Simply upload your file, choose the desired action (merge, split, or convert), and download the result for free."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How can I reduce the size of my images?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can easily resize or compress images using our free image tools. Upload your image, select the size reduction or compression option, and download the optimized image."
+            }
+        }]
+    }
+    </script>
+
+    <style>
+        /* Base styles */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark Mode Styles */
+        [data-theme="light"] {
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Help Section */
+        .help-section {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .faq-item {
+            margin-bottom: 2rem;
+        }
+
+        .faq-item h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .faq-item p {
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .sidebar {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .ad-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Button */
+        .button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Ads Section */
+        .ads-section {
+            width: 100%;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .help-section {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="Index.html" class="button">Home</a>
+            <a href="AllTools.html" class="button">All Tools</a>
+            <a href="Blog.html" class="button">Blog</a>
+            <a href="Features.html" class="button">Features</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Need Help?</h1>
+        <p>Find answers to common questions and learn how to use the tools available on Toolkit.</p>
+    </section>
+
+    <!-- Horizontal Ad Space 2 -->
+    <div class="ad-space ad-horizontal">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="YOUR_ADSENSE_ID"
+             data-ad-slot="YOUR_AD_SLOT"
+             data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Help Section -->
+    <section class="help-section">
+        <div class="faq-column">
+            <!-- FAQ 1 -->
+            <div class="faq-item">
+                <h2>How do I use PDF tools?</h2>
+                <p>Our PDF tools allow you to merge, split, and convert PDF files effortlessly. Simply upload your file, choose the desired action (merge, split, or convert), and download the result for free.</p>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="faq-item">
+                <h2>How can I reduce the size of my images?</h2>
+                <p>You can easily resize or compress images using our free image tools. Upload your image, select the size reduction or compression option, and download the optimized image.</p>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="faq-item">
+                <h2>What text-related services do you offer?</h2>
+                <p>Our text tools let you convert between various text formats, remove formatting, and much more. Upload your text file, choose the action you want, and download the updated file.</p>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="faq-item">
+                <h2>Do I need to create an account to use the tools?</h2>
+                <p>No, you do not need to create an account. All the tools are available to use for free, without any sign-up required.</p>
+            </div>
+        </div>
+
+        <!-- Sidebar with Ad -->
+        <div class="sidebar">
+            <div class="ad-container">
+                <div class="ad-label">Advertisement</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="vertical"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Horizontal Ad Space 2 -->
+    <div class="ad-space ad-horizontal">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="YOUR_ADSENSE_ID"
+             data-ad-slot="YOUR_AD_SLOT"
+             data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Toolkit. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Diff Checker - Compare and see differences between two pieces of text easily with this tool.">
+    <meta name="keywords" content="text comparison, diff checker, text tool, online text comparison, text analysis">
+    <meta name="author" content="Toolkit">
+    <meta property="og:title" content="Diff Checker - Toolkit">
+    <meta property="og:description" content="Compare two pieces of text and see the differences in a simple and easy way using our Diff Checker tool.">
+    <meta property="og:image" content="path/to/your/preview-image.jpg">
+    <meta property="og:url" content="your-website-url">
+    <title>Diff Checker - Toolkit</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXXXXXX-X');
+    </script>
+
+    <!-- AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-XXXXXX",
+            enable_page_level_ads: true
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F8FAFC;
+            --text: #1E293B;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #1A1A1A;
+            --text: #F8FAFC;
+            --card-bg: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .main-nav .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .text-container {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: var(--card-bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+        }
+
+        #result-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .output {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: var(--card-bg);
+            white-space: pre-wrap;
+            border-radius: 8px;
+        }
+
+        .green {
+            background-color: #ddffdd;
+        }
+
+        .red {
+            background-color: #ffdddd;
+        }
+
+        #stats {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* Ads Section */
+        .ads-section {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .ads-section p {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            .converter-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <h1 aria-label="Toolkit Logo">🔧 Toolkit</h1>
+        <div class="nav-links">
+            <a href="index.html" class="button">Home</a>
+            <a href="tools.html" class="button">All Tools</a>
+            <a href="blog.html" class="button">Blog</a>
+            <a href="help.html" class="button">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Diff Checker</h1>
+        <p>Compare two pieces of text and see the differences! This tool helps you identify the changes between two sets of text by highlighting the variations in color.</p>
+    </section>
+
+    <!-- Text Comparison Tool -->
+    <section class="container">
+        <div class="text-container">
+            <textarea id="text1" placeholder="Enter first text here..."></textarea>
+            <textarea id="text2" placeholder="Enter second text here..."></textarea>
+        </div>
+    </section>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="compareText()">Compare Texts</button>
+    </div>
+
+    <div id="stats" style="text-align: center; margin-top: 10px;"></div>
+
+    <div id="result-container">
+        <div class="output" id="result1"></div>
+        <div class="output" id="result2"></div>
+    </div>
+
+    <!-- Ads Section -->
+    <section class="ads-section">
+        <p>Sponsored Ad</p>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXX"
+             data-ad-slot="XXXXXXX"
+             data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </section>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Save User Preferences
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Function to compare the texts
+        function compareText() {
+            const text1 = document.getElementById('text1').value;
+            const text2 = document.getElementById('text2').value;
+
+            const lines1 = text1.split('\n');
+            const lines2 = text2.split('\n');
+
+            const maxLines = Math.max(lines1.length, lines2.length);
+            let matchCount = 0;
+
+            const result1 = document.getElementById('result1');
+            const result2 = document.getElementById('result2');
+            result1.innerHTML = '';
+            result2.innerHTML = '';
+
+            for (let i = 0; i < maxLines; i++) {
+                const line1 = lines1[i] || '';
+                const line2 = lines2[i] || '';
+
+                const isMatch = line1 === line2;
+
+                const div1 = document.createElement('div');
+                const div2 = document.createElement('div');
+
+                if (isMatch) {
+                    div1.className = 'green';
+                    div2.className = 'green';
+                    matchCount++;
+                } else {
+                    div1.className = 'red';
+                    div2.className = 'red';
+                }
+
+                div1.textContent = line1;
+                div2.textContent = line2;
+
+                result1.appendChild(div1);
+                result2.appendChild(div2);
+            }
+
+            const percentage = ((matchCount / maxLines) * 100).toFixed(2);
+            document.getElementById('stats').innerHTML = `Matching: ${percentage}%`;
+        }
+    </script>
+
+</body>
+</html>
