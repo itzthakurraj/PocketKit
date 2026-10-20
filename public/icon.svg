@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="pocketBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="45%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    
+    <!-- Accent Sparkle Gradient -->
+    <linearGradient id="sparkleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+
+    <!-- Subtle Inner Shadow -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base Canvas -->
+  <rect width="512" height="512" rx="120" fill="url(#pocketBg)" />
+  
+  <!-- Subtle decorative grid dots / texture in background -->
+  <circle cx="80" cy="80" r="4" fill="white" opacity="0.3" />
+  <circle cx="120" cy="80" r="4" fill="white" opacity="0.3" />
+  <circle cx="432" cy="432" r="4" fill="white" opacity="0.3" />
+  <circle cx="392" cy="432" r="4" fill="white" opacity="0.3" />
+
+  <!-- The Digital Tools Rising from the Pocket -->
+  <g filter="url(#shadow)">
+    <!-- Wrench Tool Blade (Left) -->
+    <path d="M190 120 C180 100, 200 70, 225 75 C235 77, 243 85, 245 95 L255 145 L220 180 L185 145 Z" fill="#F8FAFC" opacity="0.95" />
+    <circle cx="215" cy="100" r="12" fill="#6366F1" />
+
+    <!-- Ruler / Pen Tool Tip (Center High) -->
+    <path d="M242 60 L270 60 L280 200 L232 200 Z" fill="#FFFFFF" />
+    <polygon points="242,60 256,32 270,60" fill="url(#sparkleGrad)" />
+    <!-- Ruler hash marks -->
+    <line x1="255" y1="90" x2="270" y2="90" stroke="#6366F1" stroke-width="4" stroke-linecap="round" />
+    <line x1="250" y1="120" x2="270" y2="120" stroke="#6366F1" stroke-width="4" stroke-linecap="round" />
+    <line x1="255" y1="150" x2="270" y2="150" stroke="#6366F1" stroke-width="4" stroke-linecap="round" />
+
+    <!-- Screwdriver / Stylus Blade (Right) -->
+    <path d="M295 140 L320 85 C325 75, 340 75, 345 85 C350 95, 345 110, 335 120 L305 175 Z" fill="#E2E8F0" />
+    <circle cx="335" cy="95" r="8" fill="#10B981" />
+  </g>
+
+  <!-- The Iconic Pocket Front Crest -->
+  <g filter="url(#shadow)">
+    <!-- Pocket Body Outline -->
+    <path d="M136 210 L376 210 L376 300 C376 370, 310 425, 256 445 C202 425, 136 370, 136 300 Z" fill="#FFFFFF" />
+    
+    <!-- Pocket Hem / Lip Layer -->
+    <path d="M136 210 L376 210 L376 248 L136 248 Z" fill="#F1F5F9" />
+    
+    <!-- Pocket Inner Contrast Shield -->
+    <path d="M160 265 L352 265 L352 300 C352 355, 300 398, 256 415 C212 398, 160 355, 160 300 Z" fill="url(#pocketBg)" />
+
+    <!-- Golden 'P' & 'K' Monogram / Emblem on Pocket -->
+    <path d="M235 295 L235 385 M235 295 L265 295 C278 295, 288 305, 288 318 C288 331, 278 341, 265 341 L235 341 M260 338 L288 385" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- Magic Sparkles (Top Right) -->
+  <path d="M380 90 L386 115 L411 121 L386 127 L380 152 L374 127 L349 121 L374 115 Z" fill="url(#sparkleGrad)" filter="url(#shadow)" />
+  <circle cx="430" cy="80" r="8" fill="#FDE047" />
+  <circle cx="105" cy="180" r="6" fill="#FDE047" />
+</svg>

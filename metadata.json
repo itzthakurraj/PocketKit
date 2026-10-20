@@ -1,0 +1,7 @@
+{
+  "name": "PocketKit",
+  "description": "PocketKit is your pocket-sized digital workshop: 70+ client-side online tools for text editing, code formatting, image processing, PDF management, calculators, and encryption.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
