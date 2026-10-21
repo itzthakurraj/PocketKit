@@ -567,7 +567,7 @@ export const UuidGeneratorTool: React.FC = () => {
   const generateUuids = () => {
     const list: string[] = [];
     for (let i = 0; i < count; i++) {
-      let u = crypto.randomUUID();
+      let u: string = crypto.randomUUID();
       if (noHyphens) u = u.replace(/-/g, '');
       if (uppercase) u = u.toUpperCase();
       list.push(u);

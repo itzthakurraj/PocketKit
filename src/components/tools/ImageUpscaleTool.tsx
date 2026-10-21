@@ -1,205 +1,134 @@
-import React, { useState, useRef } from 'react';
-import { Upload, Download, Scaling, Lock, Unlock } from 'lucide-react';
+import React, { useState } from 'react';
+import { Upload, Download, Maximize } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export const ImageUpscaleTool: React.FC = () => {
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [origW, setOrigW] = useState(0);
   const [origH, setOrigH] = useState(0);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [lockAspect, setLockAspect] = useState(true);
-  const [resampleMode, setResampleMode] = useState<'smooth' | 'pixelated'>('smooth');
-  const [scaledSrc, setScaledSrc] = useState<string | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [newW, setNewW] = useState(0);
+  const [newH, setNewH] = useState(0);
+  const [lockRatio, setLockRatio] = useState(true);
+  const [resizedUrl, setResizedUrl] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const src = event.target?.result as string;
-      setImageSrc(src);
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        setOrigW(img.width);
-        setOrigH(img.height);
-        setWidth(img.width);
-        setHeight(img.height);
-        renderScaled(src, img.width, img.height, resampleMode);
-      };
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const u = URL.createObjectURL(f);
+    setPreview(u);
+    const img = new Image();
+    img.src = u;
+    img.onload = () => {
+      setOrigW(img.width);
+      setOrigH(img.height);
+      setNewW(img.width * 2);
+      setNewH(img.height * 2);
+      applyResize(u, img.width * 2, img.height * 2);
     };
-    reader.readAsDataURL(file);
   };
 
-  const renderScaled = (
-    src: string,
-    targetW: number,
-    targetH: number,
-    mode: 'smooth' | 'pixelated'
-  ) => {
+  const applyResize = (src: string, w: number, h: number) => {
     const img = new Image();
     img.src = src;
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = Math.max(1, targetW);
-      canvas.height = Math.max(1, targetH);
+      canvas.width = w;
+      canvas.height = h;
       const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      ctx.imageSmoothingEnabled = mode === 'smooth';
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      setScaledSrc(canvas.toDataURL('image/png'));
+      if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, w, h);
+        canvas.toBlob((b) => {
+          if (b) setResizedUrl(URL.createObjectURL(b));
+        }, 'image/png');
+      }
     };
   };
 
   const handleWidthChange = (val: number) => {
-    setWidth(val);
-    if (lockAspect && origW > 0) {
-      const newH = Math.round((val / origW) * origH);
-      setHeight(newH);
-      if (imageSrc) renderScaled(imageSrc, val, newH, resampleMode);
-    } else if (imageSrc) {
-      renderScaled(imageSrc, val, height, resampleMode);
+    setNewW(val);
+    if (lockRatio && origW > 0) {
+      const calculatedH = Math.round((val / origW) * origH);
+      setNewH(calculatedH);
+      if (preview) applyResize(preview, val, calculatedH);
+    } else {
+      if (preview) applyResize(preview, val, newH);
     }
   };
 
   const handleHeightChange = (val: number) => {
-    setHeight(val);
-    if (lockAspect && origH > 0) {
-      const newW = Math.round((val / origH) * origW);
-      setWidth(newW);
-      if (imageSrc) renderScaled(imageSrc, newW, val, resampleMode);
-    } else if (imageSrc) {
-      renderScaled(imageSrc, width, val, resampleMode);
+    setNewH(val);
+    if (lockRatio && origH > 0) {
+      const calculatedW = Math.round((val / origH) * origW);
+      setNewW(calculatedW);
+      if (preview) applyResize(preview, calculatedW, val);
+    } else {
+      if (preview) applyResize(preview, newW, val);
     }
-  };
-
-  const handleScalePercent = (pct: number) => {
-    if (origW > 0 && origH > 0) {
-      const nw = Math.round((origW * pct) / 100);
-      const nh = Math.round((origH * pct) / 100);
-      setWidth(nw);
-      setHeight(nh);
-      if (imageSrc) renderScaled(imageSrc, nw, nh, resampleMode);
-    }
-  };
-
-  const handleDownload = () => {
-    if (!scaledSrc) return;
-    const a = document.createElement('a');
-    a.href = scaledSrc;
-    a.download = `resized-${width}x${height}.png`;
-    a.click();
   };
 
   return (
-    <div className="space-y-6">
-      {!imageSrc ? (
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-indigo-500 rounded-2xl p-12 text-center cursor-pointer transition-colors bg-slate-50/50 dark:bg-slate-800/40"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFile}
-            className="hidden"
-          />
-          <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-4">
-            <Scaling className="w-8 h-8" />
-          </div>
-          <h3 className="font-bold text-base text-slate-800 dark:text-slate-100">
-            Select an Image to Resize & Scale
-          </h3>
-          <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-            Scale up or down by exact pixels or percentage with aspect ratio constraints.
-          </p>
-        </div>
+    <div className="space-y-4">
+      {!preview ? (
+        <label className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 cursor-pointer">
+          <Maximize className="w-8 h-8 text-rose-500 mb-2" />
+          <span className="font-bold text-sm text-slate-800 dark:text-white">Choose Image to Resize / Upscale</span>
+          <span className="text-xs text-slate-400 mt-1">Scale up 2x, 4x or set custom pixel dimensions</span>
+          <input type="file" accept="image/*" onChange={handleFile} className="hidden" />
+        </label>
       ) : (
-        <div className="space-y-6">
-          {/* Controls Bar */}
-          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/80 space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-slate-500">Width:</span>
-                  <input
-                    type="number"
-                    min={1}
-                    max={8000}
-                    value={width}
-                    onChange={(e) => handleWidthChange(parseInt(e.target.value) || 1)}
-                    className="w-24 px-2.5 py-1 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
-                  />
-                  <span className="text-xs text-slate-400">px</span>
-                </div>
-
-                <button
-                  onClick={() => setLockAspect(!lockAspect)}
-                  className={`p-1.5 rounded-lg border text-xs font-semibold ${
-                    lockAspect
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500'
-                  }`}
-                  title={lockAspect ? 'Aspect ratio locked' : 'Aspect ratio free'}
-                >
-                  {lockAspect ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
-                </button>
-
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-slate-500">Height:</span>
-                  <input
-                    type="number"
-                    min={1}
-                    max={8000}
-                    value={height}
-                    onChange={(e) => handleHeightChange(parseInt(e.target.value) || 1)}
-                    className="w-24 px-2.5 py-1 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
-                  />
-                  <span className="text-xs text-slate-400">px</span>
-                </div>
-              </div>
-
-              {/* Quick scale presets */}
-              <div className="flex items-center gap-1.5">
-                {[50, 75, 100, 150, 200].map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => handleScalePercent(p)}
-                    className="px-2.5 py-1 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100"
-                  >
-                    {p}%
-                  </button>
-                ))}
-              </div>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <div>
+              <label className="block mb-1">Width (px) - was {origW}</label>
+              <input
+                type="number"
+                min={10}
+                value={newW}
+                onChange={(e) => handleWidthChange(Number(e.target.value) || 10)}
+                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+              />
             </div>
-
-            <div className="flex items-center justify-between text-xs text-slate-400">
-              <span>
-                Original: {origW} × {origH} px ➔ Target: {width} × {height} px
-              </span>
-              <button
-                onClick={handleDownload}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs"
-              >
-                <Download className="w-4 h-4" /> Download Scaled PNG
-              </button>
+            <div>
+              <label className="block mb-1">Height (px) - was {origH}</label>
+              <input
+                type="number"
+                min={10}
+                value={newH}
+                onChange={(e) => handleHeightChange(Number(e.target.value) || 10)}
+                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+              />
+            </div>
+            <div className="flex items-center gap-2 pt-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={lockRatio}
+                  onChange={(e) => setLockRatio(e.target.checked)}
+                  className="rounded-xs text-rose-600"
+                />
+                Lock Aspect Ratio
+              </label>
             </div>
           </div>
 
-          {/* Preview */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-100 dark:bg-slate-900 text-center">
-            {scaledSrc && (
-              <img
-                src={scaledSrc}
-                alt="Scaled Preview"
-                className="max-h-80 mx-auto object-contain rounded-lg shadow-sm"
-              />
+          <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-900 text-center overflow-hidden">
+            {resizedUrl && (
+              <img src={resizedUrl} alt="Resized" className="max-h-72 mx-auto object-contain rounded-xl shadow-md" />
             )}
+          </div>
+
+          <div className="flex justify-end">
+            <a
+              href={resizedUrl || '#'}
+              download={`resized-${newW}x${newH}.png`}
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-rose-600 text-white font-bold text-sm hover:bg-rose-700 shadow-sm"
+            >
+              <Download className="w-4 h-4" />
+              <span>{t('tool.download', 'Download Resized Photo')}</span>
+            </a>
           </div>
         </div>
       )}

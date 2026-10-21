@@ -19,7 +19,8 @@ import {
 } from 'lucide-react';
 import { IconRenderer } from './IconRenderer';
 import { useLanguage } from '../i18n/LanguageContext';
-
+import { getLocalizedTool } from '../utils/toolLocalization';
+import { triggerHaptic } from '../utils/haptics';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -50,7 +51,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onSelectTool,
   favorites,
 }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -73,10 +74,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     const q = query.toLowerCase().trim();
     const queryMatched = q
       ? TOOLS_DATA.filter((tool) => {
+          const loc = getLocalizedTool(tool, language, t);
           return (
             tool.name.toLowerCase().includes(q) ||
+            loc.localizedName.toLowerCase().includes(q) ||
             tool.description.toLowerCase().includes(q) ||
+            loc.localizedDescription.toLowerCase().includes(q) ||
             tool.category.toLowerCase().includes(q) ||
+            loc.localizedCategory.toLowerCase().includes(q) ||
             tool.tags.some((t) => t.toLowerCase().includes(q)) ||
             (tool.keywords && tool.keywords.some((k) => k.toLowerCase().includes(q)))
           );
@@ -92,7 +97,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     }
 
     return counts;
-  }, [query]);
+  }, [query, language, t]);
 
   // Final filtered tools combining query and active category filter
   const filteredTools = useMemo(() => {
@@ -105,15 +110,19 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
       // Query filter check
       if (!q) return true;
+      const loc = getLocalizedTool(tool, language, t);
       return (
         tool.name.toLowerCase().includes(q) ||
+        loc.localizedName.toLowerCase().includes(q) ||
         tool.description.toLowerCase().includes(q) ||
+        loc.localizedDescription.toLowerCase().includes(q) ||
         tool.category.toLowerCase().includes(q) ||
+        loc.localizedCategory.toLowerCase().includes(q) ||
         tool.tags.some((t) => t.toLowerCase().includes(q)) ||
         (tool.keywords && tool.keywords.some((k) => k.toLowerCase().includes(q)))
       );
     });
-  }, [query, selectedCategory]);
+  }, [query, selectedCategory, language, t]);
 
   // Reset selected index when filtered list changes
   useEffect(() => {
@@ -126,6 +135,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       if (!isOpen) return;
 
       if (e.key === 'Escape') {
+        triggerHaptic('light');
         if (selectedCategory !== 'all') {
           setSelectedCategory('all');
         } else {
@@ -133,13 +143,16 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         }
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
+        triggerHaptic('selection');
         setSelectedIndex((prev) => (prev < filteredTools.length - 1 ? prev + 1 : 0));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
+        triggerHaptic('selection');
         setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredTools.length - 1));
       } else if (e.key === 'Enter') {
         if (filteredTools[selectedIndex]) {
           e.preventDefault();
+          triggerHaptic('medium');
           onSelectTool(filteredTools[selectedIndex].id);
           onClose();
         }
@@ -308,6 +321,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             filteredTools.map((tool, index) => {
               const isFav = favorites.includes(tool.id);
               const isKeyboardSelected = index === selectedIndex;
+              const localized = getLocalizedTool(tool, language, t);
 
               return (
                 <div
@@ -342,12 +356,12 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                               : 'text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400'
                           }`}
                         >
-                          {tool.name}
+                          {localized.localizedName}
                         </h4>
                         {isFav && <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />}
                       </div>
                       <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5 leading-normal">
-                        {tool.description}
+                        {localized.localizedDescription}
                       </p>
 
                       {/* Interactive Tool Tags */}
@@ -362,9 +376,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                               ? 'bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold'
                               : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-slate-700'
                           }`}
-                          title={`Click to filter by ${tool.category}`}
+                          title={`Click to filter by ${localized.localizedCategory}`}
                         >
-                          {tool.category}
+                          {localized.localizedCategory}
                         </button>
                         {tool.tags.slice(0, 2).map((t) => (
                           <span

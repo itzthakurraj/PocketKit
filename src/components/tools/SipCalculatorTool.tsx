@@ -1,121 +1,115 @@
 import React, { useState } from 'react';
-import { calculateSIP } from '../../utils/calculatorUtils';
-import { TrendingUp, DollarSign, PieChart, Sparkles } from 'lucide-react';
+import { Volume2, TrendingUp, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export const SipCalculatorTool: React.FC = () => {
-  const [monthly, setMonthly] = useState<number>(500);
-  const [returnRate, setReturnRate] = useState<number>(12);
-  const [years, setYears] = useState<number>(10);
+  const [monthlyInvestment, setMonthlyInvestment] = useState(5000);
+  const [returnRate, setReturnRate] = useState(12);
+  const [years, setYears] = useState(10);
+  const { t, speak, isSpeaking, stopSpeaking } = useLanguage();
 
-  const result = calculateSIP(monthly || 0, returnRate || 0, years || 1);
-  const totalVal = Math.max(1, result.totalValue);
-  const investedPercent = Math.round((result.investedAmount / totalVal) * 100);
-  const returnsPercent = 100 - investedPercent;
+  const totalMonths = years * 12;
+  const monthlyRate = returnRate / 12 / 100;
+  const totalInvested = monthlyInvestment * totalMonths;
+
+  // FV = P * [ (1 + i)^n - 1 ] * (1 + i) / i
+  const estimatedReturns =
+    monthlyRate > 0
+      ? monthlyInvestment *
+        ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) *
+        (1 + monthlyRate)
+      : totalInvested;
+
+  const totalGains = estimatedReturns - totalInvested;
+
+  const handleSpeak = () => {
+    if (isSpeaking) {
+      stopSpeaking();
+    } else {
+      speak(`Investing ${monthlyInvestment} monthly for ${years} years yields an estimated wealth of ${Math.round(estimatedReturns).toLocaleString()}.`);
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      {/* Controls */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 p-5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            <span>Monthly Deposit ($)</span>
-            <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm font-extrabold">${monthly}</span>
-          </div>
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60">
+        <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 dark:text-emerald-300">
+          <Sparkles className="w-4 h-4 text-emerald-600" />
+          <span>{t('sip.instruction', 'Estimate your future compounding wealth through regular monthly SIP investments.')}</span>
+        </div>
+        <button
+          onClick={handleSpeak}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            isSpeaking ? 'bg-red-500 text-white animate-pulse' : 'bg-emerald-600 text-white hover:bg-emerald-700'
+          }`}
+        >
+          <Volume2 className="w-3.5 h-3.5" />
+          <span>{isSpeaking ? t('a11y.speaking', 'Speaking...') : t('tool.speak', 'Listen Result 🔊')}</span>
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+            Monthly Investment
+          </label>
           <input
-            type="range"
-            min={50}
-            max={10000}
-            step={50}
-            value={monthly}
-            onChange={(e) => setMonthly(Number(e.target.value))}
-            className="w-full accent-indigo-600 cursor-pointer"
+            type="number"
+            min={500}
+            step={500}
+            value={monthlyInvestment}
+            onChange={(e) => setMonthlyInvestment(Number(e.target.value) || 0)}
+            className="w-full p-3 font-bold text-lg rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
           />
         </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            <span>Expected Return Rate</span>
-            <span className="text-emerald-600 dark:text-emerald-400 font-mono text-sm font-extrabold">{returnRate}%</span>
-          </div>
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+            Expected Return (% p.a.)
+          </label>
           <input
-            type="range"
-            min={1}
-            max={30}
-            step={0.5}
-            value={returnRate}
-            onChange={(e) => setReturnRate(Number(e.target.value))}
-            className="w-full accent-emerald-600 cursor-pointer"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            <span>Time Horizon (Years)</span>
-            <span className="text-cyan-600 dark:text-cyan-400 font-mono text-sm font-extrabold">{years} yrs</span>
-          </div>
-          <input
-            type="range"
+            type="number"
             min={1}
             max={40}
-            step={1}
+            step={0.5}
+            value={returnRate}
+            onChange={(e) => setReturnRate(Number(e.target.value) || 0)}
+            className="w-full p-3 font-bold text-lg rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+            Time Period (Years)
+          </label>
+          <input
+            type="number"
+            min={1}
+            max={40}
             value={years}
-            onChange={(e) => setYears(Number(e.target.value))}
-            className="w-full accent-cyan-600 cursor-pointer"
+            onChange={(e) => setYears(Number(e.target.value) || 1)}
+            className="w-full p-3 font-bold text-lg rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
           />
         </div>
       </div>
 
-      {/* Metrics Result */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs">
-          <div className="text-xs font-medium text-slate-400">Total Invested Capital</div>
-          <div className="text-3xl font-extrabold text-slate-800 dark:text-white mt-1">
-            ${Math.round(result.investedAmount).toLocaleString()}
-          </div>
-          <div className="text-[11px] text-slate-400 mt-1">{investedPercent}% of portfolio</div>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xs">
-          <div className="text-xs font-medium text-slate-400">Est. Compounded Returns</div>
-          <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">
-            +${Math.round(result.estimatedReturns).toLocaleString()}
-          </div>
-          <div className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1">
-            {returnsPercent}% wealth gain
+      {/* Result Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Invested Capital</span>
+          <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">
+            {Math.round(totalInvested).toLocaleString()}
           </div>
         </div>
-
-        <div className="p-5 rounded-2xl bg-gradient-to-tr from-indigo-600 to-emerald-600 text-white shadow-md">
-          <div className="text-xs font-medium text-indigo-100">Expected Total Maturity</div>
-          <div className="text-3xl font-extrabold mt-1">
-            ${Math.round(result.totalValue).toLocaleString()}
+        <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-900/60 text-center">
+          <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider">Est. Wealth Gains</span>
+          <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">
+            +{Math.round(totalGains).toLocaleString()}
           </div>
-          <div className="text-[11px] text-indigo-100 mt-1">Future wealth after {years} years</div>
         </div>
-      </div>
-
-      {/* Visual Proportion Bar */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-400 inline-block" />
-            Invested: ${Math.round(result.investedAmount).toLocaleString()} ({investedPercent}%)
-          </span>
-          <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
-            Profit: ${Math.round(result.estimatedReturns).toLocaleString()} ({returnsPercent}%)
-          </span>
-        </div>
-
-        <div className="h-3 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
-          <div
-            className="bg-slate-400 dark:bg-slate-600 transition-all duration-300"
-            style={{ width: `${investedPercent}%` }}
-          />
-          <div
-            className="bg-emerald-500 transition-all duration-300"
-            style={{ width: `${returnsPercent}%` }}
-          />
+        <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-900/60 text-center">
+          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Total Future Value</span>
+          <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
+            {Math.round(estimatedReturns).toLocaleString()}
+          </div>
         </div>
       </div>
     </div>

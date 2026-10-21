@@ -1,111 +1,76 @@
 import React, { useState } from 'react';
-import { BLOG_POSTS } from '../data/blogData';
-import { BlogPost } from '../types';
-import { BookOpen, Calendar, Clock, ArrowRight, X } from 'lucide-react';
+import { BookOpen, Calendar, Clock, ArrowRight, User, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export const BlogPage: React.FC = () => {
   const { t } = useLanguage();
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+
+  const articles = [
+    {
+      id: 'client-side-privacy',
+      title: 'Why 100% Client-Side Processing Matters for Data Security',
+      snippet: 'Discover how WebAssembly, the Web Crypto API, and modern HTML5 canvas enable heavy computation without shipping user data across the wire.',
+      date: 'Oct 2026',
+      readTime: '4 min read',
+      author: 'Security Engineering Team',
+      category: 'Privacy',
+    },
+    {
+      id: 'accessibility-digital-divide',
+      title: 'Bridging the Literacy Gap with Multilingual Voice Feedback in Web Apps',
+      snippet: 'How SpeechSynthesis and intuitive visual cues allow millions of non-literate and visually impaired individuals to utilize digital utility tools with ease.',
+      date: 'Oct 2026',
+      readTime: '5 min read',
+      author: 'Accessibility WG',
+      category: 'Inclusion',
+    },
+    {
+      id: 'pwa-vs-apk',
+      title: 'Offline PWAs and Android Native Wrappers: The Best of Both Worlds',
+      snippet: 'Learn how we designed PocketKit to distribute seamlessly as both a lightweight 4.5MB native Android APK and an instant browser PWA.',
+      date: 'Sep 2026',
+      readTime: '6 min read',
+      author: 'Mobile Infrastructure',
+      category: 'Architecture',
+    },
+  ];
 
   return (
-    <div className="space-y-10 max-w-5xl mx-auto py-6">
-      <div className="text-center space-y-3 max-w-2xl mx-auto">
-        <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
-          {t('nav.blog', 'Blog')}
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-          {t('blog.title', 'Engineering & Tips Blog')}
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <div className="space-y-2">
+        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
+          PocketKit Engineering & Product Blog
         </h1>
-        <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400">
-          {t('blog.subtitle', 'Guides, workflows, and developer tricks for getting the most out of PocketKit.')}
+        <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base">
+          Articles on client-side privacy, web cryptography, accessibility, and offline web architecture.
         </p>
       </div>
 
-      {/* Posts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {BLOG_POSTS.map((post) => (
+        {articles.map((post) => (
           <article
             key={post.id}
-            onClick={() => setSelectedPost(post)}
-            className="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group"
+            className="p-6 rounded-3xl bg-white dark:bg-[#1a202c] border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between"
           >
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-xs text-slate-400">
-                <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold text-[10px] uppercase">
-                  {post.category}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3" /> {post.readTime}
-                </span>
-              </div>
-
-              <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
+              <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400">
+                {post.category}
+              </span>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
                 {post.title}
-              </h3>
-
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
                 {post.snippet}
               </p>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs font-semibold text-indigo-600 dark:text-indigo-400">
-              <span>Read Guide</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400 mt-4">
+              <span>{post.date}</span>
+              <span>{post.readTime}</span>
             </div>
           </article>
         ))}
       </div>
-
-      {/* Post Reading Modal */}
-      {selectedPost && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div
-            className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase">
-                {selectedPost.category}
-              </span>
-              <button
-                onClick={() => setSelectedPost(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                {selectedPost.title}
-              </h2>
-              <div className="flex items-center gap-4 text-xs text-slate-400">
-                <span>By {selectedPost.author}</span>
-                <span>•</span>
-                <span>{selectedPost.date}</span>
-                <span>•</span>
-                <span>{selectedPost.readTime}</span>
-              </div>
-            </div>
-
-            <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              {selectedPost.content.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-              <button
-                onClick={() => setSelectedPost(null)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200"
-              >
-                Close Article
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

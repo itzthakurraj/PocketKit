@@ -5,15 +5,32 @@ export interface AgeBreakdown {
   totalDays: number;
   totalHours: number;
   totalMinutes: number;
-  totalSeconds: number;
-  daysUntilNextBirthday: number;
   dayOfWeekBorn: string;
   zodiacSign: string;
+  daysUntilNextBirthday: number;
 }
 
-export function calculateAgeDetails(birthDateStr: string): AgeBreakdown | null {
-  if (!birthDateStr) return null;
-  const birthDate = new Date(birthDateStr);
+const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+function getZodiac(month: number, day: number): string {
+  // month is 1-12
+  if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return 'Aquarius ♒';
+  if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) return 'Pisces ♓';
+  if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return 'Aries ♈';
+  if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return 'Taurus ♉';
+  if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return 'Gemini ♊';
+  if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return 'Cancer ♋';
+  if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return 'Leo ♌';
+  if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return 'Virgo ♍';
+  if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return 'Libra ♎';
+  if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return 'Scorpio ♏';
+  if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return 'Sagittarius ♐';
+  return 'Capricorn ♑';
+}
+
+export function calculateAgeDetails(dobString: string): AgeBreakdown | null {
+  if (!dobString) return null;
+  const birthDate = new Date(dobString);
   const now = new Date();
 
   if (isNaN(birthDate.getTime()) || birthDate > now) {
@@ -25,48 +42,31 @@ export function calculateAgeDetails(birthDateStr: string): AgeBreakdown | null {
   let days = now.getDate() - birthDate.getDate();
 
   if (days < 0) {
-    months -= 1;
-    const prevMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-    days += prevMonthDays;
+    months--;
+    const prevMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    days += prevMonthLastDay;
   }
+
   if (months < 0) {
-    years -= 1;
+    years--;
     months += 12;
   }
 
   const diffMs = now.getTime() - birthDate.getTime();
   const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const totalMinutes = Math.floor(diffMs / (1000 * 60));
-  const totalSeconds = Math.floor(diffMs / 1000);
+  const totalHours = totalDays * 24;
+  const totalMinutes = totalHours * 60;
 
-  // Next birthday
-  const nextBirthday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+  const dayOfWeekBorn = DAYS_OF_WEEK[birthDate.getDay()];
+  const zodiacSign = getZodiac(birthDate.getMonth() + 1, birthDate.getDate());
+
+  // Next birthday calculation
+  let nextBirthday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate());
   if (nextBirthday < now) {
-    nextBirthday.setFullYear(now.getFullYear() + 1);
+    nextBirthday = new Date(now.getFullYear() + 1, birthDate.getMonth(), birthDate.getDate());
   }
-  const daysUntilNextBirthday = Math.ceil(
-    (nextBirthday.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-  );
-
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const dayOfWeekBorn = daysOfWeek[birthDate.getDay()];
-
-  // Zodiac
-  const month = birthDate.getMonth() + 1;
-  const day = birthDate.getDate();
-  let zodiacSign = 'Capricorn';
-  if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) zodiacSign = 'Aquarius';
-  else if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) zodiacSign = 'Pisces';
-  else if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) zodiacSign = 'Aries';
-  else if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) zodiacSign = 'Taurus';
-  else if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) zodiacSign = 'Gemini';
-  else if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) zodiacSign = 'Cancer';
-  else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) zodiacSign = 'Leo';
-  else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) zodiacSign = 'Virgo';
-  else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) zodiacSign = 'Libra';
-  else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) zodiacSign = 'Scorpio';
-  else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) zodiacSign = 'Sagittarius';
+  const msToNext = nextBirthday.getTime() - now.getTime();
+  const daysUntilNextBirthday = Math.max(0, Math.ceil(msToNext / (1000 * 60 * 60 * 24)));
 
   return {
     years,
@@ -75,121 +75,8 @@ export function calculateAgeDetails(birthDateStr: string): AgeBreakdown | null {
     totalDays,
     totalHours,
     totalMinutes,
-    totalSeconds,
-    daysUntilNextBirthday,
     dayOfWeekBorn,
     zodiacSign,
-  };
-}
-
-export function calculateGST(
-  amount: number,
-  ratePercent: number,
-  mode: 'exclusive' | 'inclusive'
-): { netAmount: number; gstAmount: number; totalAmount: number; cgst: number; sgst: number } {
-  if (mode === 'exclusive') {
-    const gstAmount = (amount * ratePercent) / 100;
-    const totalAmount = amount + gstAmount;
-    return {
-      netAmount: amount,
-      gstAmount,
-      totalAmount,
-      cgst: gstAmount / 2,
-      sgst: gstAmount / 2,
-    };
-  } else {
-    // Inclusive: amount = net * (1 + rate / 100)
-    const netAmount = amount / (1 + ratePercent / 100);
-    const gstAmount = amount - netAmount;
-    return {
-      netAmount,
-      gstAmount,
-      totalAmount: amount,
-      cgst: gstAmount / 2,
-      sgst: gstAmount / 2,
-    };
-  }
-}
-
-export interface LoanResult {
-  monthlyEmi: number;
-  totalInterest: number;
-  totalPayment: number;
-  amortizationPreview: { month: number; emi: number; principal: number; interest: number; balance: number }[];
-}
-
-export function calculateLoan(
-  principal: number,
-  annualRate: number,
-  tenureYears: number
-): LoanResult {
-  const monthlyRate = annualRate / 12 / 100;
-  const totalMonths = tenureYears * 12;
-
-  if (monthlyRate === 0) {
-    const monthlyEmi = principal / totalMonths;
-    return {
-      monthlyEmi,
-      totalInterest: 0,
-      totalPayment: principal,
-      amortizationPreview: [],
-    };
-  }
-
-  // Formula: EMI = P * r * (1 + r)^n / [ (1 + r)^n - 1 ]
-  const factor = Math.pow(1 + monthlyRate, totalMonths);
-  const monthlyEmi = (principal * monthlyRate * factor) / (factor - 1);
-  const totalPayment = monthlyEmi * totalMonths;
-  const totalInterest = totalPayment - principal;
-
-  // Build first 12 months amortization schedule
-  const amortizationPreview = [];
-  let balance = principal;
-  for (let m = 1; m <= Math.min(12, totalMonths); m++) {
-    const interest = balance * monthlyRate;
-    const princ = monthlyEmi - interest;
-    balance = Math.max(0, balance - princ);
-    amortizationPreview.push({
-      month: m,
-      emi: monthlyEmi,
-      principal: princ,
-      interest,
-      balance,
-    });
-  }
-
-  return {
-    monthlyEmi,
-    totalInterest,
-    totalPayment,
-    amortizationPreview,
-  };
-}
-
-export function calculateSIP(
-  monthlyInvestment: number,
-  annualReturnRate: number,
-  tenureYears: number
-): { investedAmount: number; estimatedReturns: number; totalValue: number } {
-  const i = annualReturnRate / 12 / 100;
-  const n = tenureYears * 12;
-
-  const investedAmount = monthlyInvestment * n;
-  if (i === 0) {
-    return {
-      investedAmount,
-      estimatedReturns: 0,
-      totalValue: investedAmount,
-    };
-  }
-
-  // SIP formula: M * [ ( (1 + i)^n - 1 ) / i ] * (1 + i)
-  const totalValue = monthlyInvestment * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
-  const estimatedReturns = totalValue - investedAmount;
-
-  return {
-    investedAmount,
-    estimatedReturns,
-    totalValue,
+    daysUntilNextBirthday,
   };
 }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PocketKit</string>
+    <string name="app_description">PocketKit is your pocket-sized digital workshop: 70+ client-side online tools for text editing, code formatting, image processing, PDF management, calculators, and encryption.</string>
+</resources>

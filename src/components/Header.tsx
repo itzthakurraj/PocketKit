@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { ActiveView } from '../types';
-import { Search, Moon, Sun, Menu, X, Sparkles, BookOpen, HelpCircle, Grid, Smartphone } from 'lucide-react';
-import { PWAInstallButton } from './PWAInstallButton';
+import { Search, Moon, Sun, Menu, X, Sparkles, BookOpen, HelpCircle, Grid, Smartphone, Download, Mic } from 'lucide-react';
+import { InstallDropdown } from './InstallDropdown';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { AccessibilityMenu } from './AccessibilityMenu';
 import { useLanguage } from '../i18n/LanguageContext';
+import { triggerHaptic } from '../utils/haptics';
 
 interface HeaderProps {
   activeView: ActiveView;
@@ -14,6 +16,8 @@ interface HeaderProps {
   favoritesCount: number;
   onToggleFavoritesFilter: () => void;
   showingFavoritesOnly: boolean;
+  onOpenVoiceModal?: () => void;
+  isVoiceListening?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -25,6 +29,8 @@ export const Header: React.FC<HeaderProps> = ({
   favoritesCount,
   onToggleFavoritesFilter,
   showingFavoritesOnly,
+  onOpenVoiceModal,
+  isVoiceListening,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
@@ -113,10 +119,29 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right Action Buttons */}
         <div className="flex items-center gap-1 sm:gap-2">
-          {/* Desktop PWA Install Button */}
-          <div className="hidden md:block">
-            <PWAInstallButton compact />
-          </div>
+          {/* Desktop Direct Install Button (Without Dropdown) */}
+          <button
+            onClick={() => onNavigate('install')}
+            className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-xs transition-colors cursor-pointer"
+            title={t('header.installApp', 'Install App')}
+          >
+            <Download className="w-4 h-4" />
+            <span>{t('header.installApp', 'Install App')}</span>
+          </button>
+
+          {/* Accessible Voice Assistant Button (Alt+V) */}
+          <button
+            onClick={onOpenVoiceModal}
+            className={`p-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center cursor-pointer border ${
+              isVoiceListening
+                ? 'bg-red-500 text-white animate-pulse shadow-md border-red-400 ring-2 ring-red-400'
+                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border-slate-200/80 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60'
+            }`}
+            title="Voice Assistant & Navigation (Alt+V)"
+            aria-label="Voice Assistant and Navigation (Alt+V)"
+          >
+            <Mic className={`w-4 h-4 sm:w-5 sm:h-5 ${isVoiceListening ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'}`} />
+          </button>
 
           {/* Search Button: full pill on tablet/desktop, compact icon on mobile */}
           <button
@@ -151,10 +176,16 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Language Switcher */}
           <LanguageSwitcher compact={false} />
 
+          {/* Accessibility & Haptics Settings Menu */}
+          <AccessibilityMenu onOpenVoiceModal={onOpenVoiceModal} />
+
           {/* Theme Toggle */}
           <button
-            onClick={onToggleTheme}
-            className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            onClick={() => {
+              triggerHaptic('medium');
+              onToggleTheme();
+            }}
+            className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800"
             aria-label={t('header.toggleTheme', 'Toggle theme')}
           >
             {isDark ? <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" /> : <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />}
@@ -186,7 +217,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
             <div className="pt-1">
-              <PWAInstallButton fullWidth />
+              <InstallDropdown fullWidth onNavigateToInstallPage={() => { onNavigate('install'); setMobileMenuOpen(false); }} />
             </div>
           </div>
 
@@ -261,6 +292,20 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <HelpCircle className="w-4 h-4 text-blue-500" />
               <span>{t('nav.helpDocs', 'Help & Documentation')}</span>
+            </button>
+            <button
+              onClick={() => {
+                onNavigate('install');
+                setMobileMenuOpen(false);
+              }}
+              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 transition-colors cursor-pointer ${
+                activeView === 'install'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 font-bold'
+                  : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Download className="w-4 h-4 text-emerald-500" />
+              <span>{t('header.installApp', 'Install App (APK & iOS)')}</span>
             </button>
           </div>
         </div>

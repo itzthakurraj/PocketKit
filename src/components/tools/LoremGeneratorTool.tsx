@@ -1,110 +1,130 @@
 import React, { useState } from 'react';
-import { generateLoremIpsum } from '../../utils/textUtils';
-import { Copy, Check, RefreshCw, FileText } from 'lucide-react';
+import { Copy, Check, Sparkles, Volume2 } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
+
+const LOREM_WORDS = [
+  'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit',
+  'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore',
+  'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud',
+  'exercitation', 'ullamco', 'laboris', 'nisi', 'aliquip', 'ex', 'ea', 'commodo',
+  'consequat', 'duis', 'aute', 'irure', 'in', 'reprehenderit', 'voluptate', 'velit',
+  'esse', 'cillum', 'fugiat', 'nulla', 'pariatur', 'excepteur', 'sint', 'occaecat',
+  'cupidatat', 'non', 'proident', 'sunt', 'culpa', 'qui', 'officia', 'deserunt',
+  'mollit', 'anim', 'id', 'est', 'laborum'
+];
 
 export const LoremGeneratorTool: React.FC = () => {
-  const [type, setType] = useState<'paragraphs' | 'sentences' | 'words'>('paragraphs');
   const [count, setCount] = useState(3);
-  const [htmlTags, setHtmlTags] = useState(false);
+  const [type, setType] = useState<'paragraphs' | 'sentences' | 'words'>('paragraphs');
+  const [output, setOutput] = useState('');
   const [copied, setCopied] = useState(false);
-  const [result, setResult] = useState(() => generateLoremIpsum('paragraphs', 3, false));
+  const { t, speak, isSpeaking, stopSpeaking } = useLanguage();
 
-  const handleGenerate = () => {
-    setResult(generateLoremIpsum(type, count, htmlTags));
+  const generate = () => {
+    let result = '';
+    if (type === 'words') {
+      const words: string[] = [];
+      for (let i = 0; i < count; i++) {
+        words.push(LOREM_WORDS[i % LOREM_WORDS.length]);
+      }
+      result = words.join(' ') + '.';
+    } else if (type === 'sentences') {
+      const sentences: string[] = [];
+      for (let i = 0; i < count; i++) {
+        const sentenceLen = 8 + (i % 7);
+        const words: string[] = [];
+        for (let j = 0; j < sentenceLen; j++) {
+          words.push(LOREM_WORDS[(i * 5 + j) % LOREM_WORDS.length]);
+        }
+        const s = words.join(' ');
+        sentences.push(s.charAt(0).toUpperCase() + s.slice(1) + '.');
+      }
+      result = sentences.join(' ');
+    } else {
+      const paras: string[] = [];
+      for (let p = 0; p < count; p++) {
+        const sentences: string[] = [];
+        for (let i = 0; i < 4; i++) {
+          const sentenceLen = 9 + (i % 6);
+          const words: string[] = [];
+          for (let j = 0; j < sentenceLen; j++) {
+            words.push(LOREM_WORDS[(p * 10 + i * 5 + j) % LOREM_WORDS.length]);
+          }
+          const s = words.join(' ');
+          sentences.push(s.charAt(0).toUpperCase() + s.slice(1) + '.');
+        }
+        paras.push(sentences.join(' '));
+      }
+      result = paras.join('\n\n');
+    }
+    setOutput(result);
   };
 
+  React.useEffect(() => {
+    generate();
+  }, [count, type]);
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(result);
+    navigator.clipboard.writeText(output);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="space-y-6">
-      {/* Controls */}
-      <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/80 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Generate:</span>
-            <div className="flex rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden text-xs font-medium">
-              {(['paragraphs', 'sentences', 'words'] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => {
-                    setType(t);
-                    setResult(generateLoremIpsum(t, count, htmlTags));
-                  }}
-                  className={`px-3 py-1.5 capitalize transition-colors ${
-                    type === t
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300'
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Count:</span>
-            <input
-              type="number"
-              min={1}
-              max={50}
-              value={count}
-              onChange={(e) => {
-                const val = Math.max(1, Math.min(50, parseInt(e.target.value) || 1));
-                setCount(val);
-                setResult(generateLoremIpsum(type, val, htmlTags));
-              }}
-              className="w-16 px-2.5 py-1 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-center focus:ring-1 focus:ring-indigo-500 focus:outline-none"
-            />
-          </div>
-
-          <label className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={htmlTags}
-              onChange={(e) => {
-                setHtmlTags(e.target.checked);
-                setResult(generateLoremIpsum(type, count, e.target.checked));
-              }}
-              className="w-4 h-4 text-indigo-600 rounded border-slate-300 dark:border-slate-700 focus:ring-indigo-500"
-            />
-            Include &lt;p&gt; tags
-          </label>
-        </div>
-
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleGenerate}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition-colors"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            Regenerate
-          </button>
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-colors"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
-            {copied ? 'Copied' : 'Copy'}
-          </button>
+          <label className="text-xs font-bold text-slate-600 dark:text-slate-300">Generate:</label>
+          <input
+            type="number"
+            min={1}
+            max={50}
+            value={count}
+            onChange={(e) => setCount(Math.max(1, Math.min(50, Number(e.target.value) || 1)))}
+            className="w-16 px-2 py-1 text-center font-bold text-sm rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+          />
         </div>
+        <div className="flex rounded-lg border border-slate-300 dark:border-slate-600 overflow-hidden">
+          {(['paragraphs', 'sentences', 'words'] as const).map((tMode) => (
+            <button
+              key={tMode}
+              onClick={() => setType(tMode)}
+              className={`px-3 py-1 text-xs font-bold capitalize transition-colors cursor-pointer ${
+                type === tMode
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              {tMode}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={generate}
+          className="ml-auto px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition-colors cursor-pointer"
+        >
+          {t('tool.generate', 'Regenerate')}
+        </button>
       </div>
 
-      {/* Result Output */}
-      <div className="relative">
-        <textarea
-          rows={11}
-          readOnly
-          value={result}
-          className="w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-serif text-sm leading-relaxed resize-y focus:outline-none"
-        />
-        <div className="text-[11px] text-slate-400 mt-2 text-right">
-          {result.split(/\s+/).filter(Boolean).length} words generated
-        </div>
+      <textarea
+        rows={8}
+        readOnly
+        value={output}
+        className="w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm leading-relaxed"
+      />
+
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-slate-400 font-medium">
+          {output.length} {t('character.chars', 'Characters')}
+        </span>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs sm:text-sm hover:bg-indigo-700 shadow-sm cursor-pointer"
+        >
+          {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
+          <span>{copied ? t('tool.copied', 'Copied!') : t('tool.copy', 'Copy Lorem')}</span>
+        </button>
       </div>
     </div>
   );

@@ -1,106 +1,108 @@
 import React from 'react';
-import { Shield, Zap, Lock, Palette, Cpu, RefreshCw, Smartphone, CheckCircle, ArrowRight } from 'lucide-react';
+import { Shield, Zap, Smartphone, Globe, Lock, Code2, Sparkles, Volume2, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { AdBanner } from '../components/AdBanner';
 
 interface FeaturesPageProps {
-  onOpenTool: (id: string) => void;
+  onOpenTool?: (id: string | null) => void;
+  onNavigateHome?: () => void;
+  onOpenInstall?: () => void;
 }
 
-export const FeaturesPage: React.FC<FeaturesPageProps> = ({ onOpenTool }) => {
-  const { t } = useLanguage();
-  const highlights = [
+export const FeaturesPage: React.FC<FeaturesPageProps> = ({ onNavigateHome, onOpenInstall }) => {
+  const { t, speak } = useLanguage();
+
+  const features = [
     {
       icon: Shield,
-      title: 'Zero Data Retention (100% Client-Side)',
-      description: 'All text operations, file conversions, and cryptographic encryptions are calculated in your browser memory. No data is stored, logged, or uploaded to cloud servers.',
+      color: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/60',
+      title: '100% Client-Side Privacy',
+      desc: 'All computation, formatting, and file processing happen exclusively inside your device browser. No text or photos are ever transmitted to any external server.',
     },
     {
-      icon: Zap,
-      title: 'Sub-Millisecond Processing',
-      description: 'Powered by modern Web APIs (Web Crypto, HTML5 Canvas, Web Speech, and typed arrays) for instantaneous, zero-latency workflows.',
-    },
-    {
-      icon: Lock,
-      title: 'Military-Grade Encryption Tools',
-      description: 'Strong AES-256 and DES symmetric encryption, SHA-256 and MD5 cryptographic hashes, and entropy-scored random password generation.',
-    },
-    {
-      icon: Palette,
-      title: 'Visual Image & Media Studio',
-      description: 'Compress JPEG/PNG/WebP, crop with standard aspect ratios, tweak brightness/contrast/saturation, and watermark artwork in seconds.',
-    },
-    {
-      icon: Cpu,
-      title: 'Developer Syntax & Schema Suite',
-      description: 'Format, validate, and minify JSON, CSV, XML, HTML, CSS, and JavaScript with error pinpointing and tabular inspections.',
+      icon: Sparkles,
+      color: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/60',
+      title: '100% Free via Google AdSense',
+      desc: 'All 70+ tools are funded by non-intrusive Google AdSense advertisements. An active internet connection ensures sponsored ads display so all utilities stay 100% free forever without subscriptions.',
     },
     {
       icon: Smartphone,
-      title: 'Responsive & Dark Mode Native',
-      description: 'Thoughtfully crafted with fluid layout scaling, full keyboard accessibility, dark/light theme persistence, and offline readiness.',
+      color: 'text-blue-500 bg-blue-50 dark:bg-blue-950/60',
+      title: 'Native Android APK & PWA',
+      desc: 'Install directly on Android phones as a lightweight native APK, or on iOS and Desktop as an instant Progressive Web App.',
+    },
+    {
+      icon: Globe,
+      color: 'text-purple-500 bg-purple-50 dark:bg-purple-950/60',
+      title: '14 Global & Indic Languages',
+      desc: 'Seamlessly switch between English, Hindi, Bengali, Telugu, Tamil, Marathi, Gujarati, Kannada, Malayalam, Punjabi, Urdu, Odia, Spanish, and French.',
+    },
+    {
+      icon: Volume2,
+      color: 'text-amber-500 bg-amber-50 dark:bg-amber-950/60',
+      title: 'Accessibility & Voice Assistance',
+      desc: 'Built-in Text-to-Speech audio guide allows non-literate and visually challenged individuals to listen to tool guidance and calculation outcomes aloud.',
+    },
+    {
+      icon: Zap,
+      color: 'text-rose-500 bg-rose-50 dark:bg-rose-950/60',
+      title: '70+ Production Utilities',
+      desc: 'Comprehensive suites covering text editors, developers, cryptography, finance math, image optimizers, and PDF generation.',
     },
   ];
 
   return (
-    <div className="space-y-12 max-w-6xl mx-auto py-6">
-      {/* Page Header */}
-      <div className="text-center space-y-3 max-w-2xl mx-auto">
-        <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
-          {t('nav.features', 'Features')}
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+      {/* Hero Header */}
+      <div className="text-center space-y-4 max-w-3xl mx-auto">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60">
+          <Zap className="w-3.5 h-3.5" /> High Performance & Zero Bloat
         </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
-          {t('features.title', 'PocketKit Features & Architecture')}
+        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+          Everything You Need in a <span className="bg-gradient-to-r from-indigo-500 via-indigo-600 to-emerald-500 bg-clip-text text-transparent">Digital Toolkit</span>
         </h1>
-        <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400">
-          {t('features.subtitle', 'Built for modern productivity with zero friction, zero sign-ups, and unmatched speed.')}
+        <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+          Engineered for privacy, speed, and cross-platform accessibility. Built for everyday tasks without accounts, tracking, or fees.
         </p>
       </div>
 
-      {/* Grid of Features */}
+      {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {highlights.map((item, index) => {
-          const Icon = item.icon;
+        {features.map((feat, idx) => {
+          const IconComp = feat.icon;
           return (
             <div
-              key={index}
-              className="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md transition-shadow space-y-3"
+              key={idx}
+              className="p-6 rounded-3xl bg-white dark:bg-[#1a202c] border border-slate-200 dark:border-slate-800 shadow-xs hover:shadow-md transition-shadow space-y-3"
             >
-              <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-slate-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                <Icon className="w-6 h-6" />
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${feat.color}`}>
+                <IconComp className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                {item.title}
-              </h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">{feat.title}</h3>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                {item.description}
+                {feat.desc}
               </p>
             </div>
           );
         })}
       </div>
 
-      {/* Comparison Table / Callout */}
-      <div className="p-8 rounded-3xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white shadow-xl space-y-6">
-        <div className="max-w-2xl space-y-2">
-          <h2 className="text-2xl font-bold">Privacy Guaranteed by Design</h2>
-          <p className="text-sm text-indigo-200 leading-relaxed">
-            Unlike other web converter sites that require uploading your private documents and photos to unknown third-party cloud servers, Toolkit processes everything strictly within your browser.
-          </p>
-        </div>
+      {/* AdSense In-Page Banner */}
+      <AdBanner slotId="1000000003" format="auto" className="my-8" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-semibold">
-          <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 space-y-1">
-            <div className="text-emerald-400 text-base">✓ 0 Server Uploads</div>
-            <p className="text-white/80 font-normal">Files never leave your local browser RAM</p>
-          </div>
-          <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 space-y-1">
-            <div className="text-emerald-400 text-base">✓ Unlimited Free Usage</div>
-            <p className="text-white/80 font-normal">No subscriptions, rate limits, or paywalls</p>
-          </div>
-          <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 space-y-1">
-            <div className="text-emerald-400 text-base">✓ 100% Client-Side</div>
-            <p className="text-white/80 font-normal">Standard Web APIs for optimal performance</p>
-          </div>
+      {/* CTA Box */}
+      <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-indigo-600 to-emerald-600 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="space-y-1 text-center sm:text-left">
+          <h2 className="text-2xl font-black">Experience PocketKit Everywhere</h2>
+          <p className="text-indigo-100 text-sm">Install on Android, Windows, macOS, Linux, and iOS in seconds.</p>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={onOpenInstall}
+            className="px-6 py-3 rounded-2xl bg-white text-indigo-700 font-extrabold text-sm hover:bg-indigo-50 shadow-md cursor-pointer transition-colors"
+          >
+            Download / Install App
+          </button>
         </div>
       </div>
     </div>

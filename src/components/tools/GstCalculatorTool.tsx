@@ -1,118 +1,150 @@
 import React, { useState } from 'react';
-import { calculateGST } from '../../utils/calculatorUtils';
-import { Receipt, Percent, DollarSign } from 'lucide-react';
+import { Volume2, Receipt, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { triggerHaptic } from '../../utils/haptics';
 
 export const GstCalculatorTool: React.FC = () => {
   const [amount, setAmount] = useState<number>(1000);
   const [rate, setRate] = useState<number>(18);
-  const [mode, setMode] = useState<'exclusive' | 'inclusive'>('exclusive');
+  const [isInclusive, setIsInclusive] = useState<boolean>(false);
+  const { t, speak, isSpeaking, stopSpeaking } = useLanguage();
 
-  const gstRates = [3, 5, 12, 18, 28];
-  const result = calculateGST(amount || 0, rate || 0, mode);
+  const gstAmount = isInclusive
+    ? (amount - (amount * (100 / (100 + rate))))
+    : (amount * rate) / 100;
+
+  const totalAmount = isInclusive ? amount : amount + gstAmount;
+  const netAmount = isInclusive ? amount - gstAmount : amount;
+  const cgst = gstAmount / 2;
+  const sgst = gstAmount / 2;
+
+  const handleSpeak = () => {
+    triggerHaptic('voice');
+    if (isSpeaking) {
+      stopSpeaking();
+    } else {
+      const speech = `Total amount is ${totalAmount.toFixed(2)}, including GST tax of ${gstAmount.toFixed(2)} at ${rate} percent.`;
+      speak(speech);
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      {/* Configuration Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Amount */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            {mode === 'exclusive' ? 'Base / Net Price' : 'Total Price (Inc. GST)'}
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-2.5 text-slate-400 font-bold">$</span>
-            <input
-              type="number"
-              min={0}
-              value={amount}
-              onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
-              className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            />
-          </div>
+    <div className="space-y-5">
+      {/* Voice Read Aloud Bar for Accessibility */}
+      <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60">
+        <div className="flex items-center gap-2 text-xs font-semibold text-amber-800 dark:text-amber-300">
+          <Sparkles className="w-4 h-4 text-amber-600" />
+          <span>{t('gst.instruction', 'Enter base amount and choose tax rate slab to see exact tax split.')}</span>
         </div>
+        <button
+          onClick={handleSpeak}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            isSpeaking ? 'bg-red-500 text-white animate-pulse' : 'bg-amber-600 text-white hover:bg-amber-700'
+          }`}
+        >
+          <Volume2 className="w-3.5 h-3.5" />
+          <span>{isSpeaking ? t('a11y.speaking', 'Speaking...') : t('tool.speak', 'Listen Result 🔊')}</span>
+        </button>
+      </div>
 
-        {/* GST Rate */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            GST / Tax Rate (%)
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+            Amount (Currency)
           </label>
-          <div className="flex gap-1.5">
-            {gstRates.map((r) => (
-              <button
-                key={r}
-                type="button"
-                onClick={() => setRate(r)}
-                className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-colors ${
-                  rate === r
-                    ? 'bg-indigo-600 text-white border-indigo-600'
-                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50'
-                }`}
-              >
-                {r}%
-              </button>
-            ))}
-          </div>
+          <input
+            type="number"
+            min={0}
+            step="any"
+            value={amount}
+            onChange={(e) => {
+              setAmount(Number(e.target.value) || 0);
+              triggerHaptic('light');
+            }}
+            className="w-full p-3 font-bold text-lg rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+          />
         </div>
-
-        {/* Tax Mode */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            Calculation Type
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+            Tax Type
           </label>
-          <div className="flex rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden text-xs font-bold">
+          <div className="grid grid-cols-2 gap-2 h-[46px]">
             <button
-              onClick={() => setMode('exclusive')}
-              className={`flex-1 py-2.5 transition-colors ${
-                mode === 'exclusive'
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+              onClick={() => {
+                triggerHaptic('selection');
+                setIsInclusive(false);
+              }}
+              className={`rounded-xl font-bold text-xs transition-colors cursor-pointer active:scale-95 ${
+                !isInclusive
+                  ? 'bg-amber-600 text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
               }`}
             >
-              Add GST (Exclusive)
+              Exclusive (Add GST)
             </button>
             <button
-              onClick={() => setMode('inclusive')}
-              className={`flex-1 py-2.5 transition-colors ${
-                mode === 'inclusive'
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+              onClick={() => {
+                triggerHaptic('selection');
+                setIsInclusive(true);
+              }}
+              className={`rounded-xl font-bold text-xs transition-colors cursor-pointer active:scale-95 ${
+                isInclusive
+                  ? 'bg-amber-600 text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
               }`}
             >
-              Remove GST (Inclusive)
+              Inclusive (Extract GST)
             </button>
           </div>
         </div>
       </div>
 
-      {/* Result Breakdown Card */}
-      <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-50/50 via-white to-emerald-50/50 dark:from-slate-800/80 dark:via-slate-800/50 dark:to-slate-900 border border-indigo-100 dark:border-slate-700 space-y-4">
-        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-          Tax Computation Breakdown
-        </h4>
+      {/* Tax Slabs */}
+      <div>
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+          Select Standard GST / VAT Slab
+        </label>
+        <div className="grid grid-cols-5 gap-2">
+          {[5, 12, 18, 28, 0].map((r) => (
+            <button
+              key={r}
+              onClick={() => {
+                triggerHaptic('selection');
+                setRate(r);
+              }}
+              className={`py-2 rounded-xl font-black text-sm transition-colors cursor-pointer active:scale-95 ${
+                rate === r
+                  ? 'bg-amber-600 text-white shadow-sm ring-2 ring-amber-400'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
+              }`}
+            >
+              {r}%
+            </button>
+          ))}
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-            <div className="text-xs font-medium text-slate-400">Net / Pre-tax Amount</div>
-            <div className="text-2xl font-extrabold text-slate-800 dark:text-white mt-1">
-              ${result.netAmount.toFixed(2)}
-            </div>
+      {/* Result Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Net Amount</span>
+          <div className="text-xl font-black text-slate-900 dark:text-white mt-1">
+            {netAmount.toFixed(2)}
           </div>
-
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
-            <div className="text-xs font-medium text-slate-400">Total GST ({rate}%)</div>
-            <div className="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">
-              ${result.gstAmount.toFixed(2)}
-            </div>
-            <div className="text-[11px] text-slate-400 mt-1">
-              CGST: ${result.cgst.toFixed(2)} | SGST: ${result.sgst.toFixed(2)}
-            </div>
+        </div>
+        <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-900/60 text-center">
+          <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">GST Tax ({rate}%)</span>
+          <div className="text-xl font-black text-amber-600 dark:text-amber-400 mt-1">
+            +{gstAmount.toFixed(2)}
           </div>
-
-          <div className="p-4 rounded-xl bg-indigo-600 text-white shadow-md">
-            <div className="text-xs font-medium text-indigo-100">Final Gross Total</div>
-            <div className="text-3xl font-extrabold mt-1">
-              ${result.totalAmount.toFixed(2)}
-            </div>
+          <div className="text-[10px] text-amber-600/80 mt-1">
+            CGST: {cgst.toFixed(2)} | SGST: {sgst.toFixed(2)}
+          </div>
+        </div>
+        <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-900/60 text-center">
+          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Total Amount</span>
+          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
+            {totalAmount.toFixed(2)}
           </div>
         </div>
       </div>

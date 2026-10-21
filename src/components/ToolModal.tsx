@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ToolItem } from '../types';
 import { IconRenderer } from './IconRenderer';
-import { X, Star, ArrowLeft, Share2, Check } from 'lucide-react';
+import { X, Star, ArrowLeft, Share2, Check, Volume2, VolumeX } from 'lucide-react';
 import { AdBanner } from './AdBanner';
 import { useLanguage } from '../i18n/LanguageContext';
+import { getLocalizedTool } from '../utils/toolLocalization';
+import { triggerHaptic } from '../utils/haptics';
 
 
 // Tool imports
@@ -80,13 +82,15 @@ export const ToolModal: React.FC<ToolModalProps> = ({
   onToggleFavorite,
   onClose,
 }) => {
-  const { t } = useLanguage();
+  const { language, t, speak, isSpeaking, stopSpeaking } = useLanguage();
   const [copiedShare, setCopiedShare] = useState(false);
+  const localized = getLocalizedTool(tool, language, t);
 
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        triggerHaptic('light');
         onClose();
       }
     };
@@ -95,11 +99,21 @@ export const ToolModal: React.FC<ToolModalProps> = ({
   }, [onClose]);
 
   const handleShare = () => {
+    triggerHaptic('success');
     const url = `${window.location.origin}/#${tool.id}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopiedShare(true);
       setTimeout(() => setCopiedShare(false), 2000);
     });
+  };
+
+  const handleToggleVoice = () => {
+    triggerHaptic('voice');
+    if (isSpeaking) {
+      stopSpeaking();
+    } else {
+      speak(`${localized.localizedName}. ${localized.localizedDescription}`);
+    }
   };
 
   const renderToolComponent = () => {
@@ -305,19 +319,34 @@ export const ToolModal: React.FC<ToolModalProps> = ({
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">
-                    {tool.name}
+                    {localized.localizedName}
                   </h2>
                   <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                    {t(`cat.${tool.category}`, tool.category)}
+                    {localized.localizedCategory}
                   </span>
                 </div>
                 <p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-2xl">
-                  {tool.description}
+                  {localized.localizedDescription}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
+              {/* Accessible Audio Guide (Reads Tool Description & Instructions) */}
+              <button
+                type="button"
+                onClick={handleToggleVoice}
+                className={`p-2 rounded-xl border transition-all cursor-pointer ${
+                  isSpeaking
+                    ? 'bg-red-500 text-white animate-pulse border-red-400 ring-2 ring-red-400/40'
+                    : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700'
+                }`}
+                title={isSpeaking ? t('a11y.stopSpeaking', 'Stop Voice') : t('tool.readInstructions', 'Listen to Instructions (Voice)')}
+                aria-label={isSpeaking ? t('a11y.stopSpeaking', 'Stop Voice') : t('tool.readInstructions', 'Listen to Instructions')}
+              >
+                {isSpeaking ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+              </button>
+
               <button
                 onClick={handleShare}
                 className="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
@@ -330,18 +359,24 @@ export const ToolModal: React.FC<ToolModalProps> = ({
                 )}
               </button>
               <button
-                onClick={(e) => onToggleFavorite(tool.id, e)}
+                onClick={(e) => {
+                  triggerHaptic('light');
+                  onToggleFavorite(tool.id, e);
+                }}
                 className={`p-2 rounded-xl border transition-colors cursor-pointer ${
                   isFavorite
                     ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-500 border-amber-300'
-                    : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700 hover:text-amber-400'
+                    : 'bg-white dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700 hover:text-amber-400'
                 }`}
                 title={isFavorite ? t('tool.removeFavorite', 'Remove favorite') : t('tool.addFavorite', 'Save to favorites')}
               >
                 <Star className={`w-5 h-5 ${isFavorite ? 'fill-amber-400' : ''}`} />
               </button>
               <button
-                onClick={onClose}
+                onClick={() => {
+                  triggerHaptic('light');
+                  onClose();
+                }}
                 className="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
                 title={`${t('tool.close', 'Close')} (ESC)`}
               >

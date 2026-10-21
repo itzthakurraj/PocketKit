@@ -27,7 +27,8 @@ export type ActiveView =
   | 'tool'
   | 'features'
   | 'blog'
-  | 'help';
+  | 'help'
+  | 'install';
 
 export interface BlogPost {
   id: string;

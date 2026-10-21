@@ -1,33 +1,24 @@
 import React, { useState, useMemo } from 'react';
-import { ToolItem, ToolCategory } from '../types';
+import { ToolItem } from '../types';
 import { CATEGORIES } from '../data/toolsData';
 import { ToolCard } from '../components/ToolCard';
 import { IconRenderer } from '../components/IconRenderer';
 import { AdBanner } from '../components/AdBanner';
 import { useLanguage } from '../i18n/LanguageContext';
+import { getLocalizedSuite, getLocalizedTool } from '../utils/toolLocalization';
+import { triggerHaptic } from '../utils/haptics';
 
 import {
   Search,
   Sparkles,
   Shield,
   Zap,
-  Flame,
   Star,
   CheckCircle,
   LayoutGrid,
   Layers,
   ArrowRight,
   Filter,
-  FileText,
-  Image as ImageIcon,
-  FileSpreadsheet,
-  Lock,
-  Calculator,
-  Code2,
-  Palette,
-  Keyboard,
-  Clock,
-  Trash2,
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -43,6 +34,102 @@ interface HomePageProps {
   onClearRecentTools?: () => void;
 }
 
+// Distinct Visual Themes for each Category to maximize visual scanning on Desktop & Mobile
+export const CATEGORY_VISUAL_THEMES: Record<
+  string,
+  {
+    name: string;
+    icon: string;
+    accentGradient: string;
+    iconBg: string;
+    iconColor: string;
+    borderColor: string;
+    activeBg: string;
+    glowColor: string;
+  }
+> = {
+  all: {
+    name: 'All Tools',
+    icon: 'LayoutGrid',
+    accentGradient: 'from-indigo-600 via-indigo-500 to-indigo-700',
+    iconBg: 'bg-indigo-50 dark:bg-indigo-950/70',
+    iconColor: 'text-indigo-600 dark:text-indigo-400',
+    borderColor: 'border-indigo-200 dark:border-indigo-800',
+    activeBg: 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30',
+    glowColor: 'ring-indigo-400',
+  },
+  text: {
+    name: 'Text & Docs',
+    icon: 'FileText',
+    accentGradient: 'from-blue-600 to-cyan-500',
+    iconBg: 'bg-blue-50 dark:bg-blue-950/70',
+    iconColor: 'text-blue-600 dark:text-blue-400',
+    borderColor: 'border-blue-200 dark:border-blue-800',
+    activeBg: 'bg-blue-600 text-white shadow-md shadow-blue-600/30',
+    glowColor: 'ring-blue-400',
+  },
+  development: {
+    name: 'Code & Dev',
+    icon: 'Code2',
+    accentGradient: 'from-emerald-600 to-teal-500',
+    iconBg: 'bg-emerald-50 dark:bg-emerald-950/70',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    borderColor: 'border-emerald-200 dark:border-emerald-800',
+    activeBg: 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30',
+    glowColor: 'ring-emerald-400',
+  },
+  encryption: {
+    name: 'Security & Crypto',
+    icon: 'Lock',
+    accentGradient: 'from-purple-600 to-violet-600',
+    iconBg: 'bg-purple-50 dark:bg-purple-950/70',
+    iconColor: 'text-purple-600 dark:text-purple-400',
+    borderColor: 'border-purple-200 dark:border-purple-800',
+    activeBg: 'bg-purple-600 text-white shadow-md shadow-purple-600/30',
+    glowColor: 'ring-purple-400',
+  },
+  calculator: {
+    name: 'Calculators',
+    icon: 'Calculator',
+    accentGradient: 'from-amber-500 to-orange-500',
+    iconBg: 'bg-amber-50 dark:bg-amber-950/70',
+    iconColor: 'text-amber-600 dark:text-amber-400',
+    borderColor: 'border-amber-200 dark:border-amber-800',
+    activeBg: 'bg-amber-600 text-white shadow-md shadow-amber-600/30',
+    glowColor: 'ring-amber-400',
+  },
+  image: {
+    name: 'Image & Media',
+    icon: 'Image',
+    accentGradient: 'from-rose-500 to-pink-600',
+    iconBg: 'bg-rose-50 dark:bg-rose-950/70',
+    iconColor: 'text-rose-600 dark:text-rose-400',
+    borderColor: 'border-rose-200 dark:border-rose-800',
+    activeBg: 'bg-rose-600 text-white shadow-md shadow-rose-600/30',
+    glowColor: 'ring-rose-400',
+  },
+  pdf: {
+    name: 'PDF Tools',
+    icon: 'FileSpreadsheet',
+    accentGradient: 'from-red-600 to-rose-600',
+    iconBg: 'bg-red-50 dark:bg-red-950/70',
+    iconColor: 'text-red-600 dark:text-red-400',
+    borderColor: 'border-red-200 dark:border-red-800',
+    activeBg: 'bg-red-600 text-white shadow-md shadow-red-600/30',
+    glowColor: 'ring-red-400',
+  },
+  web: {
+    name: 'Web & Colors',
+    icon: 'Palette',
+    accentGradient: 'from-cyan-500 to-blue-600',
+    iconBg: 'bg-cyan-50 dark:bg-cyan-950/70',
+    iconColor: 'text-cyan-600 dark:text-cyan-400',
+    borderColor: 'border-cyan-200 dark:border-cyan-800',
+    activeBg: 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30',
+    glowColor: 'ring-cyan-400',
+  },
+};
+
 export const HomePage: React.FC<HomePageProps> = ({
   tools,
   selectedCategory,
@@ -53,11 +140,11 @@ export const HomePage: React.FC<HomePageProps> = ({
   showingFavoritesOnly,
   onClearFavoritesFilter,
 }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grouped' | 'grid'>('grouped');
 
-  // Filter tools based on search and category
+  // Filter tools based on search and category (multilingual search matching)
   const filteredTools = useMemo(() => {
     return tools.filter((tool) => {
       // Favorites check
@@ -71,23 +158,26 @@ export const HomePage: React.FC<HomePageProps> = ({
       // Search query check
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase().trim();
+      const loc = getLocalizedTool(tool, language, t);
+
       return (
         tool.name.toLowerCase().includes(q) ||
+        loc.localizedName.toLowerCase().includes(q) ||
         tool.description.toLowerCase().includes(q) ||
+        loc.localizedDescription.toLowerCase().includes(q) ||
         tool.category.toLowerCase().includes(q) ||
-        tool.tags.some((t) => t.toLowerCase().includes(q)) ||
+        loc.localizedCategory.toLowerCase().includes(q) ||
+        tool.tags.some((tag) => tag.toLowerCase().includes(q)) ||
         (tool.keywords && tool.keywords.some((k) => k.toLowerCase().includes(q)))
       );
     });
-  }, [tools, showingFavoritesOnly, favorites, selectedCategory, searchQuery]);
-
-  const popularTools = useMemo(() => tools.filter((t) => t.isPopular), [tools]);
+  }, [tools, showingFavoritesOnly, favorites, selectedCategory, searchQuery, language, t]);
 
   // Group tools by category for grouped view
   const categoryGroups = useMemo(() => {
     const groups: { category: (typeof CATEGORIES)[number]; tools: ToolItem[] }[] = [];
     CATEGORIES.filter((c) => c.id !== 'all').forEach((cat) => {
-      const catTools = filteredTools.filter((t) => t.category === cat.id);
+      const catTools = filteredTools.filter((tool) => tool.category === cat.id);
       if (catTools.length > 0) {
         groups.push({ category: cat, tools: catTools });
       }
@@ -95,98 +185,92 @@ export const HomePage: React.FC<HomePageProps> = ({
     return groups;
   }, [filteredTools]);
 
-  // Original 8 Featured Suites from the GitHub Repo
+  // 8 Curated Featured Suites with Multilingual Translation
   const FEATURED_SUITES = [
     {
       id: 'text',
-      title: 'Text Tools',
-      desc: 'Edit, format, transform case, count characters, and inspect text documents effortlessly.',
+      defaultTitle: 'Text Tools',
+      defaultDesc: 'Edit, format, transform case, count characters, and inspect text documents effortlessly.',
       icon: 'FileText',
-      linkText: 'Explore Text Tools',
+      defaultLink: 'Explore Text Tools',
       categoryTarget: 'text',
-      primaryToolId: 'case-converter',
       count: tools.filter((t) => t.category === 'text').length,
     },
     {
       id: 'image',
-      title: 'Image Tools',
-      desc: 'Compress, convert formats, crop, resize, watermark, and filter photos without quality loss.',
+      defaultTitle: 'Image Tools',
+      defaultDesc: 'Compress, convert formats, crop, resize, watermark, and filter photos without quality loss.',
       icon: 'Image',
-      linkText: 'Explore Image Tools',
+      defaultLink: 'Explore Image Tools',
       categoryTarget: 'image',
-      primaryToolId: 'image-compressor',
       count: tools.filter((t) => t.category === 'image').length,
     },
     {
       id: 'pdf',
-      title: 'PDF Magic Suite',
-      desc: 'Convert PDFs to Word, Excel, CSV, Text, Images & vice-versa with client-side privacy.',
+      defaultTitle: 'PDF Magic Suite',
+      defaultDesc: 'Convert PDFs to Word, Excel, CSV, Text, Images & vice-versa with client-side privacy.',
       icon: 'FileSpreadsheet',
-      linkText: 'Explore PDF Suite',
+      defaultLink: 'Explore PDF Suite',
       categoryTarget: 'pdf',
-      primaryToolId: 'pdf-tools',
       count: tools.filter((t) => t.category === 'pdf').length,
     },
     {
       id: 'typing',
-      title: 'Typing Test & Tutor',
-      desc: 'Test your typing speed (WPM), accuracy, and fluency with real-time feedback and lessons.',
+      defaultTitle: 'Typing Test & Tutor',
+      defaultDesc: 'Test your typing speed (WPM), accuracy, and fluency with real-time feedback and lessons.',
       icon: 'Keyboard',
-      linkText: 'Start Typing Test',
+      defaultLink: 'Start Typing Test',
       categoryTarget: 'text',
-      primaryToolId: 'typing-test',
       badge: 'Interactive',
       count: 1,
     },
     {
       id: 'encryption',
-      title: 'Encryption & Security',
-      desc: 'Protect data with AES-256, DES, Base64, MD5/SHA hashes, and strong password generation.',
+      defaultTitle: 'Encryption & Security',
+      defaultDesc: 'Protect data with AES-256, DES, Base64, MD5/SHA hashes, and strong password generation.',
       icon: 'Lock',
-      linkText: 'Explore Security Tools',
+      defaultLink: 'Explore Security Tools',
       categoryTarget: 'encryption',
-      primaryToolId: 'aes-des-encrypt',
       count: tools.filter((t) => t.category === 'encryption').length,
     },
     {
       id: 'web',
-      title: 'Web & Colors',
-      desc: 'Convert HEX to RGB, generate palettes, inspect CSS styles, and optimize frontend design.',
+      defaultTitle: 'Web & Colors',
+      defaultDesc: 'Convert HEX to RGB, generate palettes, inspect CSS styles, and optimize frontend design.',
       icon: 'Palette',
-      linkText: 'Explore Color Tools',
+      defaultLink: 'Explore Color Tools',
       categoryTarget: 'web',
-      primaryToolId: 'color-converter',
       count: tools.filter((t) => t.category === 'web').length,
     },
     {
       id: 'development',
-      title: 'Developer Tools',
-      desc: 'JSON beautifier, validator, minifier, CSV/XML converters, and multi-language code formatters.',
+      defaultTitle: 'Developer Tools',
+      defaultDesc: 'JSON beautifier, validator, minifier, CSV/XML converters, and multi-language code formatters.',
       icon: 'Code2',
-      linkText: 'Explore Dev Tools',
+      defaultLink: 'Explore Dev Tools',
       categoryTarget: 'development',
-      primaryToolId: 'json-beautifier',
       count: tools.filter((t) => t.category === 'development').length,
     },
     {
       id: 'calculator',
-      title: 'Calculators & Finance',
-      desc: 'Calculate exact age, GST/VAT tax, EMI loan repayment, and compounding SIP returns.',
+      defaultTitle: 'Calculators & Finance',
+      defaultDesc: 'Calculate exact age, GST/VAT tax, EMI loan repayment, and compounding SIP returns.',
       icon: 'Calculator',
-      linkText: 'Explore Calculators',
+      defaultLink: 'Explore Calculators',
       categoryTarget: 'calculator',
-      primaryToolId: 'loan-calculator',
       count: tools.filter((t) => t.category === 'calculator').length,
     },
   ];
 
   return (
-    <div className="space-y-12">
-      {/* Hero Section matching original style */}
-      <section className="text-center pt-8 pb-4 max-w-4xl mx-auto space-y-4 px-4">
+    <div className="space-y-10 sm:space-y-12">
+      {/* Hero Section */}
+      <section className="text-center pt-6 sm:pt-8 pb-2 max-w-4xl mx-auto space-y-4 px-2 sm:px-4">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-          <span>PocketKit • {tools.length} {t('hero.stat1Label', 'Tools')}</span>
+          <span>
+            PocketKit • {tools.length} {t('hero.stat1Label', 'Tools')}
+          </span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-500 bg-clip-text text-transparent leading-tight sm:leading-tight">
@@ -194,8 +278,11 @@ export const HomePage: React.FC<HomePageProps> = ({
           <span className="underline decoration-indigo-400/40">{t('hero.titleHighlight', 'Pocket')}</span>
         </h1>
 
-        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          {t('hero.subtitle', 'PocketKit is your pocket-sized digital workshop. 100% private, client-side tools for text editing, code formatting, image manipulation, PDF tasks, calculators, and cryptography.')}
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          {t(
+            'hero.subtitle',
+            'PocketKit is your pocket-sized digital workshop. 100% private, client-side tools for text editing, code formatting, image manipulation, PDF tasks, calculators, and cryptography.'
+          )}
         </p>
 
         {/* Hero Search Bar */}
@@ -206,8 +293,11 @@ export const HomePage: React.FC<HomePageProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t('hero.searchPlaceholder', 'Search across all tools (e.g. PDF to Word, compress image, diff checker, loan calculator)...')}
-              className="w-full pl-12 pr-10 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/90 text-slate-800 dark:text-slate-100 placeholder-slate-400 text-sm shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
+              placeholder={t(
+                'hero.searchPlaceholder',
+                'Search across all tools (e.g. PDF to Word, compress image, diff checker, loan calculator)...'
+              )}
+              className="w-full pl-12 pr-16 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/90 text-slate-800 dark:text-slate-100 placeholder-slate-400 text-sm shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
             />
             {searchQuery && (
               <button
@@ -220,8 +310,8 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
         </div>
 
-        {/* Badges / Guarantees */}
-        <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+        {/* Trust Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-5 pt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
           <span className="flex items-center gap-1.5">
             <Shield className="w-4 h-4 text-emerald-500" /> {t('hero.stat2Label', '100% Client-Side Private')}
           </span>
@@ -234,74 +324,181 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* AdSense Top Leaderboard */}
-      <AdBanner slotId="1000000001" format="horizontal" className="my-4" />
+      {/* --- Visual Category Scanning Cards (Hero Deck for Desktop & Mobile) --- */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+              {t('tools.filterCategory', 'Quick Category Scan')}
+            </h2>
+          </div>
+          <span className="text-xs text-slate-400">
+            {CATEGORIES.length - 1} {t('footer.categories', 'Categories')}
+          </span>
+        </div>
 
-      {/* 8 Original Iconic Category Hubs (Shown on clean home view) */}
+        {/* Responsive Visual Scanning Grid with Rich Icons for Desktop & Mobile */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 sm:gap-3">
+          {CATEGORIES.map((cat) => {
+            const isActive = selectedCategory === cat.id && !showingFavoritesOnly;
+            const theme = CATEGORY_VISUAL_THEMES[cat.id] || CATEGORY_VISUAL_THEMES.all;
+            const catTitle = cat.id === 'all' ? t('cat.all', cat.name) : t(`cat.${cat.id}`, cat.name);
+
+            return (
+              <button
+                key={cat.id}
+                onClick={() => {
+                  triggerHaptic('selection');
+                  if (showingFavoritesOnly) onClearFavoritesFilter();
+                  onSelectCategory(cat.id);
+                }}
+                className={`group relative p-3 sm:p-3.5 rounded-2xl border transition-all duration-200 text-left cursor-pointer flex flex-col justify-between overflow-hidden active:scale-95 ${
+                  isActive
+                    ? 'bg-white dark:bg-slate-800 shadow-md ring-2 ring-indigo-500 dark:ring-indigo-400 border-indigo-400 dark:border-indigo-500'
+                    : 'bg-white dark:bg-[#1a202c] hover:bg-slate-50 dark:hover:bg-slate-800/80 border-slate-200/80 dark:border-slate-800 shadow-xs hover:shadow-sm hover:-translate-y-0.5'
+                }`}
+                title={catTitle}
+              >
+                {/* Active Indicator Top Accent */}
+                {isActive && (
+                  <div
+                    className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${theme.accentGradient}`}
+                  />
+                )}
+
+                {/* Visual Category Icon Container */}
+                <div className="flex items-center justify-between mb-2 sm:mb-2.5">
+                  <div
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs ${
+                      isActive ? theme.iconBg : theme.iconBg
+                    }`}
+                  >
+                    <IconRenderer name={cat.icon} className={`w-5 h-5 sm:w-5 sm:h-5 ${theme.iconColor}`} />
+                  </div>
+
+                  <span
+                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                      isActive
+                        ? 'bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                    }`}
+                  >
+                    {cat.count}
+                  </span>
+                </div>
+
+                {/* Category Label */}
+                <div>
+                  <h3
+                    className={`text-xs font-bold truncate transition-colors ${
+                      isActive
+                        ? 'text-indigo-600 dark:text-indigo-400'
+                        : 'text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400'
+                    }`}
+                  >
+                    {catTitle}
+                  </h3>
+                  <p className="text-[10px] text-slate-400 truncate mt-0.5">
+                    {cat.count} {t('hero.stat1Label', 'tools')}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* AdSense Top Banner */}
+      <AdBanner slotId="1000000001" format="horizontal" className="my-2" />
+
+      {/* 8 Featured Tool Suites (Visible when browsing all tools without active search) */}
       {selectedCategory === 'all' && !searchQuery && !showingFavoritesOnly && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Layers className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-                Featured Tool Suites
+                {t('tools.featuredSuites', 'Featured Tool Suites')}
               </h2>
             </div>
-            <span className="text-xs text-slate-400 font-medium">8 Core Categories</span>
+            <span className="text-xs text-slate-400 font-medium">
+              8 {t('footer.categories', 'Core Categories')}
+            </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {FEATURED_SUITES.map((suite) => (
-              <div
-                key={suite.id}
-                onClick={() => onSelectCategory(suite.categoryTarget)}
-                className="group relative bg-white dark:bg-[#1a202c] rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer flex flex-col justify-between overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-emerald-500 opacity-80" />
+            {FEATURED_SUITES.map((suite) => {
+              const localizedSuite = getLocalizedSuite(
+                suite.id,
+                suite.defaultTitle,
+                suite.defaultDesc,
+                suite.defaultLink,
+                language
+              );
+              const theme = CATEGORY_VISUAL_THEMES[suite.id] || CATEGORY_VISUAL_THEMES.all;
 
-                <div>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-xs">
-                      <IconRenderer name={suite.icon} className="w-6 h-6" />
+              return (
+                <div
+                  key={suite.id}
+                  onClick={() => {
+                    triggerHaptic('medium');
+                    onSelectCategory(suite.categoryTarget);
+                  }}
+                  className="group relative bg-white dark:bg-[#1a202c] rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer flex flex-col justify-between overflow-hidden"
+                >
+                  <div
+                    className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${theme.accentGradient} opacity-90`}
+                  />
+
+                  <div>
+                    <div className="flex items-start justify-between mb-3">
+                      <div
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-xs ${theme.iconBg} ${theme.iconColor}`}
+                      >
+                        <IconRenderer name={suite.icon} className="w-6 h-6" />
+                      </div>
+                      {suite.badge ? (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60">
+                          {t(`badge.${suite.badge.toLowerCase()}`, suite.badge)}
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                          {suite.count} {t('hero.stat1Label', 'tools')}
+                        </span>
+                      )}
                     </div>
-                    {suite.badge ? (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60">
-                        {suite.badge}
-                      </span>
-                    ) : (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
-                        {suite.count} tools
-                      </span>
-                    )}
+
+                    <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      {localizedSuite.title}
+                    </h3>
+                    <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
+                      {localizedSuite.desc}
+                    </p>
                   </div>
 
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                    {suite.title}
-                  </h3>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                    {suite.desc}
-                  </p>
+                  <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                    <span>{localizedSuite.linkText}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
-
-                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-indigo-600 dark:text-indigo-400">
-                  <span>{suite.linkText}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
 
-      {/* Category Filter Pills & View Mode Bar */}
-      <section className="sticky top-16 z-30 bg-slate-50/95 dark:bg-[#121826]/95 backdrop-blur-md py-3 border-y border-slate-200/80 dark:border-slate-800">
+      {/* --- Category Filter Navigation Bar (Sticky with Visual Colored Icons) --- */}
+      <section className="sticky top-16 z-30 bg-slate-50/95 dark:bg-[#121826]/95 backdrop-blur-md py-3 border-y border-slate-200/80 dark:border-slate-800 shadow-xs">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full no-scrollbar">
+          {/* Scrollable Visual Category Pills with Visual Icons */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full no-scrollbar px-0.5">
             {showingFavoritesOnly && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-xs font-bold shrink-0">
-                <Star className="w-3.5 h-3.5 fill-amber-500" />
-                <span>Favorites ({favorites.length})</span>
+              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-xs font-bold shrink-0 shadow-xs">
+                <Star className="w-4 h-4 fill-amber-500" />
+                <span>
+                  {t('header.favoritesTitle', 'Favorites')} ({favorites.length})
+                </span>
                 <button
                   onClick={onClearFavoritesFilter}
                   className="ml-1 text-slate-500 hover:text-slate-900 dark:hover:text-white"
@@ -313,27 +510,39 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             {CATEGORIES.map((cat) => {
               const isActive = selectedCategory === cat.id && !showingFavoritesOnly;
+              const theme = CATEGORY_VISUAL_THEMES[cat.id] || CATEGORY_VISUAL_THEMES.all;
               const catTitle = cat.id === 'all' ? t('cat.all', cat.name) : t(`cat.${cat.id}`, cat.name);
+
               return (
                 <button
                   key={cat.id}
                   onClick={() => {
+                    triggerHaptic('selection');
                     if (showingFavoritesOnly) onClearFavoritesFilter();
                     onSelectCategory(cat.id);
                   }}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                     isActive
-                      ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/20'
-                      : 'bg-white dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/60'
+                      ? `${theme.activeBg}`
+                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/70'
                   }`}
                 >
-                  <IconRenderer name={cat.icon} className="w-3.5 h-3.5" />
+                  {/* Category Visual Icon Container */}
+                  <span
+                    className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
+                      isActive ? 'bg-white/20 text-white' : `${theme.iconBg} ${theme.iconColor}`
+                    }`}
+                  >
+                    <IconRenderer name={cat.icon} className="w-3.5 h-3.5" />
+                  </span>
+
                   <span>{catTitle}</span>
+
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
                       isActive
-                        ? 'bg-white/20 text-white'
-                        : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                        ? 'bg-white/25 text-white'
+                        : 'bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400'
                     }`}
                   >
                     {cat.count}
@@ -343,7 +552,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             })}
           </div>
 
-          {/* View mode toggle */}
+          {/* View mode toggle (Grouped vs Full Grid) */}
           {selectedCategory === 'all' && !searchQuery && (
             <div className="flex items-center gap-1 bg-white dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700 shrink-0 self-end sm:self-auto text-xs font-medium">
               <button
@@ -356,7 +565,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 title={t('tools.viewGrouped', 'Group tools by category')}
               >
                 <Layers className="w-3.5 h-3.5" />
-                {t('tools.viewGrouped', 'By Category')}
+                <span>{t('tools.viewGrouped', 'By Category')}</span>
               </button>
               <button
                 onClick={() => setViewMode('grid')}
@@ -368,7 +577,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 title={t('tools.viewGrid', 'Show all in one grid')}
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
-                {t('tools.viewGrid', 'Full Grid')}
+                <span>{t('tools.viewGrid', 'Full Grid')}</span>
               </button>
             </div>
           )}
@@ -402,12 +611,16 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="space-y-12">
             {categoryGroups.map(({ category, tools: catTools }) => {
               const groupTitle = t(`cat.${category.id}`, category.name);
+              const theme = CATEGORY_VISUAL_THEMES[category.id] || CATEGORY_VISUAL_THEMES.all;
+
               return (
                 <div key={category.id} className="space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-2">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-                        <IconRenderer name={category.icon} className="w-4 h-4" />
+                      <div
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-xs ${theme.iconBg} ${theme.iconColor}`}
+                      >
+                        <IconRenderer name={category.icon} className="w-5 h-5" />
                       </div>
                       <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
                         {groupTitle}
@@ -420,7 +633,9 @@ export const HomePage: React.FC<HomePageProps> = ({
                       onClick={() => onSelectCategory(category.id)}
                       className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                      {groupTitle}
+                      <span>
+                        {t('tools.exploreSuite', 'Explore')} {groupTitle}
+                      </span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -454,7 +669,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   : t(`cat.${selectedCategory}`, selectedCategory)}
               </h2>
               <span className="text-xs text-slate-400 font-medium">
-                {filteredTools.length} {t('tools.searchFound', 'tools found')}
+                {filteredTools.length} {t('tools.searchFound', 'tools')}
               </span>
             </div>
 

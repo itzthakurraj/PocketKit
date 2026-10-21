@@ -1,179 +1,117 @@
 import React, { useState, useRef } from 'react';
-import { Download, Sparkles, Image, Palette } from 'lucide-react';
+import { Camera, Download, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export const HtmlToImageTool: React.FC = () => {
-  const [title, setTitle] = useState('Build Better With Toolkit');
-  const [subtitle, setSubtitle] = useState('30+ free client-side online tools for developers and creators.');
-  const [tag, setTag] = useState('PRO UTILITY');
-  const [themeGradient, setThemeGradient] = useState<'indigo' | 'emerald' | 'sunset' | 'dark'>('indigo');
-  const cardRef = useRef<HTMLDivElement>(null);
+  const [title, setTitle] = useState('PocketKit Studio');
+  const [description, setDescription] = useState('70+ Private Client-Side Tools in your pocket.');
+  const [badge, setBadge] = useState('100% Client-Side');
+  const [bgGradient, setBgGradient] = useState('from-indigo-600 to-emerald-500');
+  const previewCardRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
-  const gradients = {
-    indigo: 'from-indigo-600 via-indigo-700 to-purple-800 text-white',
-    emerald: 'from-emerald-600 via-teal-700 to-cyan-800 text-white',
-    sunset: 'from-rose-500 via-amber-500 to-orange-600 text-white',
-    dark: 'from-slate-900 via-slate-800 to-slate-950 text-white border border-slate-700',
-  };
-
-  const handleExportPng = () => {
-    // Render using an SVG foreignObject or Canvas drawing
+  const handleDownload = () => {
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
     canvas.height = 630;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Draw background gradient
+    // Gradient background
     const grad = ctx.createLinearGradient(0, 0, 1200, 630);
-    if (themeGradient === 'emerald') {
-      grad.addColorStop(0, '#059669');
-      grad.addColorStop(1, '#0e7490');
-    } else if (themeGradient === 'sunset') {
-      grad.addColorStop(0, '#f43f5e');
-      grad.addColorStop(1, '#d97706');
-    } else if (themeGradient === 'dark') {
-      grad.addColorStop(0, '#0f172a');
-      grad.addColorStop(1, '#020617');
-    } else {
-      grad.addColorStop(0, '#4f46e5');
-      grad.addColorStop(1, '#6d28d9');
-    }
+    grad.addColorStop(0, '#4F46E5');
+    grad.addColorStop(1, '#10B981');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 1200, 630);
 
-    // Decorative subtle circles
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+    // Dark card overlay
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
     ctx.beginPath();
-    ctx.arc(1000, 150, 240, 0, Math.PI * 2);
+    ctx.roundRect(100, 100, 1000, 430, 40);
     ctx.fill();
 
     // Badge
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-    ctx.roundRect(100, 120, 200, 48, 24);
+    ctx.fillStyle = '#6366F1';
+    ctx.beginPath();
+    ctx.roundRect(160, 160, 240, 45, 20);
     ctx.fill();
     ctx.fillStyle = '#FFFFFF';
     ctx.font = 'bold 20px sans-serif';
-    ctx.fillText(tag.toUpperCase(), 130, 152);
+    ctx.fillText(badge, 180, 190);
 
     // Title
-    ctx.font = 'bold 64px sans-serif';
     ctx.fillStyle = '#FFFFFF';
-    // Word wrap title
-    const words = title.split(' ');
-    let line = '';
-    let y = 260;
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      if (metrics.width > 950 && n > 0) {
-        ctx.fillText(line, 100, y);
-        line = words[n] + ' ';
-        y += 75;
-      } else {
-        line = testLine;
-      }
-    }
-    ctx.fillText(line, 100, y);
+    ctx.font = 'bold 64px sans-serif';
+    ctx.fillText(title, 160, 290);
 
     // Subtitle
-    ctx.font = '32px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-    ctx.fillText(subtitle, 100, y + 80);
+    ctx.fillStyle = '#94A3B8';
+    ctx.font = '28px sans-serif';
+    ctx.fillText(description, 160, 370);
 
-    // Footer brand
+    // Branding
+    ctx.fillStyle = '#10B981';
     ctx.font = 'bold 24px sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.fillText('Generated with Toolkit • toolkit.local', 100, 560);
+    ctx.fillText('⚡ PocketKit Digital Workshop', 160, 450);
 
     const a = document.createElement('a');
-    a.href = canvas.toDataURL('image/png');
     a.download = 'social-card.png';
+    a.href = canvas.toDataURL('image/png');
     a.click();
   };
 
   return (
-    <div className="space-y-6">
-      {/* Editor Controls */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/80">
-        <div className="space-y-1">
-          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            Card Title
-          </label>
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300">
+        <div>
+          <label className="block mb-1">Headline Text</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold"
+            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
           />
         </div>
-
-        <div className="space-y-1">
-          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            Subtitle / Description
-          </label>
+        <div>
+          <label className="block mb-1">Tagline / Description</label>
           <input
             type="text"
-            value={subtitle}
-            onChange={(e) => setSubtitle(e.target.value)}
-            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
           />
         </div>
+      </div>
 
-        <div className="space-y-1">
-          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-            Gradient Theme
-          </label>
-          <div className="flex gap-1.5">
-            {(['indigo', 'emerald', 'sunset', 'dark'] as const).map((th) => (
-              <button
-                key={th}
-                onClick={() => setThemeGradient(th)}
-                className={`flex-1 py-1.5 text-xs font-bold rounded-lg capitalize border ${
-                  themeGradient === th
-                    ? 'border-indigo-600 ring-2 ring-indigo-400'
-                    : 'border-slate-200 dark:border-slate-700'
-                }`}
-              >
-                {th}
-              </button>
-            ))}
+      {/* Visual Live Card */}
+      <div
+        ref={previewCardRef}
+        className={`p-8 sm:p-12 rounded-3xl bg-gradient-to-r ${bgGradient} text-white shadow-xl relative overflow-hidden`}
+      >
+        <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-white/20">
+          <span className="inline-block px-3 py-1 rounded-full bg-indigo-500 text-xs font-bold uppercase tracking-wider mb-3">
+            {badge}
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
+            {title}
+          </h2>
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            {description}
+          </p>
+          <div className="mt-6 flex items-center gap-2 text-xs font-bold text-emerald-400">
+            <Sparkles className="w-4 h-4" /> PocketKit Digital Workshop
           </div>
         </div>
       </div>
 
-      {/* Action Bar */}
       <div className="flex justify-end">
         <button
-          onClick={handleExportPng}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors"
+          onClick={handleDownload}
+          className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 shadow-sm cursor-pointer"
         >
-          <Download className="w-4 h-4" /> Export High-Res PNG (1200×630)
+          <Camera className="w-4 h-4" />
+          <span>{t('tool.download', 'Export Graphic as PNG')}</span>
         </button>
-      </div>
-
-      {/* Live Card Preview */}
-      <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
-        <div
-          ref={cardRef}
-          className={`aspect-[1200/630] rounded-2xl bg-gradient-to-br ${gradients[themeGradient]} p-8 sm:p-14 flex flex-col justify-between shadow-xl relative overflow-hidden`}
-        >
-          <div className="relative z-10 space-y-4">
-            <span className="inline-block px-4 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs font-extrabold tracking-widest uppercase text-white border border-white/20">
-              {tag}
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight max-w-2xl text-white">
-              {title}
-            </h2>
-            <p className="text-sm sm:text-lg opacity-90 max-w-xl text-white/90">
-              {subtitle}
-            </p>
-          </div>
-
-          <div className="relative z-10 flex items-center justify-between text-xs sm:text-sm font-semibold opacity-80 pt-4 border-t border-white/20 text-white">
-            <span>🔧 Toolkit Open Suite</span>
-            <span>Free Client-Side Tools</span>
-          </div>
-        </div>
       </div>
     </div>
   );

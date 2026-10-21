@@ -31,12 +31,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPolicy }) => {
                 'Your pocket-sized digital workshop. Fast, private, client-side online tools for creators, developers, and everyday tasks.'
               )}
             </p>
-            <div className="flex items-center gap-4 text-xs text-slate-400 dark:text-slate-500">
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 dark:text-slate-500">
               <span className="inline-flex items-center gap-1">
                 <Shield className="w-3.5 h-3.5 text-emerald-500" /> {t('footer.clientSide', '100% Client-Side')}
               </span>
               <span className="inline-flex items-center gap-1">
                 <Zap className="w-3.5 h-3.5 text-amber-500" /> {t('footer.zeroWait', 'Zero Wait')}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
+                Google AdSense Powered
               </span>
             </div>
           </div>
@@ -120,6 +123,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPolicy }) => {
                   {t('nav.allTools', 'All Tools Directory')}
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('install')}
+                  className="text-emerald-600 dark:text-emerald-400 hover:underline transition-colors font-semibold flex items-center gap-1 cursor-pointer"
+                >
+                  <span>⬇</span>
+                  <span>{t('header.installApp', 'Download App (APK & iOS)')}</span>
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -183,6 +195,19 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPolicy }) => {
                   className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
                 >
                   {t('footer.contact', 'Contact & Support')}
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.dispatchEvent(new CustomEvent('pocketkit:open-adblock-guide'));
+                    }
+                  }}
+                  className="text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <span>🛡️</span>
+                  <span>Whitelist Guide</span>
                 </button>
               </li>
             </ul>

@@ -9,10 +9,16 @@ import { HomePage } from './pages/HomePage';
 import { FeaturesPage } from './pages/FeaturesPage';
 import { BlogPage } from './pages/BlogPage';
 import { HelpPage } from './pages/HelpPage';
-import { OfflineIndicator } from './components/OfflineIndicator';
+import { InstallPage } from './pages/InstallPage';
+import { InternetRequiredShield } from './components/InternetRequiredShield';
+import { AdBlockDetector } from './components/AdBlockDetector';
 import { PolicyModal, PolicyTab } from './components/PolicyModal';
 import { CookieConsent } from './components/CookieConsent';
-import { LanguageProvider } from './i18n/LanguageContext';
+import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
+import { useVoiceNavigation } from './hooks/useVoiceNavigation';
+import { VoiceAssistantModal } from './components/VoiceAssistantModal';
+import { FloatingVoiceButton } from './components/FloatingVoiceButton';
+import { triggerHaptic } from './utils/haptics';
 
 
 const LEGACY_URL_MAP: Record<string, { toolId?: string; view?: ActiveView; category?: string }> = {
@@ -105,6 +111,18 @@ function AppContent() {
     setPolicyModalOpen(true);
   };
 
+  const {
+    language,
+    speak,
+    stopSpeaking,
+    highContrast,
+    setHighContrast,
+    fontSize,
+    setFontSize,
+  } = useLanguage();
+
+  const [voiceModalOpen, setVoiceModalOpen] = useState(false);
+
   // Theme state synced with localStorage & original html data-theme
   const [isDark, setIsDark] = useState<boolean>(() => {
     const saved = localStorage.getItem('theme');
@@ -121,6 +139,100 @@ function AppContent() {
       return ['case-converter', 'image-compressor', 'diff-checker'];
     }
   });
+
+  const handleToggleTheme = () => {
+    triggerHaptic('medium');
+    setIsDark((prev) => !prev);
+  };
+
+  const handleToggleFavorite = (toolId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    triggerHaptic('light');
+    setFavorites((prev) =>
+      prev.includes(toolId) ? prev.filter((id) => id !== toolId) : [...prev, toolId]
+    );
+  };
+
+  const handleNavigate = (view: ActiveView, category?: string) => {
+    triggerHaptic('selection');
+    setActiveView(view);
+    if (category) {
+      setSelectedCategory(category);
+      window.location.hash = `category:${category}`;
+    } else if (view === 'all-tools') {
+      setSelectedCategory('all');
+      window.location.hash = '';
+    } else if (view === 'features' || view === 'blog' || view === 'help' || view === 'install') {
+      window.location.hash = view;
+    } else {
+      window.location.hash = '';
+    }
+    setActiveToolId(null);
+    setShowingFavoritesOnly(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const [isOnline, setIsOnline] = useState<boolean>(() => {
+    return typeof navigator !== 'undefined' ? navigator.onLine : true;
+  });
+
+  const handleSelectTool = (id: string | null) => {
+    if (id && !isOnline) {
+      triggerHaptic('error');
+      return;
+    }
+    triggerHaptic(id ? 'medium' : 'light');
+    setActiveToolId(id);
+    if (id) {
+      window.location.hash = id;
+    } else {
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  };
+
+  // Accessible Voice Navigation & Audio Assistant
+  const voiceNav = useVoiceNavigation({
+    currentView: activeView,
+    language,
+    onNavigate: handleNavigate,
+    onSelectTool: handleSelectTool,
+    onOpenSearch: () => {
+      triggerHaptic('light');
+      setIsSearchOpen(true);
+    },
+    onToggleTheme: handleToggleTheme,
+    onToggleHighContrast: () => setHighContrast(!highContrast),
+    onChangeFontSize: (action) => {
+      if (action === 'increase') {
+        setFontSize(fontSize === 'normal' ? 'large' : 'xl');
+      } else {
+        setFontSize('normal');
+      }
+    },
+    onCloseModal: () => {
+      setActiveToolId(null);
+      setIsSearchOpen(false);
+      setPolicyModalOpen(false);
+      setVoiceModalOpen(false);
+    },
+    speak,
+    stopSpeaking,
+  });
+
+  // Global Keyboard Shortcut: Alt+V for Voice Navigation
+  useEffect(() => {
+    const handleVoiceShortcut = (e: KeyboardEvent) => {
+      if (e.altKey && (e.key === 'v' || e.key === 'V')) {
+        e.preventDefault();
+        triggerHaptic('voice');
+        setVoiceModalOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleVoiceShortcut);
+    return () => window.removeEventListener('keydown', handleVoiceShortcut);
+  }, []);
 
   // Parse path & hash on initial load and popstate
   useEffect(() => {
@@ -150,6 +262,9 @@ function AppContent() {
           setActiveToolId(null);
         } else if (hash === 'help') {
           setActiveView('help');
+          setActiveToolId(null);
+        } else if (hash === 'install' || hash === 'download') {
+          setActiveView('install');
           setActiveToolId(null);
         } else if (hash.startsWith('category:')) {
           const cat = hash.replace('category:', '');
@@ -181,27 +296,18 @@ function AppContent() {
     };
   }, []);
 
-  // Update hash when activeToolId or activeView changes
-  const handleSelectTool = (id: string | null) => {
-    setActiveToolId(id);
-    if (id) {
-      window.location.hash = id;
-    } else {
-      if (window.location.hash) {
-        history.replaceState(null, '', window.location.pathname);
-      }
-    }
-  };
-
   // Apply theme to DOM
   useEffect(() => {
     const html = document.documentElement;
+    const body = document.body;
     if (isDark) {
       html.classList.add('dark');
+      body.classList.add('dark');
       html.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
     } else {
       html.classList.remove('dark');
+      body.classList.remove('dark');
       html.setAttribute('data-theme', 'light');
       localStorage.setItem('theme', 'light');
     }
@@ -224,35 +330,6 @@ function AppContent() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleToggleTheme = () => {
-    setIsDark((prev) => !prev);
-  };
-
-  const handleToggleFavorite = (toolId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setFavorites((prev) =>
-      prev.includes(toolId) ? prev.filter((id) => id !== toolId) : [...prev, toolId]
-    );
-  };
-
-  const handleNavigate = (view: ActiveView, category?: string) => {
-    setActiveView(view);
-    if (category) {
-      setSelectedCategory(category);
-      window.location.hash = `category:${category}`;
-    } else if (view === 'all-tools') {
-      setSelectedCategory('all');
-      window.location.hash = '';
-    } else if (view === 'features' || view === 'blog' || view === 'help') {
-      window.location.hash = view;
-    } else {
-      window.location.hash = '';
-    }
-    setActiveToolId(null);
-    setShowingFavoritesOnly(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const activeTool = activeToolId ? TOOLS_DATA.find((t) => t.id === activeToolId) : null;
 
   return (
@@ -263,15 +340,24 @@ function AppContent() {
         onNavigate={handleNavigate}
         isDark={isDark}
         onToggleTheme={handleToggleTheme}
-        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenSearch={() => {
+          triggerHaptic('light');
+          setIsSearchOpen(true);
+        }}
         favoritesCount={favorites.length}
         onToggleFavoritesFilter={() => {
+          triggerHaptic('light');
           setShowingFavoritesOnly(!showingFavoritesOnly);
           if (activeView !== 'home' && activeView !== 'all-tools') {
             setActiveView('home');
           }
         }}
         showingFavoritesOnly={showingFavoritesOnly}
+        onOpenVoiceModal={() => {
+          triggerHaptic('voice');
+          setVoiceModalOpen(true);
+        }}
+        isVoiceListening={voiceNav.isListening}
       />
 
       {/* Main Page Area */}
@@ -281,6 +367,7 @@ function AppContent() {
             tools={TOOLS_DATA}
             selectedCategory={selectedCategory}
             onSelectCategory={(cat) => {
+              triggerHaptic('selection');
               setSelectedCategory(cat);
               window.location.hash = cat === 'all' ? '' : `category:${cat}`;
             }}
@@ -288,7 +375,10 @@ function AppContent() {
             onToggleFavorite={handleToggleFavorite}
             onSelectTool={handleSelectTool}
             showingFavoritesOnly={showingFavoritesOnly}
-            onClearFavoritesFilter={() => setShowingFavoritesOnly(false)}
+            onClearFavoritesFilter={() => {
+              triggerHaptic('light');
+              setShowingFavoritesOnly(false);
+            }}
           />
         ) : activeView === 'features' ? (
           <FeaturesPage onOpenTool={handleSelectTool} />
@@ -296,6 +386,8 @@ function AppContent() {
           <BlogPage />
         ) : activeView === 'help' ? (
           <HelpPage />
+        ) : activeView === 'install' ? (
+          <InstallPage />
         ) : null}
       </main>
 
@@ -305,7 +397,10 @@ function AppContent() {
       {/* Search Modal */}
       <SearchModal
         isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
+        onClose={() => {
+          triggerHaptic('light');
+          setIsSearchOpen(false);
+        }}
         onSelectTool={handleSelectTool}
         favorites={favorites}
       />
@@ -330,8 +425,39 @@ function AppContent() {
       {/* AdSense Cookie Consent Notice */}
       <CookieConsent onOpenPrivacyPolicy={() => handleOpenPolicy('privacy')} />
 
-      {/* Offline Status Toast */}
-      <OfflineIndicator />
+      {/* Polite AdBlocker Detection and Whitelist Guide */}
+      <AdBlockDetector />
+
+      {/* Online Requirement & AdSense Monetization Shield across all platforms */}
+      <InternetRequiredShield onStatusChange={setIsOnline} />
+
+      {/* Floating Accessible Voice Trigger Button */}
+      <FloatingVoiceButton
+        isListening={voiceNav.isListening}
+        onOpenVoiceModal={() => {
+          triggerHaptic('voice');
+          setVoiceModalOpen(true);
+        }}
+        isOfflineVoiceReady={voiceNav.isOfflineVoiceReady}
+      />
+
+      {/* Voice Assistant & Hands-free Navigation Modal */}
+      <VoiceAssistantModal
+        isOpen={voiceModalOpen}
+        onClose={() => {
+          triggerHaptic('light');
+          setVoiceModalOpen(false);
+        }}
+        isListening={voiceNav.isListening}
+        transcript={voiceNav.transcript}
+        lastCommand={voiceNav.lastCommand}
+        statusMessage={voiceNav.statusMessage}
+        isSupported={voiceNav.isSupported}
+        isOfflineVoiceReady={voiceNav.isOfflineVoiceReady}
+        isOnline={voiceNav.isOnline}
+        onToggleListening={voiceNav.toggleListening}
+        onExecuteCommand={(cmd) => voiceNav.executeVoiceCommand(cmd)}
+      />
     </div>
   );
 }

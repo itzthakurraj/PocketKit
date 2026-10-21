@@ -1,33 +1,51 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PocketKit</title>
-    <meta name="title" content="PocketKit" />
-    <meta name="description" content="PocketKit is your pocket-sized digital workshop: 70+ client-side online tools for text editing, code formatting, image processing, PDF management, calculators, and encryption." />
-    <meta name="keywords" content="PocketKit, online tools, PDF converter, image compressor, text editor, web development tools, json beautifier, base64 encoder, diff checker" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="PocketKit" />
-    <meta property="og:description" content="PocketKit is your pocket-sized digital workshop: 70+ client-side online tools for text editing, code formatting, image processing, PDF management, calculators, and encryption." />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="PocketKit" />
-    <meta name="twitter:description" content="PocketKit is your pocket-sized digital workshop: 70+ client-side online tools for text editing, code formatting, image processing, PDF management, calculators, and encryption." />
-    <meta name="theme-color" content="#4f46e5" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <title>PocketKit - MultiTools Digital Workshop | 70+ Free Online Tools</title>
+    <meta name="description" content="PocketKit is your pocket-sized digital workshop: 70+ client-side online tools for text editing, code formatting, image processing, PDF management, calculators, and encryption, supported by Google AdSense." />
+    <meta name="application-name" content="PocketKit" />
     <meta name="apple-mobile-web-app-title" content="PocketKit" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#4f46e5" />
+    <meta name="msapplication-TileColor" content="#4f46e5" />
+
+    <!-- OpenGraph & Social Media -->
+    <meta property="og:title" content="PocketKit - MultiTools Digital Workshop | 70+ Free Online Tools" />
+    <meta property="og:description" content="PocketKit is your pocket-sized digital workshop: 70+ client-side online tools for text editing, code formatting, image processing, PDF management, calculators, and encryption, supported by Google AdSense." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pocketkit.app" />
+    <meta property="og:image" content="/pwa-512x512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PocketKit - MultiTools Digital Workshop" />
+    <meta name="twitter:description" content="70+ client-side tools for PDFs, images, code, text, calculators, and security." />
+    <meta name="twitter:image" content="/pwa-512x512.png" />
+
+    <!-- PWA Web App Manifest & App Icons -->
+    <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/svg+xml" href="/pocketkit-icon.svg" />
-    <!-- Google Fonts: Inter & JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Google AdSense Official Configuration (ca-pub-XXXXXXXXXXXXXXXX) -->
+    <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').catch(function(err) {
+            console.debug('ServiceWorker notice:', err);
+          });
+        });
+      }
+    </script>
   </head>
-  <body class="bg-slate-50 dark:bg-[#121826] min-h-screen">
+  <body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

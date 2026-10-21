@@ -1,216 +1,127 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Upload, Download, Stamp, Sliders } from 'lucide-react';
+import React, { useState } from 'react';
+import { Upload, Download, Stamp } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 export const ImageWatermarkTool: React.FC = () => {
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [watermarkText, setWatermarkText] = useState('© COPYRIGHT TOOLKIT');
-  const [fontSize, setFontSize] = useState(36);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [watermarkText, setWatermarkText] = useState('PocketKit Protected');
+  const [fontSize, setFontSize] = useState(32);
+  const [opacity, setOpacity] = useState(0.7);
   const [color, setColor] = useState('#FFFFFF');
-  const [opacity, setOpacity] = useState(0.5);
-  const [position, setPosition] = useState<'center' | 'bottom-right' | 'bottom-left' | 'top-right' | 'tile'>('bottom-right');
-  const [rotation, setRotation] = useState(0);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [watermarkedUrl, setWatermarkedUrl] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImageSrc(event.target?.result as string);
-    };
-    reader.readAsDataURL(file);
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const u = URL.createObjectURL(f);
+    setPreview(u);
+    applyWatermark(u, watermarkText, fontSize, opacity, color);
   };
 
-  const renderCanvas = () => {
-    if (!imageSrc || !canvasRef.current) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
+  const applyWatermark = (src: string, text: string, size: number, op: number, col: string) => {
     const img = new Image();
-    img.src = imageSrc;
+    img.src = src;
     img.onload = () => {
+      const canvas = document.createElement('canvas');
       canvas.width = img.width;
       canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(img, 0, 0);
+        ctx.save();
+        ctx.globalAlpha = op;
+        ctx.font = `bold ${size}px sans-serif`;
+        ctx.fillStyle = col;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'bottom';
+        // Draw shadow
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 6;
+        ctx.fillText(text, canvas.width - 30, canvas.height - 30);
+        ctx.restore();
 
-      // Draw original image
-      ctx.drawImage(img, 0, 0);
-
-      // Watermark styling
-      ctx.save();
-      ctx.globalAlpha = opacity;
-      ctx.fillStyle = color;
-      ctx.font = `bold ${fontSize}px sans-serif`;
-      ctx.textBaseline = 'middle';
-
-      if (position === 'tile') {
-        const stepX = 260;
-        const stepY = 180;
-        ctx.rotate((-25 * Math.PI) / 180);
-        for (let x = -img.width; x < img.width * 2; x += stepX) {
-          for (let y = -img.height; y < img.height * 2; y += stepY) {
-            ctx.fillText(watermarkText, x, y);
-          }
-        }
-      } else {
-        let x = 40;
-        let y = 40;
-        const metrics = ctx.measureText(watermarkText);
-        const textWidth = metrics.width;
-
-        if (position === 'center') {
-          x = (canvas.width - textWidth) / 2;
-          y = canvas.height / 2;
-        } else if (position === 'bottom-right') {
-          x = canvas.width - textWidth - 40;
-          y = canvas.height - 50;
-        } else if (position === 'bottom-left') {
-          x = 40;
-          y = canvas.height - 50;
-        } else if (position === 'top-right') {
-          x = canvas.width - textWidth - 40;
-          y = 50;
-        }
-
-        ctx.translate(x + textWidth / 2, y);
-        ctx.rotate((rotation * Math.PI) / 180);
-        ctx.fillText(watermarkText, -textWidth / 2, 0);
+        canvas.toBlob((b) => {
+          if (b) setWatermarkedUrl(URL.createObjectURL(b));
+        }, 'image/png');
       }
-
-      ctx.restore();
     };
   };
 
-  useEffect(() => {
-    renderCanvas();
-  }, [imageSrc, watermarkText, fontSize, color, opacity, position, rotation]);
-
-  const handleDownload = () => {
-    if (!canvasRef.current) return;
-    const a = document.createElement('a');
-    a.href = canvasRef.current.toDataURL('image/png');
-    a.download = 'watermarked-image.png';
-    a.click();
+  const handleUpdate = () => {
+    if (preview) applyWatermark(preview, watermarkText, fontSize, opacity, color);
   };
 
   return (
-    <div className="space-y-6">
-      {!imageSrc ? (
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-indigo-500 rounded-2xl p-12 text-center cursor-pointer transition-colors bg-slate-50/50 dark:bg-slate-800/40"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFile}
-            className="hidden"
-          />
-          <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-4">
-            <Stamp className="w-8 h-8" />
-          </div>
-          <h3 className="font-bold text-base text-slate-800 dark:text-slate-100">
-            Upload Image to Add Watermark
-          </h3>
-          <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-            Overlay customized branding, copyright stamps, or diagonal tiled security watermarks.
-          </p>
-        </div>
+    <div className="space-y-4">
+      {!preview ? (
+        <label className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 cursor-pointer">
+          <Stamp className="w-8 h-8 text-rose-500 mb-2" />
+          <span className="font-bold text-sm text-slate-800 dark:text-white">Choose Photo for Watermarking</span>
+          <span className="text-xs text-slate-400 mt-1">Add client-side custom text stamps or copyright labels</span>
+          <input type="file" accept="image/*" onChange={handleFile} className="hidden" />
+        </label>
       ) : (
-        <div className="space-y-6">
-          {/* Settings Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/80">
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-                Watermark Text
-              </label>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <div className="sm:col-span-2">
+              <label className="block mb-1">Watermark Text</label>
               <input
                 type="text"
                 value={watermarkText}
-                onChange={(e) => setWatermarkText(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold"
+                onChange={(e) => {
+                  setWatermarkText(e.target.value);
+                  if (preview) applyWatermark(preview, e.target.value, fontSize, opacity, color);
+                }}
+                className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
               />
             </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-                Position
-              </label>
-              <select
-                value={position}
-                onChange={(e) => setPosition(e.target.value as any)}
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold"
-              >
-                <option value="bottom-right">Bottom Right</option>
-                <option value="bottom-left">Bottom Left</option>
-                <option value="top-right">Top Right</option>
-                <option value="center">Center</option>
-                <option value="tile">Diagonal Tiled Grid</option>
-              </select>
+            <div>
+              <label className="block mb-1">Font Size ({fontSize}px)</label>
+              <input
+                type="range"
+                min={16}
+                max={96}
+                value={fontSize}
+                onChange={(e) => {
+                  setFontSize(Number(e.target.value));
+                  if (preview) applyWatermark(preview, watermarkText, Number(e.target.value), opacity, color);
+                }}
+                className="w-full accent-rose-500"
+              />
             </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs font-bold text-slate-600 dark:text-slate-300 uppercase">
-                <span>Opacity</span>
-                <span>{Math.round(opacity * 100)}%</span>
-              </div>
+            <div>
+              <label className="block mb-1">Opacity ({Math.round(opacity * 100)}%)</label>
               <input
                 type="range"
                 min={0.1}
                 max={1.0}
                 step={0.05}
                 value={opacity}
-                onChange={(e) => setOpacity(Number(e.target.value))}
-                className="w-full accent-indigo-600"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs font-bold text-slate-600 dark:text-slate-300 uppercase">
-                <span>Font Size</span>
-                <span>{fontSize}px</span>
-              </div>
-              <input
-                type="range"
-                min={14}
-                max={96}
-                value={fontSize}
-                onChange={(e) => setFontSize(Number(e.target.value))}
-                className="w-full accent-indigo-600"
+                onChange={(e) => {
+                  setOpacity(Number(e.target.value));
+                  if (preview) applyWatermark(preview, watermarkText, fontSize, Number(e.target.value), color);
+                }}
+                className="w-full accent-rose-500"
               />
             </div>
           </div>
 
-          {/* Action Row */}
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="text-xs font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
-            >
-              Choose different image
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFile}
-              className="hidden"
-            />
-            <button
-              onClick={handleDownload}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors"
-            >
-              <Download className="w-4 h-4" /> Download Watermarked PNG
-            </button>
+          <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-900 text-center overflow-hidden">
+            {watermarkedUrl && (
+              <img src={watermarkedUrl} alt="Watermarked" className="max-h-72 mx-auto object-contain rounded-xl shadow-md" />
+            )}
           </div>
 
-          {/* Canvas Preview */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-100 dark:bg-slate-900 text-center">
-            <canvas ref={canvasRef} className="max-h-96 max-w-full mx-auto object-contain rounded-lg shadow-sm" />
+          <div className="flex justify-end">
+            <a
+              href={watermarkedUrl || '#'}
+              download="watermarked-photo.png"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-rose-600 text-white font-bold text-sm hover:bg-rose-700 shadow-sm"
+            >
+              <Download className="w-4 h-4" />
+              <span>{t('tool.download', 'Download Watermarked Image')}</span>
+            </a>
           </div>
         </div>
       )}
