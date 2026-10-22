@@ -6,9 +6,10 @@ import { useLanguage } from '../i18n/LanguageContext';
 interface FooterProps {
   onNavigate: (view: ActiveView, category?: string) => void;
   onOpenPolicy?: (tab: 'privacy' | 'terms' | 'about' | 'contact') => void;
+  onOpenSitemap?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPolicy }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPolicy, onOpenSitemap }) => {
   const { t } = useLanguage();
 
   return (
@@ -165,6 +166,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPolicy }) => {
                   {t('nav.help', 'Help & FAQs')}
                 </button>
               </li>
+              {onOpenSitemap && (
+                <li>
+                  <button
+                    onClick={onOpenSitemap}
+                    className="text-indigo-600 dark:text-indigo-400 hover:underline transition-colors font-semibold cursor-pointer"
+                  >
+                    Worldwide SEO Directory & XML
+                  </button>
+                </li>
+              )}
               <li>
                 <button
                   onClick={() => onOpenPolicy?.('privacy')}

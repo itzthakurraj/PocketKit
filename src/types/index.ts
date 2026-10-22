@@ -18,6 +18,11 @@ export interface ToolItem {
   originalFile?: string;
   badge?: string;
   isPopular?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+  howToSteps?: string[];
+  faqs?: { question: string; answer: string }[];
+  relatedToolIds?: string[];
 }
 
 export type ActiveView =

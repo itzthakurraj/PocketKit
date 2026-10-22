@@ -18,6 +18,9 @@ import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
 import { useVoiceNavigation } from './hooks/useVoiceNavigation';
 import { VoiceAssistantModal } from './components/VoiceAssistantModal';
 import { FloatingVoiceButton } from './components/FloatingVoiceButton';
+import { StandaloneToolPage } from './pages/StandaloneToolPage';
+import { SitemapModal } from './components/SitemapModal';
+import { syncDocumentSEO } from './utils/seoUtils';
 import { triggerHaptic } from './utils/haptics';
 
 
@@ -105,6 +108,7 @@ function AppContent() {
   const [showingFavoritesOnly, setShowingFavoritesOnly] = useState(false);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
   const [policyTab, setPolicyTab] = useState<PolicyTab>('privacy');
+  const [sitemapModalOpen, setSitemapModalOpen] = useState(false);
 
   const handleOpenPolicy = (tab: PolicyTab) => {
     setPolicyTab(tab);
@@ -184,13 +188,26 @@ function AppContent() {
     triggerHaptic(id ? 'medium' : 'light');
     setActiveToolId(id);
     if (id) {
-      window.location.hash = id;
+      try {
+        window.history.pushState(null, '', `/tools/${id}`);
+      } catch {
+        window.location.hash = `/tools/${id}`;
+      }
     } else {
-      if (window.location.hash) {
-        history.replaceState(null, '', window.location.pathname);
+      try {
+        window.history.pushState(null, '', '/');
+      } catch {
+        window.location.hash = '';
       }
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Synchronize document SEO (Title, Meta, OpenGraph, Twitter, Schema.org JSON-LD)
+  useEffect(() => {
+    const tool = activeToolId ? TOOLS_DATA.find((t) => t.id === activeToolId) : null;
+    syncDocumentSEO(tool, activeView, selectedCategory);
+  }, [activeToolId, activeView, selectedCategory]);
 
   // Accessible Voice Navigation & Audio Assistant
   const voiceNav = useVoiceNavigation({
@@ -252,6 +269,18 @@ function AppContent() {
         return;
       }
 
+      // Check clean URL path: /tools/:toolId or /tool/:toolId
+      const cleanPathMatch = path.match(/^tools?\/(.+)$/);
+      if (cleanPathMatch) {
+        const rawId = cleanPathMatch[1].replace(/\/$/, '');
+        const normalized = rawId.replace(/-/g, '');
+        const matched = TOOLS_DATA.find((t) => t.id === rawId || t.id.replace(/-/g, '') === normalized);
+        if (matched) {
+          setActiveToolId(matched.id);
+          return;
+        }
+      }
+
       // Check hash
       if (hash) {
         if (hash === 'features') {
@@ -272,18 +301,27 @@ function AppContent() {
           setSelectedCategory(cat);
           setActiveToolId(null);
         } else {
-          // Check if hash matches tool id directly
-          const matchedTool = TOOLS_DATA.find((t) => t.id === hash || t.id.toLowerCase() === hash);
+          // Check hash clean format #/tools/:id or #/tool/:id
+          const hashPathMatch = hash.match(/^\/?tools?\/(.+)$/);
+          const rawHashId = hashPathMatch ? hashPathMatch[1].replace(/\/$/, '') : hash.replace(/^\/?/, '');
+          const normalizedHash = rawHashId.replace(/-/g, '');
+
+          // Check if hash matches tool id directly or with dash variation
+          const matchedTool = TOOLS_DATA.find(
+            (t) => t.id === rawHashId || t.id.toLowerCase() === rawHashId || t.id.replace(/-/g, '') === normalizedHash
+          );
           if (matchedTool) {
             setActiveToolId(matchedTool.id);
-          } else if (LEGACY_URL_MAP[hash + '.html']) {
-            const legacyMatch = LEGACY_URL_MAP[hash + '.html'];
+          } else if (LEGACY_URL_MAP[rawHashId + '.html']) {
+            const legacyMatch = LEGACY_URL_MAP[rawHashId + '.html'];
             if (legacyMatch.toolId) setActiveToolId(legacyMatch.toolId);
           }
         }
       } else {
-        // No hash and not a legacy tool path -> close modal if open
-        setActiveToolId(null);
+        // No hash and not a tool path
+        if (!cleanPathMatch) {
+          setActiveToolId(null);
+        }
       }
     };
 
@@ -344,6 +382,10 @@ function AppContent() {
           triggerHaptic('light');
           setIsSearchOpen(true);
         }}
+        onOpenSitemap={() => {
+          triggerHaptic('light');
+          setSitemapModalOpen(true);
+        }}
         favoritesCount={favorites.length}
         onToggleFavoritesFilter={() => {
           triggerHaptic('light');
@@ -362,7 +404,15 @@ function AppContent() {
 
       {/* Main Page Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {activeView === 'home' || activeView === 'all-tools' || activeView === 'category' ? (
+        {activeTool ? (
+          <StandaloneToolPage
+            tool={activeTool}
+            isFavorite={favorites.includes(activeTool.id)}
+            onToggleFavorite={handleToggleFavorite}
+            onSelectTool={handleSelectTool}
+            onNavigateHome={() => handleSelectTool(null)}
+          />
+        ) : activeView === 'home' || activeView === 'all-tools' || activeView === 'category' ? (
           <HomePage
             tools={TOOLS_DATA}
             selectedCategory={selectedCategory}
@@ -392,7 +442,11 @@ function AppContent() {
       </main>
 
       {/* Footer */}
-      <Footer onNavigate={handleNavigate} onOpenPolicy={handleOpenPolicy} />
+      <Footer
+        onNavigate={handleNavigate}
+        onOpenPolicy={handleOpenPolicy}
+        onOpenSitemap={() => setSitemapModalOpen(true)}
+      />
 
       {/* Search Modal */}
       <SearchModal
@@ -405,15 +459,12 @@ function AppContent() {
         favorites={favorites}
       />
 
-      {/* Active Tool Modal */}
-      {activeTool && (
-        <ToolModal
-          tool={activeTool}
-          isFavorite={favorites.includes(activeTool.id)}
-          onToggleFavorite={handleToggleFavorite}
-          onClose={() => handleSelectTool(null)}
-        />
-      )}
+      {/* Sitemap & SEO Index Modal */}
+      <SitemapModal
+        isOpen={sitemapModalOpen}
+        onClose={() => setSitemapModalOpen(false)}
+        onSelectTool={handleSelectTool}
+      />
 
       {/* Legal & Policy Compliance Modal */}
       <PolicyModal

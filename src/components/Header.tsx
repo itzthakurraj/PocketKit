@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ActiveView } from '../types';
-import { Search, Moon, Sun, Menu, X, Sparkles, BookOpen, HelpCircle, Grid, Smartphone, Download, Mic } from 'lucide-react';
+import { Search, Moon, Sun, Menu, X, Sparkles, BookOpen, HelpCircle, Grid, Smartphone, Download, Mic, Globe } from 'lucide-react';
 import { InstallDropdown } from './InstallDropdown';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { AccessibilityMenu } from './AccessibilityMenu';
@@ -18,6 +18,7 @@ interface HeaderProps {
   showingFavoritesOnly: boolean;
   onOpenVoiceModal?: () => void;
   isVoiceListening?: boolean;
+  onOpenSitemap?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,6 +32,7 @@ export const Header: React.FC<HeaderProps> = ({
   showingFavoritesOnly,
   onOpenVoiceModal,
   isVoiceListening,
+  onOpenSitemap,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
@@ -115,6 +117,19 @@ export const Header: React.FC<HeaderProps> = ({
             <HelpCircle className="w-4 h-4" />
             {t('nav.help', 'Help')}
           </button>
+          {onOpenSitemap && (
+            <button
+              onClick={() => {
+                triggerHaptic('light');
+                onOpenSitemap();
+              }}
+              className="px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
+              title="Worldwide Tools SEO Directory"
+            >
+              <Globe className="w-4 h-4" />
+              <span>Directory</span>
+            </button>
+          )}
         </nav>
 
         {/* Right Action Buttons */}
@@ -293,6 +308,18 @@ export const Header: React.FC<HeaderProps> = ({
               <HelpCircle className="w-4 h-4 text-blue-500" />
               <span>{t('nav.helpDocs', 'Help & Documentation')}</span>
             </button>
+            {onOpenSitemap && (
+              <button
+                onClick={() => {
+                  onOpenSitemap();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <Globe className="w-4 h-4 text-indigo-500" />
+                <span>Worldwide SEO Directory</span>
+              </button>
+            )}
             <button
               onClick={() => {
                 onNavigate('install');
