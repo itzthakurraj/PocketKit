@@ -5,7 +5,8 @@ export type ToolCategory =
   | 'calculator'
   | 'image'
   | 'pdf'
-  | 'web';
+  | 'web'
+  | 'audio';
 
 export interface ToolItem {
   id: string;

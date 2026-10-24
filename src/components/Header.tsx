@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { ActiveView } from '../types';
-import { Search, Moon, Sun, Menu, X, Sparkles, BookOpen, HelpCircle, Grid, Smartphone, Download, Mic, Globe } from 'lucide-react';
+import { Moon, Sun, Menu, X, Sparkles, BookOpen, HelpCircle, Grid, Smartphone, Download, Star } from 'lucide-react';
 import { InstallDropdown } from './InstallDropdown';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { AccessibilityMenu } from './AccessibilityMenu';
 import { useLanguage } from '../i18n/LanguageContext';
 import { triggerHaptic } from '../utils/haptics';
 
@@ -12,7 +11,7 @@ interface HeaderProps {
   onNavigate: (view: ActiveView, category?: string) => void;
   isDark: boolean;
   onToggleTheme: () => void;
-  onOpenSearch: () => void;
+  onOpenSearch?: () => void;
   favoritesCount: number;
   onToggleFavoritesFilter: () => void;
   showingFavoritesOnly: boolean;
@@ -26,20 +25,16 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigate,
   isDark,
   onToggleTheme,
-  onOpenSearch,
   favoritesCount,
   onToggleFavoritesFilter,
   showingFavoritesOnly,
-  onOpenVoiceModal,
-  isVoiceListening,
-  onOpenSitemap,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#1a202c]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-200">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#121826]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-200">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
         {/* Brand */}
         <div
           onClick={() => {
@@ -48,26 +43,26 @@ export const Header: React.FC<HeaderProps> = ({
           }}
           className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group shrink-0"
         >
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform bg-indigo-600">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden shadow-sm shadow-indigo-500/20 group-hover:scale-105 transition-transform bg-indigo-600">
             <img src="/pocketkit-icon.svg" alt="PocketKit Logo" className="w-full h-full object-cover" />
           </div>
           <div className="flex items-baseline">
-            <span className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white">
+            <span className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white">
               Pocket<span className="bg-gradient-to-r from-indigo-500 via-indigo-600 to-emerald-500 bg-clip-text text-transparent">Kit</span>
             </span>
-            <span className="hidden sm:inline-block ml-1.5 sm:ml-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/50">
+            <span className="hidden sm:inline-block ml-1.5 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/50">
               v2.0
             </span>
           </div>
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+        <nav className="hidden md:flex items-center gap-1">
           <button
             onClick={() => onNavigate('home')}
-            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
               activeView === 'home' && !showingFavoritesOnly
-                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/40'
+                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
             }`}
           >
@@ -75,175 +70,139 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
           <button
             onClick={() => onNavigate('all-tools')}
-            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
               activeView === 'all-tools'
-                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/40'
+                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
             }`}
           >
-            <Grid className="w-4 h-4" />
-            {t('nav.allTools', 'All Tools')}
+            <Grid className="w-4 h-4 text-indigo-500" />
+            <span>{t('nav.allTools', 'All Tools')}</span>
           </button>
           <button
             onClick={() => onNavigate('features')}
-            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
               activeView === 'features'
-                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/40'
+                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
             }`}
           >
-            <Sparkles className="w-4 h-4" />
-            {t('nav.features', 'Features')}
+            <Sparkles className="w-4 h-4 text-emerald-500" />
+            <span>{t('nav.features', 'Features')}</span>
           </button>
           <button
             onClick={() => onNavigate('blog')}
-            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
               activeView === 'blog'
-                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/40'
+                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
             }`}
           >
-            <BookOpen className="w-4 h-4" />
-            {t('nav.blog', 'Blog')}
+            <BookOpen className="w-4 h-4 text-amber-500" />
+            <span>{t('nav.blog', 'Blog')}</span>
           </button>
           <button
             onClick={() => onNavigate('help')}
-            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
               activeView === 'help'
-                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/40'
+                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
             }`}
           >
-            <HelpCircle className="w-4 h-4" />
-            {t('nav.help', 'Help')}
+            <HelpCircle className="w-4 h-4 text-blue-500" />
+            <span>{t('nav.help', 'Help')}</span>
           </button>
-          {onOpenSitemap && (
-            <button
-              onClick={() => {
-                triggerHaptic('light');
-                onOpenSitemap();
-              }}
-              className="px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
-              title="Worldwide Tools SEO Directory"
-            >
-              <Globe className="w-4 h-4" />
-              <span>Directory</span>
-            </button>
-          )}
         </nav>
 
         {/* Right Action Buttons */}
-        <div className="flex items-center gap-1 sm:gap-2">
-          {/* Desktop Direct Install Button (Without Dropdown) */}
-          <button
-            onClick={() => onNavigate('install')}
-            className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-xs transition-colors cursor-pointer"
-            title={t('header.installApp', 'Install App')}
-          >
-            <Download className="w-4 h-4" />
-            <span>{t('header.installApp', 'Install App')}</span>
-          </button>
-
-          {/* Accessible Voice Assistant Button (Alt+V) */}
-          <button
-            onClick={onOpenVoiceModal}
-            className={`p-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center cursor-pointer border ${
-              isVoiceListening
-                ? 'bg-red-500 text-white animate-pulse shadow-md border-red-400 ring-2 ring-red-400'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border-slate-200/80 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60'
-            }`}
-            title="Voice Assistant & Navigation (Alt+V)"
-            aria-label="Voice Assistant and Navigation (Alt+V)"
-          >
-            <Mic className={`w-4 h-4 sm:w-5 sm:h-5 ${isVoiceListening ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'}`} />
-          </button>
-
-          {/* Search Button: full pill on tablet/desktop, compact icon on mobile */}
-          <button
-            onClick={onOpenSearch}
-            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors border border-slate-200/80 dark:border-slate-700/80 cursor-pointer"
-            title={t('header.searchTitle', 'Search tools (Ctrl+K or ⌘K)')}
-            aria-label="Search tools"
-          >
-            <Search className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('header.searchPlaceholder', 'Search tools...')}</span>
-            <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded shadow-xs">
-              ⌘K
-            </kbd>
-          </button>
-
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Starred / Favorites toggle */}
           {favoritesCount > 0 && (
             <button
               onClick={onToggleFavoritesFilter}
-              className={`p-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer border ${
                 showingFavoritesOnly
-                  ? 'bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 ring-2 ring-amber-400'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 border-amber-300 dark:border-amber-700 ring-2 ring-amber-400/30'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700'
               }`}
               title={t('header.favoritesTitle', 'Saved favorite tools')}
             >
-              <span className="text-amber-500">★</span>
-              <span className="text-xs font-semibold">{favoritesCount}</span>
+              <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+              <span>{favoritesCount}</span>
             </button>
           )}
 
-          {/* Language Switcher */}
-          <LanguageSwitcher compact={false} />
+          {/* Desktop Install App Button */}
+          <button
+            onClick={() => onNavigate('install')}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-xs transition-colors cursor-pointer"
+            title={t('header.installApp', 'Install App')}
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>{t('header.installApp', 'Install App')}</span>
+          </button>
 
-          {/* Accessibility & Haptics Settings Menu */}
-          <AccessibilityMenu onOpenVoiceModal={onOpenVoiceModal} />
+          {/* Compact Language Switcher */}
+          <LanguageSwitcher compact={true} />
 
           {/* Theme Toggle */}
           <button
             onClick={() => {
-              triggerHaptic('medium');
+              triggerHaptic('light');
               onToggleTheme();
             }}
-            className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-800"
+            className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
             aria-label={t('header.toggleTheme', 'Toggle theme')}
+            title="Toggle dark / light mode"
           >
-            {isDark ? <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" /> : <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />}
+            {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
           </button>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer ml-0.5"
-            aria-label="Toggle menu"
+            className="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+            aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-[#1a202c]/98 backdrop-blur-xl px-4 pt-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-150">
-          {/* Dedicated Install App Section in Mobile View with Generous Space */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-50/90 via-white to-emerald-50/70 dark:from-indigo-950/60 dark:via-slate-900 dark:to-slate-900 border border-indigo-200/60 dark:border-indigo-800/60 shadow-sm space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-600 text-white flex items-center justify-center shadow-md">
-                <Smartphone className="w-5 h-5" />
+        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-[#121826]/98 backdrop-blur-xl px-4 pt-3 pb-5 space-y-3 animate-in slide-in-from-top-2 duration-150 shadow-lg">
+          {/* Mobile Install App Quick CTA */}
+          <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-50/80 via-white to-emerald-50/60 dark:from-indigo-950/50 dark:via-slate-900 dark:to-slate-900 border border-indigo-200/60 dark:border-indigo-800/60 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-xs">
+                <Smartphone className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">PocketKit Mobile App</h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-tight">100+ tools offline, full-screen & zero delay</p>
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white">PocketKit Mobile</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Offline & full-screen</p>
               </div>
             </div>
-            <div className="pt-1">
-              <InstallDropdown fullWidth onNavigateToInstallPage={() => { onNavigate('install'); setMobileMenuOpen(false); }} />
-            </div>
+            <button
+              onClick={() => {
+                onNavigate('install');
+                setMobileMenuOpen(false);
+              }}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Install</span>
+            </button>
           </div>
 
           {/* Navigation Links */}
-          <div className="space-y-1 pt-1">
+          <div className="space-y-1">
             <button
               onClick={() => {
                 onNavigate('home');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 transition-colors cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2.5 transition-colors cursor-pointer ${
                 activeView === 'home' && !showingFavoritesOnly
                   ? 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400'
                   : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -257,7 +216,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onNavigate('all-tools');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 transition-colors cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2.5 transition-colors cursor-pointer ${
                 activeView === 'all-tools'
                   ? 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400'
                   : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -271,7 +230,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onNavigate('features');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 transition-colors cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2.5 transition-colors cursor-pointer ${
                 activeView === 'features'
                   ? 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400'
                   : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -285,7 +244,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onNavigate('blog');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 transition-colors cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2.5 transition-colors cursor-pointer ${
                 activeView === 'blog'
                   ? 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400'
                   : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -299,40 +258,14 @@ export const Header: React.FC<HeaderProps> = ({
                 onNavigate('help');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 transition-colors cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2.5 transition-colors cursor-pointer ${
                 activeView === 'help'
                   ? 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400'
                   : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
               <HelpCircle className="w-4 h-4 text-blue-500" />
-              <span>{t('nav.helpDocs', 'Help & Documentation')}</span>
-            </button>
-            {onOpenSitemap && (
-              <button
-                onClick={() => {
-                  onOpenSitemap();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-              >
-                <Globe className="w-4 h-4 text-indigo-500" />
-                <span>Worldwide SEO Directory</span>
-              </button>
-            )}
-            <button
-              onClick={() => {
-                onNavigate('install');
-                setMobileMenuOpen(false);
-              }}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2.5 transition-colors cursor-pointer ${
-                activeView === 'install'
-                  ? 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 font-bold'
-                  : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
-              }`}
-            >
-              <Download className="w-4 h-4 text-emerald-500" />
-              <span>{t('header.installApp', 'Install App (APK & iOS)')}</span>
+              <span>{t('nav.help', 'Help & Documentation')}</span>
             </button>
           </div>
         </div>

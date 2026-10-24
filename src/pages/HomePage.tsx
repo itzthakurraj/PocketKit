@@ -128,6 +128,16 @@ export const CATEGORY_VISUAL_THEMES: Record<
     activeBg: 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30',
     glowColor: 'ring-cyan-400',
   },
+  audio: {
+    name: 'Audio & Sound',
+    icon: 'Volume2',
+    accentGradient: 'from-violet-600 to-indigo-600',
+    iconBg: 'bg-violet-50 dark:bg-violet-950/70',
+    iconColor: 'text-violet-600 dark:text-violet-400',
+    borderColor: 'border-violet-200 dark:border-violet-800',
+    activeBg: 'bg-violet-600 text-white shadow-md shadow-violet-600/30',
+    glowColor: 'ring-violet-400',
+  },
 };
 
 export const HomePage: React.FC<HomePageProps> = ({
@@ -274,7 +284,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-500 bg-clip-text text-transparent leading-tight sm:leading-tight">
-          {t('hero.titlePre', '70+ Powerful Tools in Your')}{' '}
+          {t('hero.titlePre', '100+ Powerful Tools in Your')}{' '}
           <span className="underline decoration-indigo-400/40">{t('hero.titleHighlight', 'Pocket')}</span>
         </h1>
 

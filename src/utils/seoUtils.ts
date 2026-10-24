@@ -8,9 +8,9 @@ export interface GeneratedSEO {
   jsonLd: Record<string, unknown>[];
 }
 
-const DEFAULT_TITLE = 'PocketKit - MultiTools Digital Workshop | 70+ Free Online Tools';
+const DEFAULT_TITLE = 'PocketKit - MultiTools Digital Workshop | 100+ Free Online Tools';
 const DEFAULT_DESC =
-  'PocketKit is your pocket-sized digital workshop: 70+ fast, private client-side online tools for PDF creation, text editing, code formatting, image processing, and calculators.';
+  'PocketKit is your pocket-sized digital workshop: 100+ fast, private client-side online tools for PDF creation, text editing, code formatting, image processing, audio generation, and calculators.';
 
 export function getToolSEO(tool: ToolItem): GeneratedSEO {
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://pocketkit.app';
@@ -47,16 +47,19 @@ export function getToolSEO(tool: ToolItem): GeneratedSEO {
     },
   ];
 
-  // Schema.org WebApplication / SoftwareApplication
+  // Schema.org SoftwareApplication structured data
   const softwareSchema = {
     '@context': 'https://schema.org',
-    '@type': 'WebApplication',
+    '@type': 'SoftwareApplication',
     name: tool.name,
+    headline: tool.seoTitle || `${tool.name} Online`,
     alternateName: `${tool.name} Online`,
     description: description,
     url: canonicalUrl,
     applicationCategory: mapCategoryToSchema(tool.category),
     operatingSystem: 'All (Web Browser, Windows, macOS, Linux, iOS, Android)',
+    softwareVersion: '2.1',
+    browserRequirements: 'Requires JavaScript. Requires HTML5.',
     offers: {
       '@type': 'Offer',
       price: '0',
@@ -137,6 +140,8 @@ function mapCategoryToSchema(category: string): string {
       return 'DeveloperApplication';
     case 'image':
       return 'MultimediaApplication';
+    case 'audio':
+      return 'AudioApplication';
     case 'calculator':
       return 'UtilityApplication';
     case 'encryption':
@@ -156,6 +161,8 @@ function formatCategoryName(cat: string): string {
       return 'Code & Dev';
     case 'image':
       return 'Image & Media';
+    case 'audio':
+      return 'Audio & Sound';
     case 'calculator':
       return 'Calculators';
     case 'encryption':

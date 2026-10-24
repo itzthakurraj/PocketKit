@@ -14,17 +14,20 @@ import {
   RotateCw,
   FileCode,
   Layers,
+  Lock,
+  Unlock,
 } from 'lucide-react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { triggerHaptic } from '../../utils/haptics';
+import { PdfPasswordSecurityTool } from './PdfPasswordSecurityTool';
 
 interface PdfToolsSuiteProps {
-  initialTab?: 'imagesToPdf' | 'dataToPdf' | 'extractPdf' | 'textToPdf';
+  initialTab?: 'imagesToPdf' | 'dataToPdf' | 'extractPdf' | 'textToPdf' | 'protectPdf' | 'unlockPdf';
 }
 
 export const PdfToolsSuite: React.FC<PdfToolsSuiteProps> = ({ initialTab = 'textToPdf' }) => {
-  const [tab, setTab] = useState<'textToPdf' | 'imagesToPdf' | 'dataToPdf' | 'extractPdf'>(
-    initialTab === 'extractPdf' ? 'extractPdf' : initialTab
+  const [tab, setTab] = useState<'textToPdf' | 'imagesToPdf' | 'dataToPdf' | 'extractPdf' | 'protectPdf' | 'unlockPdf'>(
+    initialTab
   );
 
   // Text to PDF state
@@ -389,6 +392,36 @@ export const PdfToolsSuite: React.FC<PdfToolsSuiteProps> = ({ initialTab = 'text
           <Layers className="w-4 h-4" />
           <span>Extract Content</span>
         </button>
+
+        <button
+          onClick={() => {
+            triggerHaptic('selection');
+            setTab('protectPdf');
+          }}
+          className={`px-4 py-2.5 font-bold text-xs sm:text-sm border-b-2 transition-colors cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 ${
+            tab === 'protectPdf'
+              ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400'
+              : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Lock className="w-4 h-4" />
+          <span>Protect with Password</span>
+        </button>
+
+        <button
+          onClick={() => {
+            triggerHaptic('selection');
+            setTab('unlockPdf');
+          }}
+          className={`px-4 py-2.5 font-bold text-xs sm:text-sm border-b-2 transition-colors cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 ${
+            tab === 'unlockPdf'
+              ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400'
+              : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Unlock className="w-4 h-4" />
+          <span>Unlock & Remove Password</span>
+        </button>
       </div>
 
       {/* TAB 1: TEXT & NOTES TO PDF */}
@@ -711,6 +744,12 @@ export const PdfToolsSuite: React.FC<PdfToolsSuiteProps> = ({ initialTab = 'text
           )}
         </div>
       )}
+
+      {/* TAB 5: PROTECT PDF */}
+      {tab === 'protectPdf' && <PdfPasswordSecurityTool initialMode="protect" />}
+
+      {/* TAB 6: UNLOCK PDF */}
+      {tab === 'unlockPdf' && <PdfPasswordSecurityTool initialMode="remove" />}
     </div>
   );
 };

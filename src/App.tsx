@@ -98,6 +98,9 @@ const LEGACY_URL_MAP: Record<string, { toolId?: string; view?: ActiveView; categ
   'watermarkimage.html': { toolId: 'image-watermark' },
   'web.html': { toolId: 'web-hub' },
   'development.html': { toolId: 'development-hub' },
+  'pdfremover.html': { toolId: 'pdf-password-remover' },
+  'pdfunlock.html': { toolId: 'pdf-password-remover' },
+  'pdfprotect.html': { toolId: 'pdf-password-protect' },
 };
 
 function AppContent() {
@@ -378,14 +381,6 @@ function AppContent() {
         onNavigate={handleNavigate}
         isDark={isDark}
         onToggleTheme={handleToggleTheme}
-        onOpenSearch={() => {
-          triggerHaptic('light');
-          setIsSearchOpen(true);
-        }}
-        onOpenSitemap={() => {
-          triggerHaptic('light');
-          setSitemapModalOpen(true);
-        }}
         favoritesCount={favorites.length}
         onToggleFavoritesFilter={() => {
           triggerHaptic('light');
@@ -395,11 +390,6 @@ function AppContent() {
           }
         }}
         showingFavoritesOnly={showingFavoritesOnly}
-        onOpenVoiceModal={() => {
-          triggerHaptic('voice');
-          setVoiceModalOpen(true);
-        }}
-        isVoiceListening={voiceNav.isListening}
       />
 
       {/* Main Page Area */}

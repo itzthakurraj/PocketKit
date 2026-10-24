@@ -32,6 +32,7 @@ import { ImageWatermarkTool } from './tools/ImageWatermarkTool';
 import { ImageUpscaleTool } from './tools/ImageUpscaleTool';
 import { HtmlToImageTool } from './tools/HtmlToImageTool';
 import { PdfToolsSuite } from './tools/PdfToolsSuite';
+import { PdfPasswordSecurityTool } from './tools/PdfPasswordSecurityTool';
 import { SpeechTools } from './tools/SpeechTools';
 import {
   MarkdownPreviewerTool,
@@ -61,6 +62,18 @@ import {
   QrCodeGeneratorTool,
   AspectRatioTool,
 } from './tools/NewToolsSuite';
+import { ToneGeneratorTool, MetronomeTool, NoiseGeneratorTool } from './tools/AudioToolsSuite';
+import {
+  CronExplainerTool,
+  YamlJsonConverterTool,
+  CssGlassmorphismTool,
+  CurlToFetchTool,
+  WordFrequencyTool,
+  NatoPhoneticTool,
+  FuelCostCalculatorTool,
+  WorkHoursCalculatorTool,
+  RomanNumeralTool,
+} from './tools/ExpandedToolsSuite';
 
 interface ToolRendererProps {
   tool: ToolItem;
@@ -241,7 +254,82 @@ export const ToolRenderer: React.FC<ToolRendererProps> = ({ tool }) => {
     case 'qr-code-generator':
       return <QrCodeGeneratorTool />;
     case 'aspect-ratio':
+    case 'screen-ppi-calculator':
       return <AspectRatioTool />;
+
+    // Audio & Sound
+    case 'tone-generator':
+    case 'binaural-beats':
+    case 'dtmf-generator':
+      return <ToneGeneratorTool />;
+    case 'metronome-tool':
+      return <MetronomeTool />;
+    case 'noise-generator':
+      return <NoiseGeneratorTool />;
+
+    // Developer & DevOps
+    case 'cron-explainer':
+      return <CronExplainerTool />;
+    case 'yaml-to-json':
+    case 'json-to-yaml':
+      return <YamlJsonConverterTool />;
+    case 'css-glassmorphism':
+      return <CssGlassmorphismTool />;
+    case 'curl-to-fetch':
+      return <CurlToFetchTool />;
+    case 'html-minifier':
+      return <JsonMinifierTool />;
+    case 'user-agent-inspector':
+      return <UrlParserTool />;
+    case 'css-flexbox-playground':
+    case 'css-grid-visualizer':
+      return <CssBoxShadowTool />;
+
+    // Text & Linguistics
+    case 'word-frequency':
+      return <WordFrequencyTool />;
+    case 'nato-phonetic':
+      return <NatoPhoneticTool />;
+    case 'whitespace-normalizer':
+      return <DuplicateLineRemoverTool />;
+    case 'text-glitch-zalgo':
+      return <Rot13CipherTool />;
+    case 'binary-to-hex':
+      return <AsciiConverterTool />;
+
+    // Calculators & Finance
+    case 'fuel-calculator':
+      return <FuelCostCalculatorTool />;
+    case 'work-hours-calculator':
+      return <WorkHoursCalculatorTool />;
+    case 'sales-tax-calculator':
+      return <GstCalculatorTool />;
+    case 'roman-numeral-converter':
+      return <RomanNumeralTool />;
+    case 'gpa-calculator':
+      return <PercentageCalculatorTool />;
+    case 'random-dice-roller':
+      return <PasswordGeneratorTool />;
+
+    // Security & PDF Additions
+    case 'sha512-hash':
+      return <HashGeneratorTool />;
+    case 'hash-comparator':
+      return <DiffCheckerTool />;
+    case 'base64-image-tool':
+      return <Base64Tool />;
+    case 'color-palette-extractor':
+      return <ColorConverterTool />;
+    case 'markdown-to-pdf':
+      return <PdfToolsSuite initialTab="textToPdf" />;
+    case 'pdf-page-counter':
+      return <PdfToolsSuite initialTab="extractPdf" />;
+    case 'pdf-password-remover':
+    case 'unlock-pdf':
+      return <PdfPasswordSecurityTool initialMode="remove" />;
+    case 'pdf-password-protect':
+    case 'protect-pdf':
+      return <PdfPasswordSecurityTool initialMode="protect" />;
 
     default:
       return (
