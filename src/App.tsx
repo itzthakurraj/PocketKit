@@ -162,20 +162,42 @@ function AppContent() {
 
   const handleNavigate = (view: ActiveView, category?: string) => {
     triggerHaptic('selection');
-    setActiveView(view);
-    if (category) {
-      setSelectedCategory(category);
-      window.location.hash = `category:${category}`;
-    } else if (view === 'all-tools') {
-      setSelectedCategory('all');
-      window.location.hash = '';
-    } else if (view === 'features' || view === 'blog' || view === 'help' || view === 'install') {
-      window.location.hash = view;
-    } else {
-      window.location.hash = '';
-    }
     setActiveToolId(null);
     setShowingFavoritesOnly(false);
+
+    if (category) {
+      setSelectedCategory(category);
+      setActiveView('category');
+      const hashStr = `category:${category}`;
+      try {
+        window.history.pushState(null, '', `/#${hashStr}`);
+      } catch {
+        window.location.hash = hashStr;
+      }
+    } else if (view === 'all-tools') {
+      setSelectedCategory('all');
+      setActiveView('all-tools');
+      try {
+        window.history.pushState(null, '', '/#all-tools');
+      } catch {
+        window.location.hash = 'all-tools';
+      }
+    } else if (view === 'home') {
+      setSelectedCategory('all');
+      setActiveView('home');
+      try {
+        window.history.pushState(null, '', '/');
+      } catch {
+        window.location.hash = '';
+      }
+    } else {
+      setActiveView(view);
+      try {
+        window.history.pushState(null, '', `/#${view}`);
+      } catch {
+        window.location.hash = view;
+      }
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -254,13 +276,108 @@ function AppContent() {
     return () => window.removeEventListener('keydown', handleVoiceShortcut);
   }, []);
 
-  // Parse path & hash on initial load and popstate
+  // Parse path & hash on initial load, popstate, and hashchange
   useEffect(() => {
     const syncRouteFromLocation = () => {
-      const path = window.location.pathname.replace(/^\//, '').toLowerCase();
-      const hash = window.location.hash.replace(/^#/, '').toLowerCase();
+      const fullPath = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
+      const path = fullPath.toLowerCase();
+      const rawHash = window.location.hash.replace(/^#\/?/, '');
+      const hash = rawHash.toLowerCase();
 
-      // Check legacy path first
+      // 1. Check legal & support routes
+      if (path === 'privacy' || hash === 'privacy') {
+        handleOpenPolicy('privacy');
+      } else if (path === 'contact' || hash === 'contact' || path === 'support' || hash === 'support') {
+        handleOpenPolicy('contact');
+      } else if (path === 'terms' || hash === 'terms') {
+        handleOpenPolicy('terms');
+      }
+
+      // 2. High-priority Hash navigation (prevents trapping when path was previously /tools/...)
+      if (hash) {
+        if (hash === 'features') {
+          setActiveView('features');
+          setActiveToolId(null);
+          if (path.startsWith('tools/') || path.startsWith('tool/')) {
+            try { window.history.replaceState(null, '', '/#features'); } catch {}
+          }
+          return;
+        }
+        if (hash === 'blog') {
+          setActiveView('blog');
+          setActiveToolId(null);
+          if (path.startsWith('tools/') || path.startsWith('tool/')) {
+            try { window.history.replaceState(null, '', '/#blog'); } catch {}
+          }
+          return;
+        }
+        if (hash === 'help') {
+          setActiveView('help');
+          setActiveToolId(null);
+          if (path.startsWith('tools/') || path.startsWith('tool/')) {
+            try { window.history.replaceState(null, '', '/#help'); } catch {}
+          }
+          return;
+        }
+        if (hash === 'install' || hash === 'download') {
+          setActiveView('install');
+          setActiveToolId(null);
+          if (path.startsWith('tools/') || path.startsWith('tool/')) {
+            try { window.history.replaceState(null, '', '/#install'); } catch {}
+          }
+          return;
+        }
+        if (hash === 'all-tools') {
+          setActiveView('all-tools');
+          setSelectedCategory('all');
+          setActiveToolId(null);
+          if (path.startsWith('tools/') || path.startsWith('tool/')) {
+            try { window.history.replaceState(null, '', '/#all-tools'); } catch {}
+          }
+          return;
+        }
+        if (hash === 'home') {
+          setActiveView('home');
+          setSelectedCategory('all');
+          setActiveToolId(null);
+          if (path.startsWith('tools/') || path.startsWith('tool/')) {
+            try { window.history.replaceState(null, '', '/'); } catch {}
+          }
+          return;
+        }
+        if (hash.startsWith('category:')) {
+          const cat = hash.replace('category:', '');
+          setActiveView('category');
+          setSelectedCategory(cat);
+          setActiveToolId(null);
+          if (path.startsWith('tools/') || path.startsWith('tool/')) {
+            try { window.history.replaceState(null, '', `/#category:${cat}`); } catch {}
+          }
+          return;
+        }
+
+        // Check hash clean format #/tools/:id or #tools/:id or direct tool ID in hash
+        const hashPathMatch = hash.match(/^\/?tools?\/(.+)$/);
+        const rawHashId = hashPathMatch ? hashPathMatch[1].replace(/\/$/, '') : hash.replace(/^\/?/, '');
+        const normalizedHash = rawHashId.replace(/-/g, '');
+
+        const matchedToolInHash = TOOLS_DATA.find(
+          (t) => t.id === rawHashId || t.id.toLowerCase() === rawHashId || t.id.replace(/-/g, '') === normalizedHash
+        );
+        if (matchedToolInHash) {
+          setActiveToolId(matchedToolInHash.id);
+          return;
+        }
+        if (LEGACY_URL_MAP[rawHashId + '.html']) {
+          const legacyMatch = LEGACY_URL_MAP[rawHashId + '.html'];
+          if (legacyMatch.toolId) {
+            setActiveToolId(legacyMatch.toolId);
+            return;
+          }
+        }
+      }
+
+      // 3. Legacy path mapping
       if (path && LEGACY_URL_MAP[path]) {
         const match = LEGACY_URL_MAP[path];
         if (match.toolId) {
@@ -268,11 +385,12 @@ function AppContent() {
         } else if (match.view) {
           setActiveView(match.view);
           if (match.category) setSelectedCategory(match.category);
+          setActiveToolId(null);
         }
         return;
       }
 
-      // Check clean URL path: /tools/:toolId or /tool/:toolId
+      // 4. Clean URL pathname tool routing: /tools/:toolId or /tool/:toolId
       const cleanPathMatch = path.match(/^tools?\/(.+)$/);
       if (cleanPathMatch) {
         const rawId = cleanPathMatch[1].replace(/\/$/, '');
@@ -284,47 +402,23 @@ function AppContent() {
         }
       }
 
-      // Check hash
-      if (hash) {
-        if (hash === 'features') {
-          setActiveView('features');
-          setActiveToolId(null);
-        } else if (hash === 'blog') {
-          setActiveView('blog');
-          setActiveToolId(null);
-        } else if (hash === 'help') {
-          setActiveView('help');
-          setActiveToolId(null);
-        } else if (hash === 'install' || hash === 'download') {
-          setActiveView('install');
-          setActiveToolId(null);
-        } else if (hash.startsWith('category:')) {
-          const cat = hash.replace('category:', '');
-          setActiveView('category');
-          setSelectedCategory(cat);
-          setActiveToolId(null);
-        } else {
-          // Check hash clean format #/tools/:id or #/tool/:id
-          const hashPathMatch = hash.match(/^\/?tools?\/(.+)$/);
-          const rawHashId = hashPathMatch ? hashPathMatch[1].replace(/\/$/, '') : hash.replace(/^\/?/, '');
-          const normalizedHash = rawHashId.replace(/-/g, '');
+      // 5. Clean URL pathname view routing
+      if (path === 'features' || path === 'blog' || path === 'help' || path === 'install') {
+        setActiveView(path as ActiveView);
+        setActiveToolId(null);
+        return;
+      }
+      if (path === 'all-tools') {
+        setActiveView('all-tools');
+        setSelectedCategory('all');
+        setActiveToolId(null);
+        return;
+      }
 
-          // Check if hash matches tool id directly or with dash variation
-          const matchedTool = TOOLS_DATA.find(
-            (t) => t.id === rawHashId || t.id.toLowerCase() === rawHashId || t.id.replace(/-/g, '') === normalizedHash
-          );
-          if (matchedTool) {
-            setActiveToolId(matchedTool.id);
-          } else if (LEGACY_URL_MAP[rawHashId + '.html']) {
-            const legacyMatch = LEGACY_URL_MAP[rawHashId + '.html'];
-            if (legacyMatch.toolId) setActiveToolId(legacyMatch.toolId);
-          }
-        }
-      } else {
-        // No hash and not a tool path
-        if (!cleanPathMatch) {
-          setActiveToolId(null);
-        }
+      // 6. Home route fallback (/ or empty or index.html)
+      if (!path || path === 'index.html') {
+        setActiveView('home');
+        setActiveToolId(null);
       }
     };
 
@@ -400,17 +494,14 @@ function AppContent() {
             isFavorite={favorites.includes(activeTool.id)}
             onToggleFavorite={handleToggleFavorite}
             onSelectTool={handleSelectTool}
-            onNavigateHome={() => handleSelectTool(null)}
+            onNavigateHome={() => handleNavigate('home')}
+            onNavigateCategory={(cat) => handleNavigate('category', cat)}
           />
         ) : activeView === 'home' || activeView === 'all-tools' || activeView === 'category' ? (
           <HomePage
             tools={TOOLS_DATA}
             selectedCategory={selectedCategory}
-            onSelectCategory={(cat) => {
-              triggerHaptic('selection');
-              setSelectedCategory(cat);
-              window.location.hash = cat === 'all' ? '' : `category:${cat}`;
-            }}
+            onSelectCategory={(cat) => handleNavigate('category', cat)}
             favorites={favorites}
             onToggleFavorite={handleToggleFavorite}
             onSelectTool={handleSelectTool}
@@ -421,7 +512,11 @@ function AppContent() {
             }}
           />
         ) : activeView === 'features' ? (
-          <FeaturesPage onOpenTool={handleSelectTool} />
+          <FeaturesPage
+            onOpenTool={handleSelectTool}
+            onNavigateHome={() => handleNavigate('home')}
+            onOpenInstall={() => handleNavigate('install')}
+          />
         ) : activeView === 'blog' ? (
           <BlogPage />
         ) : activeView === 'help' ? (

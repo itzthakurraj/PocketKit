@@ -30,6 +30,7 @@ interface StandaloneToolPageProps {
   onToggleFavorite: (id: string, e: React.MouseEvent) => void;
   onSelectTool: (id: string | null) => void;
   onNavigateHome: () => void;
+  onNavigateCategory?: (category: string) => void;
 }
 
 export const StandaloneToolPage: React.FC<StandaloneToolPageProps> = ({
@@ -38,6 +39,7 @@ export const StandaloneToolPage: React.FC<StandaloneToolPageProps> = ({
   onToggleFavorite,
   onSelectTool,
   onNavigateHome,
+  onNavigateCategory,
 }) => {
   const { language, t, speak, isSpeaking, stopSpeaking } = useLanguage();
   const [copiedShare, setCopiedShare] = useState(false);
@@ -86,7 +88,7 @@ export const StandaloneToolPage: React.FC<StandaloneToolPageProps> = ({
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
         <button
           onClick={onNavigateHome}
-          className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1 cursor-pointer"
+          className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1 cursor-pointer font-medium"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>PocketKit</span>
@@ -94,7 +96,11 @@ export const StandaloneToolPage: React.FC<StandaloneToolPageProps> = ({
         <span aria-hidden="true" className="text-slate-300 dark:text-slate-700">/</span>
         <button
           onClick={() => {
-            window.location.hash = `category:${tool.category}`;
+            if (onNavigateCategory) {
+              onNavigateCategory(tool.category);
+            } else {
+              window.location.hash = `category:${tool.category}`;
+            }
           }}
           className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors uppercase tracking-wider font-semibold cursor-pointer"
         >
@@ -323,7 +329,7 @@ export const StandaloneToolPage: React.FC<StandaloneToolPageProps> = ({
               onClick={onNavigateHome}
               className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
             >
-              Browse All 70+ Tools →
+              Browse All 100+ Tools →
             </button>
           </div>
 

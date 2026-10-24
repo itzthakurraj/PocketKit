@@ -498,101 +498,40 @@ export const HomePage: React.FC<HomePageProps> = ({
         </section>
       )}
 
-      {/* --- Category Filter Navigation Bar (Sticky with Visual Colored Icons) --- */}
-      <section className="sticky top-16 z-30 bg-slate-50/95 dark:bg-[#121826]/95 backdrop-blur-md py-3 border-y border-slate-200/80 dark:border-slate-800 shadow-xs">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          {/* Scrollable Visual Category Pills with Visual Icons */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full no-scrollbar px-0.5">
-            {showingFavoritesOnly && (
-              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-xs font-bold shrink-0 shadow-xs">
-                <Star className="w-4 h-4 fill-amber-500" />
-                <span>
-                  {t('header.favoritesTitle', 'Favorites')} ({favorites.length})
-                </span>
-                <button
-                  onClick={onClearFavoritesFilter}
-                  className="ml-1 text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                >
-                  ✕
-                </button>
-              </div>
+      {/* Active Filter or Search Notice (replaces bulky horizontal scrollbar with clean feedback) */}
+      {(showingFavoritesOnly || selectedCategory !== 'all' || searchQuery) && (
+        <section className="p-3.5 sm:p-4 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/70 dark:border-indigo-800/60 flex flex-wrap items-center justify-between gap-3 animate-in fade-in duration-200">
+          <div className="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
+            <span className="text-slate-500 dark:text-slate-400">Viewing:</span>
+            {showingFavoritesOnly ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 font-bold">
+                <Star className="w-3.5 h-3.5 fill-amber-500" />
+                Favorites ({favorites.length})
+              </span>
+            ) : selectedCategory !== 'all' ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold">
+                {CATEGORIES.find((c) => c.id === selectedCategory)?.name || selectedCategory} ({filteredTools.length} tools)
+              </span>
+            ) : (
+              <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                "{searchQuery}" ({filteredTools.length} results)
+              </span>
             )}
-
-            {CATEGORIES.map((cat) => {
-              const isActive = selectedCategory === cat.id && !showingFavoritesOnly;
-              const theme = CATEGORY_VISUAL_THEMES[cat.id] || CATEGORY_VISUAL_THEMES.all;
-              const catTitle = cat.id === 'all' ? t('cat.all', cat.name) : t(`cat.${cat.id}`, cat.name);
-
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => {
-                    triggerHaptic('selection');
-                    if (showingFavoritesOnly) onClearFavoritesFilter();
-                    onSelectCategory(cat.id);
-                  }}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                    isActive
-                      ? `${theme.activeBg}`
-                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/70'
-                  }`}
-                >
-                  {/* Category Visual Icon Container */}
-                  <span
-                    className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                      isActive ? 'bg-white/20 text-white' : `${theme.iconBg} ${theme.iconColor}`
-                    }`}
-                  >
-                    <IconRenderer name={cat.icon} className="w-3.5 h-3.5" />
-                  </span>
-
-                  <span>{catTitle}</span>
-
-                  <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                      isActive
-                        ? 'bg-white/25 text-white'
-                        : 'bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400'
-                    }`}
-                  >
-                    {cat.count}
-                  </span>
-                </button>
-              );
-            })}
           </div>
 
-          {/* View mode toggle (Grouped vs Full Grid) */}
-          {selectedCategory === 'all' && !searchQuery && (
-            <div className="flex items-center gap-1 bg-white dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700 shrink-0 self-end sm:self-auto text-xs font-medium">
-              <button
-                onClick={() => setViewMode('grouped')}
-                className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer ${
-                  viewMode === 'grouped'
-                    ? 'bg-indigo-600 text-white font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                }`}
-                title={t('tools.viewGrouped', 'Group tools by category')}
-              >
-                <Layers className="w-3.5 h-3.5" />
-                <span>{t('tools.viewGrouped', 'By Category')}</span>
-              </button>
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer ${
-                  viewMode === 'grid'
-                    ? 'bg-indigo-600 text-white font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                }`}
-                title={t('tools.viewGrid', 'Show all in one grid')}
-              >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span>{t('tools.viewGrid', 'Full Grid')}</span>
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
+          <button
+            onClick={() => {
+              triggerHaptic('light');
+              onSelectCategory('all');
+              setSearchQuery('');
+              if (showingFavoritesOnly) onClearFavoritesFilter();
+            }}
+            className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-300 transition-colors shadow-2xs cursor-pointer"
+          >
+            Clear Filter (Show All 104+ Tools)
+          </button>
+        </section>
+      )}
 
       {/* Tools Listing Section */}
       <section className="space-y-8">
@@ -619,6 +558,38 @@ export const HomePage: React.FC<HomePageProps> = ({
         ) : selectedCategory === 'all' && !searchQuery && viewMode === 'grouped' && !showingFavoritesOnly ? (
           // Grouped Category View: Every single tool categorized under its category header
           <div className="space-y-12">
+            <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <LayoutGrid className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                  Tools Directory
+                </h2>
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                  {tools.length} Tools
+                </span>
+              </div>
+
+              {/* View mode toggle (Grouped vs Full Grid) */}
+              <div className="flex items-center gap-1 bg-white dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700 text-xs font-medium">
+                <button
+                  onClick={() => setViewMode('grouped')}
+                  className="px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer bg-indigo-600 text-white font-bold"
+                  title={t('tools.viewGrouped', 'Group tools by category')}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>{t('tools.viewGrouped', 'By Category')}</span>
+                </button>
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className="px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  title={t('tools.viewGrid', 'Show all in one grid')}
+                >
+                  <LayoutGrid className="w-3.5 h-3.5" />
+                  <span>{t('tools.viewGrid', 'Full Grid')}</span>
+                </button>
+              </div>
+            </div>
+
             {categoryGroups.map(({ category, tools: catTools }) => {
               const groupTitle = t(`cat.${category.id}`, category.name);
               const theme = CATEGORY_VISUAL_THEMES[category.id] || CATEGORY_VISUAL_THEMES.all;
@@ -678,9 +649,29 @@ export const HomePage: React.FC<HomePageProps> = ({
                   ? t('tools.allCollection', 'All Tools Directory')
                   : t(`cat.${selectedCategory}`, selectedCategory)}
               </h2>
-              <span className="text-xs text-slate-400 font-medium">
-                {filteredTools.length} {t('tools.searchFound', 'tools')}
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-slate-400 font-medium">
+                  {filteredTools.length} {t('tools.searchFound', 'tools')}
+                </span>
+                {selectedCategory === 'all' && !searchQuery && !showingFavoritesOnly && (
+                  <div className="flex items-center gap-1 bg-white dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700 text-xs font-medium">
+                    <button
+                      onClick={() => setViewMode('grouped')}
+                      className="px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                    >
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>{t('tools.viewGrouped', 'By Category')}</span>
+                    </button>
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className="px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors cursor-pointer bg-indigo-600 text-white font-bold"
+                    >
+                      <LayoutGrid className="w-3.5 h-3.5" />
+                      <span>{t('tools.viewGrid', 'Full Grid')}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
