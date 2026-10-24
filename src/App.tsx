@@ -1,27 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { ActiveView, ToolItem } from './types';
 import { TOOLS_DATA } from './data/toolsData';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { SearchModal } from './components/SearchModal';
-import { ToolModal } from './components/ToolModal';
 import { HomePage } from './pages/HomePage';
-import { FeaturesPage } from './pages/FeaturesPage';
-import { BlogPage } from './pages/BlogPage';
-import { HelpPage } from './pages/HelpPage';
-import { InstallPage } from './pages/InstallPage';
+import { ToolLoadingSkeleton } from './components/ToolLoadingSkeleton';
 import { InternetRequiredShield } from './components/InternetRequiredShield';
 import { AdBlockDetector } from './components/AdBlockDetector';
-import { PolicyModal, PolicyTab } from './components/PolicyModal';
+import { PolicyTab } from './components/PolicyModal';
 import { CookieConsent } from './components/CookieConsent';
 import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
 import { useVoiceNavigation } from './hooks/useVoiceNavigation';
-import { VoiceAssistantModal } from './components/VoiceAssistantModal';
 import { FloatingVoiceButton } from './components/FloatingVoiceButton';
-import { StandaloneToolPage } from './pages/StandaloneToolPage';
-import { SitemapModal } from './components/SitemapModal';
 import { syncDocumentSEO } from './utils/seoUtils';
 import { triggerHaptic } from './utils/haptics';
+
+// Code-split route pages and interactive modals
+const FeaturesPage = lazy(() => import('./pages/FeaturesPage').then((m) => ({ default: m.FeaturesPage })));
+const BlogPage = lazy(() => import('./pages/BlogPage').then((m) => ({ default: m.BlogPage })));
+const HelpPage = lazy(() => import('./pages/HelpPage').then((m) => ({ default: m.HelpPage })));
+const InstallPage = lazy(() => import('./pages/InstallPage').then((m) => ({ default: m.InstallPage })));
+const StandaloneToolPage = lazy(() => import('./pages/StandaloneToolPage').then((m) => ({ default: m.StandaloneToolPage })));
+const ToolModal = lazy(() => import('./components/ToolModal').then((m) => ({ default: m.ToolModal })));
+const SearchModal = lazy(() => import('./components/SearchModal').then((m) => ({ default: m.SearchModal })));
+const SitemapModal = lazy(() => import('./components/SitemapModal').then((m) => ({ default: m.SitemapModal })));
+const PolicyModal = lazy(() => import('./components/PolicyModal').then((m) => ({ default: m.PolicyModal })));
+const VoiceAssistantModal = lazy(() => import('./components/VoiceAssistantModal').then((m) => ({ default: m.VoiceAssistantModal })));
+
 
 
 const LEGACY_URL_MAP: Record<string, { toolId?: string; view?: ActiveView; category?: string }> = {
@@ -488,42 +493,44 @@ function AppContent() {
 
       {/* Main Page Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {activeTool ? (
-          <StandaloneToolPage
-            tool={activeTool}
-            isFavorite={favorites.includes(activeTool.id)}
-            onToggleFavorite={handleToggleFavorite}
-            onSelectTool={handleSelectTool}
-            onNavigateHome={() => handleNavigate('home')}
-            onNavigateCategory={(cat) => handleNavigate('category', cat)}
-          />
-        ) : activeView === 'home' || activeView === 'all-tools' || activeView === 'category' ? (
-          <HomePage
-            tools={TOOLS_DATA}
-            selectedCategory={selectedCategory}
-            onSelectCategory={(cat) => handleNavigate('category', cat)}
-            favorites={favorites}
-            onToggleFavorite={handleToggleFavorite}
-            onSelectTool={handleSelectTool}
-            showingFavoritesOnly={showingFavoritesOnly}
-            onClearFavoritesFilter={() => {
-              triggerHaptic('light');
-              setShowingFavoritesOnly(false);
-            }}
-          />
-        ) : activeView === 'features' ? (
-          <FeaturesPage
-            onOpenTool={handleSelectTool}
-            onNavigateHome={() => handleNavigate('home')}
-            onOpenInstall={() => handleNavigate('install')}
-          />
-        ) : activeView === 'blog' ? (
-          <BlogPage />
-        ) : activeView === 'help' ? (
-          <HelpPage />
-        ) : activeView === 'install' ? (
-          <InstallPage />
-        ) : null}
+        <Suspense fallback={<ToolLoadingSkeleton />}>
+          {activeTool ? (
+            <StandaloneToolPage
+              tool={activeTool}
+              isFavorite={favorites.includes(activeTool.id)}
+              onToggleFavorite={handleToggleFavorite}
+              onSelectTool={handleSelectTool}
+              onNavigateHome={() => handleNavigate('home')}
+              onNavigateCategory={(cat) => handleNavigate('category', cat)}
+            />
+          ) : activeView === 'home' || activeView === 'all-tools' || activeView === 'category' ? (
+            <HomePage
+              tools={TOOLS_DATA}
+              selectedCategory={selectedCategory}
+              onSelectCategory={(cat) => handleNavigate('category', cat)}
+              favorites={favorites}
+              onToggleFavorite={handleToggleFavorite}
+              onSelectTool={handleSelectTool}
+              showingFavoritesOnly={showingFavoritesOnly}
+              onClearFavoritesFilter={() => {
+                triggerHaptic('light');
+                setShowingFavoritesOnly(false);
+              }}
+            />
+          ) : activeView === 'features' ? (
+            <FeaturesPage
+              onOpenTool={handleSelectTool}
+              onNavigateHome={() => handleNavigate('home')}
+              onOpenInstall={() => handleNavigate('install')}
+            />
+          ) : activeView === 'blog' ? (
+            <BlogPage />
+          ) : activeView === 'help' ? (
+            <HelpPage />
+          ) : activeView === 'install' ? (
+            <InstallPage />
+          ) : null}
+        </Suspense>
       </main>
 
       {/* Footer */}
@@ -534,29 +541,41 @@ function AppContent() {
       />
 
       {/* Search Modal */}
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={() => {
-          triggerHaptic('light');
-          setIsSearchOpen(false);
-        }}
-        onSelectTool={handleSelectTool}
-        favorites={favorites}
-      />
+      {isSearchOpen && (
+        <Suspense fallback={null}>
+          <SearchModal
+            isOpen={isSearchOpen}
+            onClose={() => {
+              triggerHaptic('light');
+              setIsSearchOpen(false);
+            }}
+            onSelectTool={handleSelectTool}
+            favorites={favorites}
+          />
+        </Suspense>
+      )}
 
       {/* Sitemap & SEO Index Modal */}
-      <SitemapModal
-        isOpen={sitemapModalOpen}
-        onClose={() => setSitemapModalOpen(false)}
-        onSelectTool={handleSelectTool}
-      />
+      {sitemapModalOpen && (
+        <Suspense fallback={null}>
+          <SitemapModal
+            isOpen={sitemapModalOpen}
+            onClose={() => setSitemapModalOpen(false)}
+            onSelectTool={handleSelectTool}
+          />
+        </Suspense>
+      )}
 
       {/* Legal & Policy Compliance Modal */}
-      <PolicyModal
-        isOpen={policyModalOpen}
-        initialTab={policyTab}
-        onClose={() => setPolicyModalOpen(false)}
-      />
+      {policyModalOpen && (
+        <Suspense fallback={null}>
+          <PolicyModal
+            isOpen={policyModalOpen}
+            initialTab={policyTab}
+            onClose={() => setPolicyModalOpen(false)}
+          />
+        </Suspense>
+      )}
 
       {/* AdSense Cookie Consent Notice */}
       <CookieConsent onOpenPrivacyPolicy={() => handleOpenPolicy('privacy')} />
@@ -578,22 +597,26 @@ function AppContent() {
       />
 
       {/* Voice Assistant & Hands-free Navigation Modal */}
-      <VoiceAssistantModal
-        isOpen={voiceModalOpen}
-        onClose={() => {
-          triggerHaptic('light');
-          setVoiceModalOpen(false);
-        }}
-        isListening={voiceNav.isListening}
-        transcript={voiceNav.transcript}
-        lastCommand={voiceNav.lastCommand}
-        statusMessage={voiceNav.statusMessage}
-        isSupported={voiceNav.isSupported}
-        isOfflineVoiceReady={voiceNav.isOfflineVoiceReady}
-        isOnline={voiceNav.isOnline}
-        onToggleListening={voiceNav.toggleListening}
-        onExecuteCommand={(cmd) => voiceNav.executeVoiceCommand(cmd)}
-      />
+      {voiceModalOpen && (
+        <Suspense fallback={null}>
+          <VoiceAssistantModal
+            isOpen={voiceModalOpen}
+            onClose={() => {
+              triggerHaptic('light');
+              setVoiceModalOpen(false);
+            }}
+            isListening={voiceNav.isListening}
+            transcript={voiceNav.transcript}
+            lastCommand={voiceNav.lastCommand}
+            statusMessage={voiceNav.statusMessage}
+            isSupported={voiceNav.isSupported}
+            isOfflineVoiceReady={voiceNav.isOfflineVoiceReady}
+            isOnline={voiceNav.isOnline}
+            onToggleListening={voiceNav.toggleListening}
+            onExecuteCommand={(cmd) => voiceNav.executeVoiceCommand(cmd)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

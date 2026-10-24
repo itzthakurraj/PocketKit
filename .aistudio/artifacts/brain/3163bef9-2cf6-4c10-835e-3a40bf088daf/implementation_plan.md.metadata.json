@@ -1,6 +1,6 @@
 {
-  "summary":  "End-to-end plan to repair, standardize, and thoroughly test the site navigation and hybrid routing architecture across all 104+ tools, header, mobile drawer, views, and footer links.",
-  "updatedAt":  "2026-10-24T12:41:58.854819991Z",
+  "summary":  "Implementation plan for fixing the 3-way dark/light/system theme switcher and expanding PocketKit from 206 tools to 400+ production tools with instant fuzzy search and sub-category pill tags.",
+  "updatedAt":  "2026-10-24T14:46:44.018018460Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

@@ -118,13 +118,13 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Hero
     'hero.badge': 'Instant Client-Side Utilities',
-    'hero.titlePre': '100+ Powerful Tools in Your',
+    'hero.titlePre': '200+ Powerful Tools in Your',
     'hero.titleHighlight': 'Pocket',
     'hero.subtitle':
       'PocketKit is your pocket-sized digital workshop. 100% private, client-side tools for text editing, code formatting, image manipulation, PDF tasks, calculators, and cryptography. No signups, zero server storage.',
-    'hero.searchPlaceholder': 'Search 100+ tools by name, task, or file format (e.g. PDF, JSON, compress, Age Calculator)...',
+    'hero.searchPlaceholder': 'Search 200+ tools by name, task, or file format (e.g. PDF, JSON, compress, Age Calculator)...',
     'hero.searchToolsCount': 'tools available in offline mode',
-    'hero.stat1Number': '100+',
+    'hero.stat1Number': '200+',
     'hero.stat1Label': 'tools',
     'hero.stat2Number': '100%',
     'hero.stat2Label': 'Client-Side Private',

@@ -1,73 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ToolItem } from '../types';
 import { IconRenderer } from './IconRenderer';
+import { ToolRenderer } from './ToolRenderer';
 import { X, Star, ArrowLeft, Share2, Check, Volume2, VolumeX } from 'lucide-react';
 import { AdBanner } from './AdBanner';
 import { useLanguage } from '../i18n/LanguageContext';
 import { getLocalizedTool } from '../utils/toolLocalization';
 import { triggerHaptic } from '../utils/haptics';
-
-
-// Tool imports
-import { CaseConverterTool } from './tools/CaseConverterTool';
-import { CharacterCountTool } from './tools/CharacterCountTool';
-import { AsciiConverterTool } from './tools/AsciiConverterTool';
-import { DiffCheckerTool } from './tools/DiffCheckerTool';
-import { LoremGeneratorTool } from './tools/LoremGeneratorTool';
-import { TypingTestTool } from './tools/TypingTestTool';
-import { JsonBeautifierTool } from './tools/JsonBeautifierTool';
-import { JsonMinifierTool } from './tools/JsonMinifierTool';
-import { JsonToCsvTool } from './tools/JsonToCsvTool';
-import { JsonToXmlTool } from './tools/JsonToXmlTool';
-import { CodeBeautifierTool } from './tools/CodeBeautifierTool';
-import { AesDesEncryptTool } from './tools/AesDesEncryptTool';
-import { Base64Tool } from './tools/Base64Tool';
-import { HashGeneratorTool } from './tools/HashGeneratorTool';
-import { PasswordGeneratorTool } from './tools/PasswordGeneratorTool';
-import { UrlEncoderTool } from './tools/UrlEncoderTool';
-import { AgeCalculatorTool } from './tools/AgeCalculatorTool';
-import { GstCalculatorTool } from './tools/GstCalculatorTool';
-import { LoanCalculatorTool } from './tools/LoanCalculatorTool';
-import { SipCalculatorTool } from './tools/SipCalculatorTool';
-import { CalculatorTool } from './tools/CalculatorTool';
-import { ColorConverterTool } from './tools/ColorConverterTool';
-import { ImageCompressorTool } from './tools/ImageCompressorTool';
-import { ImageConverterTool } from './tools/ImageConverterTool';
-import { ImageCropperTool } from './tools/ImageCropperTool';
-import { PhotoEditorTool } from './tools/PhotoEditorTool';
-import { ImageWatermarkTool } from './tools/ImageWatermarkTool';
-import { ImageUpscaleTool } from './tools/ImageUpscaleTool';
-import { HtmlToImageTool } from './tools/HtmlToImageTool';
-import { PdfToolsSuite } from './tools/PdfToolsSuite';
-import { SpeechTools } from './tools/SpeechTools';
-import {
-  MarkdownPreviewerTool,
-  SlugGeneratorTool,
-  DuplicateLineRemoverTool,
-  TextSorterTool,
-  TextToBinaryTool,
-  Rot13CipherTool,
-  MorseCodeTool,
-  UuidGeneratorTool,
-  TimestampConverterTool,
-  JwtDecoderTool,
-  HtmlEntityTool,
-  UrlParserTool,
-  SqlFormatterTool,
-  RegexTesterTool,
-  ChmodCalculatorTool,
-  UnitConverterTool,
-  PercentageCalculatorTool,
-  CompoundInterestTool,
-  DiscountCalculatorTool,
-  TipCalculatorTool,
-  BmiCalculatorTool,
-  DateDifferenceTool,
-  CssBoxShadowTool,
-  CssGradientTool,
-  QrCodeGeneratorTool,
-  AspectRatioTool,
-} from './tools/NewToolsSuite';
 
 interface ToolModalProps {
   tool: ToolItem;
@@ -116,216 +55,27 @@ export const ToolModal: React.FC<ToolModalProps> = ({
     }
   };
 
-  const renderToolComponent = () => {
-    switch (tool.id) {
-      // Text Tools
-      case 'case-converter':
-      case 'uppercase-converter':
-      case 'lowercase-converter':
-      case 'document-wizard':
-        return <CaseConverterTool />;
-      case 'character-count':
-        return <CharacterCountTool />;
-      case 'ascii-converter':
-      case 'text-to-ascii':
-      case 'ascii-to-text':
-        return <AsciiConverterTool />;
-      case 'diff-checker':
-        return <DiffCheckerTool />;
-      case 'lorem-generator':
-        return <LoremGeneratorTool />;
-      case 'typing-test':
-        return <TypingTestTool />;
-
-      // Developer Tools
-      case 'json-beautifier':
-      case 'json-viewer':
-      case 'json-validator':
-        return <JsonBeautifierTool />;
-      case 'json-minifier':
-        return <JsonMinifierTool />;
-      case 'json-to-csv':
-        return <JsonToCsvTool />;
-      case 'json-to-xml':
-        return <JsonToXmlTool />;
-      case 'code-beautifier':
-      case 'html-beautifier':
-      case 'css-beautifier':
-      case 'js-beautifier':
-      case 'css-minify':
-      case 'development-hub':
-        return <CodeBeautifierTool />;
-      case 'html-encode-decode':
-      case 'url-encoder':
-        return <UrlEncoderTool />;
-
-      // Encryption & Security
-      case 'aes-des-encrypt':
-      case 'encryption-hub':
-        return <AesDesEncryptTool />;
-      case 'base64-tool':
-        return <Base64Tool />;
-      case 'md5-hash':
-      case 'sha256-hash':
-        return <HashGeneratorTool />;
-      case 'password-generator':
-        return <PasswordGeneratorTool />;
-
-      // Calculators
-      case 'age-calculator':
-        return <AgeCalculatorTool />;
-      case 'gst-calculator':
-        return <GstCalculatorTool />;
-      case 'loan-calculator':
-        return <LoanCalculatorTool />;
-      case 'sip-calculator':
-        return <SipCalculatorTool />;
-      case 'scientific-calculator':
-        return <CalculatorTool />;
-
-      // Web & Colors
-      case 'color-converter':
-      case 'hex-to-rgb':
-      case 'rgb-to-hex':
-      case 'web-hub':
-        return <ColorConverterTool />;
-
-      // Image Tools
-      case 'image-compressor':
-        return <ImageCompressorTool />;
-      case 'image-converter':
-      case 'convert-to-jpg':
-      case 'convert-from-jpg':
-      case 'image-tools-hub':
-        return <ImageConverterTool />;
-      case 'image-cropper':
-        return <ImageCropperTool />;
-      case 'photo-editor':
-        return <PhotoEditorTool />;
-      case 'image-watermark':
-        return <ImageWatermarkTool />;
-      case 'image-upscale':
-        return <ImageUpscaleTool />;
-      case 'html-to-image':
-        return <HtmlToImageTool />;
-
-      // PDF & Audio Tools
-      case 'jpgto-pdf':
-      case 'pngto-pdf':
-      case 'webpto-pdf':
-        return <PdfToolsSuite initialTab="imagesToPdf" />;
-      case 'csvto-pdf':
-      case 'excelto-pdf':
-      case 'htmlto-pdf':
-      case 'jsonto-pdf':
-      case 'xmlto-pdf':
-        return <PdfToolsSuite initialTab="dataToPdf" />;
-      case 'pdftotext':
-      case 'pdftojpg':
-      case 'pdftopng':
-      case 'pdftowebp':
-      case 'pdftoword':
-      case 'pdftoexcel':
-      case 'pdftocsv':
-      case 'pdftohtml':
-      case 'pdftojson':
-      case 'pdftoxml':
-      case 'pdftozip':
-        return <PdfToolsSuite initialTab="extractPdf" />;
-      case 'pdf-tools':
-      case 'textto-pdf':
-      case 'speechto-pdf':
-        return <PdfToolsSuite initialTab="textToPdf" />;
-      case 'speech-tools':
-        return <SpeechTools />;
-
-      // Extended Power Tools (Text, Dev, Calc, Web, Crypto)
-      case 'markdown-previewer':
-        return <MarkdownPreviewerTool />;
-      case 'slug-generator':
-        return <SlugGeneratorTool />;
-      case 'duplicate-line-remover':
-        return <DuplicateLineRemoverTool />;
-      case 'text-sorter':
-        return <TextSorterTool />;
-      case 'text-to-binary':
-        return <TextToBinaryTool />;
-      case 'rot13-cipher':
-        return <Rot13CipherTool />;
-      case 'morse-code':
-        return <MorseCodeTool />;
-      case 'uuid-generator':
-        return <UuidGeneratorTool />;
-      case 'timestamp-converter':
-        return <TimestampConverterTool />;
-      case 'jwt-decoder':
-        return <JwtDecoderTool />;
-      case 'html-entity':
-        return <HtmlEntityTool />;
-      case 'url-parser':
-        return <UrlParserTool />;
-      case 'sql-formatter':
-        return <SqlFormatterTool />;
-      case 'regex-tester':
-        return <RegexTesterTool />;
-      case 'chmod-calculator':
-        return <ChmodCalculatorTool />;
-      case 'unit-converter':
-        return <UnitConverterTool />;
-      case 'percentage-calculator':
-        return <PercentageCalculatorTool />;
-      case 'compound-interest':
-        return <CompoundInterestTool />;
-      case 'discount-calculator':
-        return <DiscountCalculatorTool />;
-      case 'tip-calculator':
-        return <TipCalculatorTool />;
-      case 'bmi-calculator':
-        return <BmiCalculatorTool />;
-      case 'date-difference':
-        return <DateDifferenceTool />;
-      case 'css-box-shadow':
-        return <CssBoxShadowTool />;
-      case 'css-gradient':
-        return <CssGradientTool />;
-      case 'qr-code-generator':
-        return <QrCodeGeneratorTool />;
-      case 'aspect-ratio':
-        return <AspectRatioTool />;
-      default:
-        return <CaseConverterTool />;
-    }
-  };
-
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-start justify-center p-3 sm:p-6 lg:p-10 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-4xl bg-white dark:bg-[#1a202c] rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden my-auto"
+        className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Top Header */}
-        <div className="relative p-6 sm:p-8 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-          {/* Accent line */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 via-indigo-600 to-emerald-500" />
-
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0 shadow-xs">
-                <IconRenderer name={tool.icon} className="w-6 h-6" />
+        {/* Modal Header */}
+        <div className="p-4 sm:p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-center shrink-0">
+                <IconRenderer name={tool.icon} className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">
-                    {localized.localizedName}
-                  </h2>
-                  <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                    {localized.localizedCategory}
-                  </span>
-                </div>
-                <p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-2xl">
+              <div className="min-w-0">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white truncate">
+                  {localized.localizedName}
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                   {localized.localizedDescription}
                 </p>
               </div>
@@ -388,7 +138,7 @@ export const ToolModal: React.FC<ToolModalProps> = ({
 
         {/* Modal Tool Body */}
         <div className="p-6 sm:p-8 max-h-[75vh] overflow-y-auto">
-          {renderToolComponent()}
+          <ToolRenderer tool={tool} />
           {/* AdSense In-Tool Banner */}
           <AdBanner slotId="1000000002" format="auto" className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800" />
         </div>

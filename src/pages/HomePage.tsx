@@ -284,7 +284,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-500 bg-clip-text text-transparent leading-tight sm:leading-tight">
-          {t('hero.titlePre', '100+ Powerful Tools in Your')}{' '}
+          {t('hero.titlePre', '200+ Powerful Tools in Your')}{' '}
           <span className="underline decoration-indigo-400/40">{t('hero.titleHighlight', 'Pocket')}</span>
         </h1>
 

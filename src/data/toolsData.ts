@@ -1,4 +1,5 @@
 import { ToolItem } from '../types';
+import { NEW_TOOLS_DATA } from './newToolsData';
 
 export interface CategoryInfo {
   id: string;
@@ -9,15 +10,15 @@ export interface CategoryInfo {
 }
 
 export const CATEGORIES: CategoryInfo[] = [
-  { id: 'all', name: 'All Tools', icon: 'LayoutGrid', description: 'Browse all 100+ available pocket tools', count: 102 },
-  { id: 'text', name: 'Text & Docs', icon: 'FileText', description: 'Case converter, word counter, diff checker & formatters', count: 16 },
-  { id: 'development', name: 'Code & Dev', icon: 'Code2', description: 'JSON, YAML, Regex, SQL, JWT, UUID & minifiers', count: 20 },
-  { id: 'encryption', name: 'Security & Crypto', icon: 'Lock', description: 'AES-256, DES, Base64, Hashes & Passwords', count: 10 },
-  { id: 'calculator', name: 'Calculators', icon: 'Calculator', description: 'Age, GST, Loans, SIP, Fuel, Hours & Unit math', count: 18 },
-  { id: 'image', name: 'Image & Media', icon: 'Image', description: 'Compressor, cropper, filter, watermark & QR', count: 12 },
+  { id: 'all', name: 'All Tools', icon: 'LayoutGrid', description: 'Browse all 200+ available pocket tools', count: 206 },
+  { id: 'text', name: 'Text & Docs', icon: 'FileText', description: 'Case converter, word counter, diff checker & formatters', count: 30 },
+  { id: 'development', name: 'Code & Dev', icon: 'Code2', description: 'JSON, YAML, Regex, SQL, JWT, UUID & minifiers', count: 46 },
+  { id: 'encryption', name: 'Security & Crypto', icon: 'Lock', description: 'AES-256, DES, Base64, Hashes & Passwords', count: 20 },
+  { id: 'calculator', name: 'Calculators', icon: 'Calculator', description: 'Age, GST, Loans, SIP, Fuel, Hours & Unit math', count: 38 },
+  { id: 'image', name: 'Image & Media', icon: 'Image', description: 'Compressor, cropper, filter, watermark & QR', count: 20 },
   { id: 'pdf', name: 'PDF Tools', icon: 'FileSpreadsheet', description: 'Convert to/from PDF, extract & client-side merge', count: 10 },
-  { id: 'audio', name: 'Audio & Sound', icon: 'Volume2', description: 'Tone frequency, metronome BPM, ambient noise & synthesis', count: 5 },
-  { id: 'web', name: 'Web & Colors', icon: 'Palette', description: 'HEX/RGB color converter, shadows & CSS gradients', count: 11 },
+  { id: 'audio', name: 'Audio & Sound', icon: 'Volume2', description: 'Tone frequency, metronome BPM, ambient noise & synthesis', count: 19 },
+  { id: 'web', name: 'Web & Colors', icon: 'Palette', description: 'HEX/RGB color converter, shadows & CSS gradients', count: 23 },
 ];
 
 export const TOOLS_DATA: ToolItem[] = [
@@ -1378,4 +1379,5 @@ export const TOOLS_DATA: ToolItem[] = [
     seoDescription: 'Calculate Pixels Per Inch (PPI) and display density for monitors, laptops, and smartphones from resolution and diagonal size.',
     relatedToolIds: ['aspect-ratio', 'user-agent-inspector'],
   },
+  ...NEW_TOOLS_DATA,
 ];
