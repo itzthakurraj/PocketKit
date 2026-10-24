@@ -153,8 +153,26 @@ export const HomePage: React.FC<HomePageProps> = ({
   const { language, t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grouped' | 'grid'>('grouped');
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>('all');
 
-  // Filter tools based on search and category (multilingual search matching)
+  // Reset subcategory when parent category changes
+  React.useEffect(() => {
+    setSelectedSubCategory('all');
+  }, [selectedCategory]);
+
+  // Compute available sub-categories for active category
+  const availableSubCategories = useMemo(() => {
+    const currentCategoryTools = selectedCategory === 'all'
+      ? tools
+      : tools.filter((t) => t.category === selectedCategory);
+    const subs = new Set<string>();
+    currentCategoryTools.forEach((t) => {
+      if (t.subCategory) subs.add(t.subCategory);
+    });
+    return Array.from(subs);
+  }, [tools, selectedCategory]);
+
+  // Filter tools based on search, category, and subCategory (multilingual search matching)
   const filteredTools = useMemo(() => {
     return tools.filter((tool) => {
       // Favorites check
@@ -163,6 +181,10 @@ export const HomePage: React.FC<HomePageProps> = ({
       }
       // Category check
       if (selectedCategory !== 'all' && tool.category !== selectedCategory) {
+        return false;
+      }
+      // Sub-category pill check
+      if (selectedSubCategory !== 'all' && tool.subCategory !== selectedSubCategory) {
         return false;
       }
       // Search query check
@@ -177,11 +199,12 @@ export const HomePage: React.FC<HomePageProps> = ({
         loc.localizedDescription.toLowerCase().includes(q) ||
         tool.category.toLowerCase().includes(q) ||
         loc.localizedCategory.toLowerCase().includes(q) ||
+        (tool.subCategory && tool.subCategory.toLowerCase().includes(q)) ||
         tool.tags.some((tag) => tag.toLowerCase().includes(q)) ||
         (tool.keywords && tool.keywords.some((k) => k.toLowerCase().includes(q)))
       );
     });
-  }, [tools, showingFavoritesOnly, favorites, selectedCategory, searchQuery, language, t]);
+  }, [tools, showingFavoritesOnly, favorites, selectedCategory, selectedSubCategory, searchQuery, language, t]);
 
   // Group tools by category for grouped view
   const categoryGroups = useMemo(() => {
@@ -284,7 +307,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-500 bg-clip-text text-transparent leading-tight sm:leading-tight">
-          {t('hero.titlePre', '200+ Powerful Tools in Your')}{' '}
+          {t('hero.titlePre', '400+ Powerful Tools in Your')}{' '}
           <span className="underline decoration-indigo-400/40">{t('hero.titleHighlight', 'Pocket')}</span>
         </h1>
 
@@ -417,6 +440,60 @@ export const HomePage: React.FC<HomePageProps> = ({
             );
           })}
         </div>
+
+        {/* Sub-Category Pill Filter Bar */}
+        {availableSubCategories.length > 0 && (
+          <div className="pt-2 flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0 mr-1 flex items-center gap-1">
+              <span>Topic:</span>
+            </span>
+            <button
+              onClick={() => {
+                triggerHaptic('light');
+                setSelectedSubCategory('all');
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border ${
+                selectedSubCategory === 'all'
+                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80'
+              }`}
+            >
+              All Topics
+            </button>
+            {availableSubCategories.map((sub) => {
+              const currentScopeTools = selectedCategory === 'all'
+                ? tools
+                : tools.filter((t) => t.category === selectedCategory);
+              const count = currentScopeTools.filter((t) => t.subCategory === sub).length;
+
+              return (
+                <button
+                  key={sub}
+                  onClick={() => {
+                    triggerHaptic('light');
+                    setSelectedSubCategory(sub === selectedSubCategory ? 'all' : sub);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border flex items-center gap-1.5 ${
+                    selectedSubCategory === sub
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80'
+                  }`}
+                >
+                  <span>{sub}</span>
+                  <span
+                    className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full tabular-nums ${
+                      selectedSubCategory === sub
+                        ? 'bg-indigo-700 text-indigo-100'
+                        : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* AdSense Top Banner */}
@@ -528,7 +605,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             }}
             className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-300 transition-colors shadow-2xs cursor-pointer"
           >
-            Clear Filter (Show All 104+ Tools)
+            Clear Filter (Show All 400+ Tools)
           </button>
         </section>
       )}

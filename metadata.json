@@ -1,6 +1,6 @@
 {
   "name": "PocketKit - MultiTools Digital Workshop",
-  "description": "PocketKit is your pocket-sized digital workshop: 200+ client-side online tools for text editing, code formatting, image processing, PDF management, calculators, audio tools, and encryption, supported by Google AdSense.",
+  "description": "PocketKit is your pocket-sized digital workshop: 400+ client-side online tools for DevOps, APIs, networking, databases, text editing, code formatting, image processing, PDF management, calculators, audio tools, and encryption, supported by Google AdSense.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

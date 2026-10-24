@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ActiveView } from '../types';
-import { Moon, Sun, Menu, X, Sparkles, BookOpen, HelpCircle, Grid, Smartphone, Download, Star } from 'lucide-react';
+import { ActiveView, ThemeMode } from '../types';
+import { Moon, Sun, Monitor, Menu, X, Sparkles, BookOpen, HelpCircle, Grid, Smartphone, Download, Star } from 'lucide-react';
 import { InstallDropdown } from './InstallDropdown';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -10,7 +10,9 @@ interface HeaderProps {
   activeView: ActiveView;
   onNavigate: (view: ActiveView, category?: string) => void;
   isDark: boolean;
+  themeMode?: ThemeMode;
   onToggleTheme: () => void;
+  onSetThemeMode?: (mode: ThemeMode) => void;
   onOpenSearch?: () => void;
   favoritesCount: number;
   onToggleFavoritesFilter: () => void;
@@ -24,7 +26,9 @@ export const Header: React.FC<HeaderProps> = ({
   activeView,
   onNavigate,
   isDark,
+  themeMode = 'system',
   onToggleTheme,
+  onSetThemeMode,
   favoritesCount,
   onToggleFavoritesFilter,
   showingFavoritesOnly,
@@ -145,17 +149,26 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Compact Language Switcher */}
           <LanguageSwitcher compact={true} />
 
-          {/* Theme Toggle */}
+          {/* Theme Toggle Button (Cycles: Light -> Dark -> System Auto) */}
           <button
             onClick={() => {
               triggerHaptic('light');
               onToggleTheme();
             }}
-            className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+            className="px-2 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700 flex items-center gap-1.5"
             aria-label={t('header.toggleTheme', 'Toggle theme')}
-            title="Toggle dark / light mode"
+            title={`Current theme: ${themeMode === 'light' ? 'Light' : themeMode === 'dark' ? 'Dark' : 'System Auto'} (click to cycle)`}
           >
-            {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+            {themeMode === 'light' ? (
+              <Sun className="w-4 h-4 text-amber-500" />
+            ) : themeMode === 'dark' ? (
+              <Moon className="w-4 h-4 text-indigo-400" />
+            ) : (
+              <Monitor className="w-4 h-4 text-emerald-500" />
+            )}
+            <span className="hidden lg:inline text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {themeMode === 'system' ? 'Auto' : themeMode === 'light' ? 'Light' : 'Dark'}
+            </span>
           </button>
 
           {/* Mobile Menu Hamburger */}
@@ -267,6 +280,46 @@ export const Header: React.FC<HeaderProps> = ({
               <HelpCircle className="w-4 h-4 text-blue-500" />
               <span>{t('nav.help', 'Help & Documentation')}</span>
             </button>
+          </div>
+
+          {/* Mobile Theme Switcher Bar */}
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Appearance</span>
+            <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+              <button
+                onClick={() => onSetThemeMode ? onSetThemeMode('light') : onToggleTheme()}
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${
+                  themeMode === 'light'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
+                <span>Light</span>
+              </button>
+              <button
+                onClick={() => onSetThemeMode ? onSetThemeMode('dark') : onToggleTheme()}
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${
+                  themeMode === 'dark'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                <Moon className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Dark</span>
+              </button>
+              <button
+                onClick={() => onSetThemeMode ? onSetThemeMode('system') : onToggleTheme()}
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1 ${
+                  themeMode === 'system'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                <Monitor className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Auto</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

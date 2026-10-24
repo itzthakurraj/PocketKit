@@ -8,11 +8,14 @@ export type ToolCategory =
   | 'web'
   | 'audio';
 
+export type ThemeMode = 'light' | 'dark' | 'system';
+
 export interface ToolItem {
   id: string;
   name: string;
   description: string;
   category: ToolCategory;
+  subCategory?: string;
   icon: string;
   keywords: string[];
   tags: string[];

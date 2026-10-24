@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { ActiveView, ToolItem } from './types';
+import { ActiveView, ToolItem, ThemeMode } from './types';
 import { TOOLS_DATA } from './data/toolsData';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -135,12 +135,29 @@ function AppContent() {
 
   const [voiceModalOpen, setVoiceModalOpen] = useState(false);
 
-  // Theme state synced with localStorage & original html data-theme
-  const [isDark, setIsDark] = useState<boolean>(() => {
-    const saved = localStorage.getItem('theme');
-    if (saved) return saved === 'dark';
+  // 3-Way Theme state (light | dark | system) synced with localStorage
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem('pocketkit_theme_mode') || localStorage.getItem('theme');
+    if (saved === 'dark' || saved === 'light' || saved === 'system') return saved as ThemeMode;
+    return 'system';
+  });
+
+  const [systemPrefersDark, setSystemPrefersDark] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e: MediaQueryListEvent) => {
+      setSystemPrefersDark(e.matches);
+    };
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+
+  const isDark = themeMode === 'system' ? systemPrefersDark : themeMode === 'dark';
 
   // Favorites state synced with localStorage
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -154,7 +171,12 @@ function AppContent() {
 
   const handleToggleTheme = () => {
     triggerHaptic('medium');
-    setIsDark((prev) => !prev);
+    setThemeMode((prev) => (prev === 'light' ? 'dark' : prev === 'dark' ? 'system' : 'light'));
+  };
+
+  const handleSetThemeMode = (mode: ThemeMode) => {
+    triggerHaptic('medium');
+    setThemeMode(mode);
   };
 
   const handleToggleFavorite = (toolId: string, e: React.MouseEvent) => {
@@ -444,14 +466,16 @@ function AppContent() {
       html.classList.add('dark');
       body.classList.add('dark');
       html.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
+      html.style.colorScheme = 'dark';
     } else {
       html.classList.remove('dark');
       body.classList.remove('dark');
       html.setAttribute('data-theme', 'light');
-      localStorage.setItem('theme', 'light');
+      html.style.colorScheme = 'light';
     }
-  }, [isDark]);
+    localStorage.setItem('pocketkit_theme_mode', themeMode);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }, [isDark, themeMode]);
 
   // Persist favorites
   useEffect(() => {
@@ -479,7 +503,9 @@ function AppContent() {
         activeView={activeView}
         onNavigate={handleNavigate}
         isDark={isDark}
+        themeMode={themeMode}
         onToggleTheme={handleToggleTheme}
+        onSetThemeMode={handleSetThemeMode}
         favoritesCount={favorites.length}
         onToggleFavoritesFilter={() => {
           triggerHaptic('light');

@@ -176,6 +176,15 @@ const InvisibleCharacterDetectorTool = lazyTool(() => import('./tools/AdvancedTe
 const NatoPhoneticSpellerTool = lazyTool(() => import('./tools/AdvancedTextSuite'), 'NatoPhoneticSpellerTool');
 const RandomWordPickerTool = lazyTool(() => import('./tools/AdvancedTextSuite'), 'RandomWordPickerTool');
 
+// ==========================================
+// CODE-SPLIT LAZY IMPORTS: 400-TOOLS EXPANSION SUITES
+// ==========================================
+const DevOpsCloudSuite = lazyTool(() => import('./tools/DevOpsCloudSuite'), 'DevOpsCloudSuite');
+const ApiDatabaseSuite = lazyTool(() => import('./tools/ApiDatabaseSuite'), 'ApiDatabaseSuite');
+const NetworkSysadminSuite = lazyTool(() => import('./tools/NetworkSysadminSuite'), 'NetworkSysadminSuite');
+const CodeTransformSuite = lazyTool(() => import('./tools/CodeTransformSuite'), 'CodeTransformSuite');
+const ArchitectureSystemsSuite = lazyTool(() => import('./tools/ArchitectureSystemsSuite'), 'ArchitectureSystemsSuite');
+
 interface ToolRendererProps {
   tool: ToolItem;
 }
@@ -618,7 +627,53 @@ export const ToolRenderer: React.FC<ToolRendererProps> = ({ tool }) => {
       case 'readability-score-analyzer':
         return <CharacterCountTool />;
 
+      // ==========================================
+      // 400-TOOLS EXPANSION SUITES
+      // ==========================================
+      case 'k8s-manifest-generator':
+      case 'dockerfile-linter-generator':
+      case 'nginx-config-builder':
+      case 'systemd-service-generator':
+        return <DevOpsCloudSuite toolId={tool.id} />;
+
+      case 'curl-to-multi-language':
+      case 'sql-dialect-converter':
+      case 'json-to-zod-schema':
+      case 'rest-status-code-directory':
+        return <ApiDatabaseSuite toolId={tool.id} />;
+
+      case 'dns-record-builder':
+      case 'dmarc-policy-generator':
+      case 'cidr-range-summarizer':
+      case 'mac-oui-lookup':
+        return <NetworkSysadminSuite toolId={tool.id} />;
+
+      case 'css-specificity-calc':
+      case 'css-clamp-calculator':
+        return <CodeTransformSuite toolId={tool.id} />;
+
+      case 'uptime-sla-downtime-calc':
+      case 'totp-qr-uri-generator':
+        return <ArchitectureSystemsSuite toolId={tool.id} />;
+
       default:
+        // Dynamic subCategory routing for expansion tools
+        if (tool.subCategory === 'DevOps & Containers' || tool.subCategory === 'Cloud & Security') {
+          return <DevOpsCloudSuite toolId={tool.id} />;
+        }
+        if (tool.subCategory === 'API & Database') {
+          return <ApiDatabaseSuite toolId={tool.id} />;
+        }
+        if (tool.subCategory === 'Networking & Security') {
+          return <NetworkSysadminSuite toolId={tool.id} />;
+        }
+        if (tool.subCategory === 'Code & Transform') {
+          return <CodeTransformSuite toolId={tool.id} />;
+        }
+        if (tool.subCategory === 'Architecture & Systems') {
+          return <ArchitectureSystemsSuite toolId={tool.id} />;
+        }
+
         return (
           <div className="text-center py-12">
             <p className="text-slate-500">Tool workspace ready. Select an action above to begin.</p>

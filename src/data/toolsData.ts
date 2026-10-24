@@ -1,5 +1,6 @@
 import { ToolItem } from '../types';
 import { NEW_TOOLS_DATA } from './newToolsData';
+import { DEVELOPER_EXPANSION_TOOLS_DATA } from './developerExpansionToolsData';
 
 export interface CategoryInfo {
   id: string;
@@ -10,15 +11,15 @@ export interface CategoryInfo {
 }
 
 export const CATEGORIES: CategoryInfo[] = [
-  { id: 'all', name: 'All Tools', icon: 'LayoutGrid', description: 'Browse all 200+ available pocket tools', count: 206 },
-  { id: 'text', name: 'Text & Docs', icon: 'FileText', description: 'Case converter, word counter, diff checker & formatters', count: 30 },
-  { id: 'development', name: 'Code & Dev', icon: 'Code2', description: 'JSON, YAML, Regex, SQL, JWT, UUID & minifiers', count: 46 },
-  { id: 'encryption', name: 'Security & Crypto', icon: 'Lock', description: 'AES-256, DES, Base64, Hashes & Passwords', count: 20 },
-  { id: 'calculator', name: 'Calculators', icon: 'Calculator', description: 'Age, GST, Loans, SIP, Fuel, Hours & Unit math', count: 38 },
+  { id: 'all', name: 'All Tools', icon: 'LayoutGrid', description: 'Browse all 400+ available pocket tools', count: 400 },
+  { id: 'development', name: 'Code & Dev', icon: 'Code2', description: 'JSON, YAML, Regex, SQL, JWT, Docker, K8s & APIs', count: 141 },
+  { id: 'calculator', name: 'Calculators', icon: 'Calculator', description: 'Math, Subnets, Capacity, Latency, SLA & Physics', count: 80 },
+  { id: 'text', name: 'Text & Docs', icon: 'FileText', description: 'Case converter, word counter, diff checker & formatters', count: 46 },
+  { id: 'encryption', name: 'Security & Crypto', icon: 'Lock', description: 'AES-256, DES, Base64, Hashes, IAM, WireGuard & 2FA', count: 45 },
+  { id: 'web', name: 'Web & Colors', icon: 'Palette', description: 'HEX/RGB color converter, CSS grid, clamp & fluid design', count: 39 },
   { id: 'image', name: 'Image & Media', icon: 'Image', description: 'Compressor, cropper, filter, watermark & QR', count: 20 },
-  { id: 'pdf', name: 'PDF Tools', icon: 'FileSpreadsheet', description: 'Convert to/from PDF, extract & client-side merge', count: 10 },
   { id: 'audio', name: 'Audio & Sound', icon: 'Volume2', description: 'Tone frequency, metronome BPM, ambient noise & synthesis', count: 19 },
-  { id: 'web', name: 'Web & Colors', icon: 'Palette', description: 'HEX/RGB color converter, shadows & CSS gradients', count: 23 },
+  { id: 'pdf', name: 'PDF Tools', icon: 'FileSpreadsheet', description: 'Convert to/from PDF, extract & client-side merge', count: 10 },
 ];
 
 export const TOOLS_DATA: ToolItem[] = [
@@ -1380,4 +1381,5 @@ export const TOOLS_DATA: ToolItem[] = [
     relatedToolIds: ['aspect-ratio', 'user-agent-inspector'],
   },
   ...NEW_TOOLS_DATA,
+  ...DEVELOPER_EXPANSION_TOOLS_DATA,
 ];
